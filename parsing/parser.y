@@ -96,7 +96,7 @@ primary_expression
 	;
 
 postfix_expression
-	: primary_expression
+	: primary_expression							{ $$ = $1; }
 	| postfix_expression '[' expression ']'					{ /* array_access */ }
 	| postfix_expression '(' ')'						{ /* function_call */ }
 	| postfix_expression '(' argument_expression_list ')'			{ /* function_call */ }
@@ -107,12 +107,12 @@ postfix_expression
 	;
 
 argument_expression_list
-	: assignment_expression
-	| argument_expression_list ',' assignment_expression
+	: assignment_expression							{ /* argument_expression_list */ }
+	| argument_expression_list ',' assignment_expression			{ /* argument_expression_list */ }
 	;
 
 unary_expression
-	: postfix_expression
+	: postfix_expression							{ $$ = $1; }
 	| INC_OP unary_expression						{ /* pre_increment */ }
 	| DEC_OP unary_expression						{ /* pre_decrement */ }
 	| '&' cast_expression							{ /* address_of */ }
@@ -126,31 +126,31 @@ unary_expression
 	;
 
 cast_expression
-	: unary_expression
+	: unary_expression							{ $$ = $1; }
 	| '(' type_name ')' cast_expression					{ /* type_cast */ }
 	;
 
 multiplicative_expression
-	: cast_expression
+	: cast_expression							{ $$ = $1; }
 	| multiplicative_expression '*' cast_expression				{ /* multiply */ }
 	| multiplicative_expression '/' cast_expression				{ /* divide */ }
 	| multiplicative_expression '%' cast_expression				{ /* modulo */ }
 	;
 
 additive_expression
-	: multiplicative_expression
+	: multiplicative_expression						{ $$ = $1; }
 	| additive_expression '+' multiplicative_expression			{ /* add */ }
 	| additive_expression '-' multiplicative_expression			{ /* subtract */ }
 	;
 
 shift_expression
-	: additive_expression
+	: additive_expression							{ $$ = $1; }
 	| shift_expression LEFT_OP additive_expression				{ /* left_shift */ }
 	| shift_expression RIGHT_OP additive_expression				{ /* right_shift */ }
 	;
 
 relational_expression
-	: shift_expression
+	: shift_expression							{ $$ = $1; }
 	| relational_expression '<' shift_expression				{ /* less_than */ }
 	| relational_expression '>' shift_expression				{ /* greater_than */ }
 	| relational_expression LE_OP shift_expression				{ /* less_than_equals */ }
@@ -158,43 +158,43 @@ relational_expression
 	;
 
 equality_expression
-	: relational_expression
+	: relational_expression							{ $$ = $1; }
 	| equality_expression EQ_OP relational_expression			{ /* equals */ }
 	| equality_expression NE_OP relational_expression			{ /* not_equals */ }
 	;
 
 and_expression
-	: equality_expression
+	: equality_expression							{ $$ = $1; }
 	| and_expression '&' equality_expression				{ /* bitwise_and */ }
 	;
 
 exclusive_or_expression
-	: and_expression
+	: and_expression							{ $$ = $1; }
 	| exclusive_or_expression '^' and_expression				{ /* bitwise_xor */ }
 	;
 
 inclusive_or_expression
-	: exclusive_or_expression
+	: exclusive_or_expression						{ $$ = $1; }
 	| inclusive_or_expression '|' exclusive_or_expression			{ /* bitwise_or */ }
 	;
 
 logical_and_expression
-	: inclusive_or_expression
+	: inclusive_or_expression						{ $$ = $1; }
 	| logical_and_expression AND_OP inclusive_or_expression			{ /* logical_and */ }
 	;
 
 logical_or_expression
-	: logical_and_expression
+	: logical_and_expression						{ $$ = $1; }
 	| logical_or_expression OR_OP logical_and_expression			{ /* logical_or */ }
 	;
 
 conditional_expression
-	: logical_or_expression
+	: logical_or_expression							{ $$ = $1; }
 	| logical_or_expression '?' expression ':' conditional_expression	{ /* ternary_op */ }
 	;
 
 assignment_expression
-	: conditional_expression
+	: conditional_expression						{ $$ = $1; }
 	| unary_expression '=' assignment_expression				{ /* assign */ }
 	| unary_expression MUL_ASSIGN assignment_expression			{ /* multiply_assign */ }
 	| unary_expression DIV_ASSIGN assignment_expression			{ /* divide_assign */ }
@@ -209,12 +209,12 @@ assignment_expression
 	;
 
 expression
-	: assignment_expression
-	| expression ',' assignment_expression
+	: assignment_expression							{ $$ = $1; }
+	| expression ',' assignment_expression					{ /* comma */ }
 	;
 
 constant_expression
-	: conditional_expression
+	: conditional_expression						{ $$ = $1; }
 	;
 
 declaration
@@ -232,12 +232,12 @@ declaration_specifiers
 	;
 
 init_declarator_list
-	: init_declarator
-	| init_declarator_list ',' init_declarator
+	: init_declarator							{ /* init_declarator_list */ }
+	| init_declarator_list ',' init_declarator				{ /* init_declarator_list */ }
 	;
 
 init_declarator
-	: declarator
+	: declarator								{ /* init_declr */ }
 	| declarator '=' initializer						{ /* init_declr */ }
 	;
 
@@ -276,12 +276,12 @@ struct_or_union
 	;
 
 struct_declaration_list
-	: struct_declaration
-	| struct_declaration_list struct_declaration
+	: struct_declaration							{ /* struct_declaration_list */ }
+	| struct_declaration_list struct_declaration				{ /* struct_declaration_list */ }
 	;
 
 struct_declaration
-	: specifier_qualifier_list struct_declarator_list ';'
+	: specifier_qualifier_list struct_declarator_list ';'			{ /* struct_declaration */ }
 	;
 
 specifier_qualifier_list
@@ -292,14 +292,14 @@ specifier_qualifier_list
 	;
 
 struct_declarator_list
-	: struct_declarator
-	| struct_declarator_list ',' struct_declarator
+	: struct_declarator							{ /* struct_declarator_list */ }
+	| struct_declarator_list ',' struct_declarator				{ /* struct_declarator_list */ }
 	;
 
 struct_declarator
-	: declarator
-	| ':' constant_expression
-	| declarator ':' constant_expression
+	: declarator								{ $$ = $1; }
+	| ':' constant_expression						{ /* bitfield_declarator */ }
+	| declarator ':' constant_expression					{ /* bitfield_declarator */ }
 	;
 
 enum_specifier
@@ -309,8 +309,8 @@ enum_specifier
 	;
 
 enumerator_list
-	: enumerator
-	| enumerator_list ',' enumerator
+	: enumerator								{ /* enumerator_list */ }
+	| enumerator_list ',' enumerator					{ /* enumerator_list */ }
 	;
 
 enumerator
@@ -324,8 +324,8 @@ type_qualifier
 	;
 
 declarator
-	: pointer direct_declarator
-	| direct_declarator
+	: pointer direct_declarator						{ $$ = $1; }
+	| direct_declarator							{ $$ = $1; }
 	;
 
 direct_declarator
@@ -346,19 +346,19 @@ pointer
 	;
 
 type_qualifier_list
-	: type_qualifier
-	| type_qualifier_list type_qualifier
+	: type_qualifier							{ /* type_qualifier_list */ }
+	| type_qualifier_list type_qualifier					{ /* type_qualifier_list */ }
 	;
 
 
 parameter_type_list
-	: parameter_list
-	| parameter_list ',' ELLIPSIS
+	: parameter_list							{ /* parameter_type_list */ }
+	| parameter_list ',' ELLIPSIS						{ /* parameter_type_list */ }
 	;
 
 parameter_list
-	: parameter_declaration
-	| parameter_list ',' parameter_declaration
+	: parameter_declaration							{ /* parameter_list */ }
+	| parameter_list ',' parameter_declaration				{ /* parameter_list */ }
 	;
 
 parameter_declaration
@@ -368,19 +368,19 @@ parameter_declaration
 	;
 
 identifier_list
-	: IDENTIFIER
-	| identifier_list ',' IDENTIFIER
+	: IDENTIFIER								{ /* identifier_list */ }
+	| identifier_list ',' IDENTIFIER					{ /* identifier_list */ }
 	;
 
 type_name
-	: specifier_qualifier_list
-	| specifier_qualifier_list abstract_declarator
+	: specifier_qualifier_list						{ /* type_name */ }
+	| specifier_qualifier_list abstract_declarator				{ /* type_name */ }
 	;
 
 abstract_declarator
-	: pointer
-	| direct_abstract_declarator
-	| pointer direct_abstract_declarator
+	: pointer								{ /* abstract_declarator */ }
+	| direct_abstract_declarator						{ /* abstract_declarator */ }
+	| pointer direct_abstract_declarator					{ /* abstract_declarator */ }
 	;
 
 direct_abstract_declarator
@@ -397,22 +397,22 @@ direct_abstract_declarator
 
 initializer
 	: assignment_expression
-	| '{' initializer_list '}'
-	| '{' initializer_list ',' '}'
+	| '{' initializer_list '}'						{ /* initializer */ }
+	| '{' initializer_list ',' '}'						{ /* initializer */ }
 	;
 
 initializer_list
-	: initializer
-	| initializer_list ',' initializer
+	: initializer								{ /* initializer_list */ }
+	| initializer_list ',' initializer					{ /* initializer_list */ }
 	;
 
 statement
-	: labeled_statement
-	| compound_statement
-	| expression_statement
-	| selection_statement
-	| iteration_statement
-	| jump_statement
+	: labeled_statement							{ $$ = $1; }
+	| compound_statement							{ $$ = $1; }
+	| expression_statement							{ $$ = $1; }
+	| selection_statement							{ $$ = $1; }
+	| iteration_statement							{ $$ = $1; }
+	| jump_statement							{ $$ = $1; }
 	;
 
 labeled_statement
@@ -429,18 +429,18 @@ compound_statement
 	;
 
 declaration_list
-	: declaration
-	| declaration_list declaration
+	: declaration								{ /* declaration_list */ }
+	| declaration_list declaration						{ /* declaration_list */ }
 	;
 
 statement_list
-	: statement
-	| statement_list statement
+	: statement								{ /* statement_list */ }
+	| statement_list statement						{ /* statement_list */ }
 	;
 
 expression_statement
-	: ';'
-	| expression ';'
+	: ';'									{ /* expression_statement */ }
+	| expression ';'							{ /* expression_statement */ }
 	;
 
 selection_statement
@@ -471,20 +471,20 @@ jump_statement
 	;
 
 translation_unit
-	: external_declaration
-	| translation_unit external_declaration
+	: external_declaration							{ /* translation_unit */ }
+	| translation_unit external_declaration					{ /* translation_unit */ }
 	;
 
 external_declaration
-	: function_definition
-	| declaration
+	: function_definition							{ $$ = $1; }
+	| declaration								{ $$ = $1; }
 	;
 
 function_definition
-	: declaration_specifiers declarator declaration_list compound_statement
-	| declaration_specifiers declarator compound_statement
-	| declarator declaration_list compound_statement
-	| declarator compound_statement
+	: declaration_specifiers declarator declaration_list compound_statement	{ /* function_definition */ }
+	| declaration_specifiers declarator compound_statement			{ /* function_definition */ }
+	| declarator declaration_list compound_statement			{ /* function_definition */ }
+	| declarator compound_statement						{ /* function_definition */ }
 	;
 
 %%

@@ -37,7 +37,7 @@ ast_for_statement_new (ast_node *for_tok,
   loc.last_line = end->last_line;
   loc.last_column = end->last_column;
 
-  ast_node_construct (&self->base, &ast_for_statement_vtbl, &loc);
+  ast_node_construct (&self->base, &ast_for_statement_vtbl, AST_FOR_STATEMENT, &loc);
 
   self->for_tok       = for_tok;
   self->open_bracket  = open_bracket;
