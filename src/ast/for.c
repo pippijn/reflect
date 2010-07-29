@@ -10,7 +10,7 @@ typedef struct ast_node_for_statement self_type;
 static fn_print ast_for_statement_print;
 
 
-struct ast_vtbl ast_for_statement_vtbl = {
+struct ast_vtbl vtbl = {
   ast_node_destruct,
   ast_for_statement_print,
 };
@@ -24,7 +24,7 @@ ast_for_statement_new (ast_node *for_tok,
 		       ast_node *condition, ast_node *increment,
                        ast_node *close_bracket, ast_node *body)
 {
-  self_type *self = malloc (sizeof (self_type*));
+  self_type *self = NULL;
   struct location loc;
   struct location const *start;
   struct location const *end;
@@ -37,7 +37,7 @@ ast_for_statement_new (ast_node *for_tok,
   loc.last_line = end->last_line;
   loc.last_column = end->last_column;
 
-  ast_node_construct (&self->base, &ast_for_statement_vtbl, AST_FOR_STATEMENT, &loc);
+  NEW_SELF (AST_FOR_STATEMENT, &loc);
 
   self->for_tok       = for_tok;
   self->open_bracket  = open_bracket;
@@ -56,7 +56,7 @@ ast_for_statement_new (ast_node *for_tok,
 struct ast_node *
 ast_for_statement_for (ast_node *object)
 {
-  self_type const* self = (self_type const *)object;
+  CONST_SELF (AST_FOR_STATEMENT);
 
   return self->for_tok;
 }
@@ -64,8 +64,7 @@ ast_for_statement_for (ast_node *object)
 struct ast_node *
 ast_for_statement_open_bracket (ast_node const *object)
 {
-
-  self_type const* self = (self_type const *)object;
+  CONST_SELF (AST_FOR_STATEMENT);
 
   return self->open_bracket;
 }
@@ -73,7 +72,7 @@ ast_for_statement_open_bracket (ast_node const *object)
 struct ast_node *
 ast_for_statement_initializer (ast_node const *object)
 {
-  self_type const* self = (self_type const *)object;
+  CONST_SELF (AST_FOR_STATEMENT);
 
   return self->initializer;
 }
@@ -81,7 +80,7 @@ ast_for_statement_initializer (ast_node const *object)
 struct ast_node *
 ast_for_statement_condition (ast_node const *object)
 {
-  self_type const* self = (self_type const *)object;
+  CONST_SELF (AST_FOR_STATEMENT);
 
   return self->condition;
 }
@@ -89,7 +88,7 @@ ast_for_statement_condition (ast_node const *object)
 struct ast_node *
 ast_for_statement_increment (ast_node const *object)
 {
-  self_type const* self = (self_type const *)object;
+  CONST_SELF (AST_FOR_STATEMENT);
 
   return self->increment;
 }
@@ -97,7 +96,7 @@ ast_for_statement_increment (ast_node const *object)
 struct ast_node *
 ast_for_statement_close_bracket (ast_node const *object)
 {
-  self_type const* self = (self_type const *)object;
+  CONST_SELF (AST_FOR_STATEMENT);
 
   return self->close_bracket;
 }
@@ -105,7 +104,7 @@ ast_for_statement_close_bracket (ast_node const *object)
 struct ast_node *
 ast_for_statement_body (ast_node const *object)
 {
-  self_type const* self = (self_type const *)object;
+  CONST_SELF (AST_FOR_STATEMENT);
 
   return self->body;
 }
@@ -116,7 +115,7 @@ ast_for_statement_body (ast_node const *object)
 static void
 ast_for_statement_print (ast_node const* object, FILE* fh)
 {
-  self_type const* self = (self_type const*)object;
+  CONST_SELF (AST_FOR_STATEMENT);
 
   ast_node_print (self->for_tok, fh);
   ast_node_print (self->open_bracket, fh);
