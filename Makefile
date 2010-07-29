@@ -7,7 +7,7 @@ CFLAGS		= -Wall
 SOURCES =			\
 	parsing/parser.y	\
 	parsing/lexer.l		\
-	$(wildcard src/*.c src/*/*.c)
+	$(shell find src -name "*.c")
 
 OBJECTS = $(addsuffix .o,$(basename $(SOURCES)))
 
