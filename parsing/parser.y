@@ -1,4 +1,5 @@
 %{
+// vim:noexpandtab
 #include "yy/parse_interf.h"
 #define scanner parse_context_scanner_get (context)
 %}
@@ -17,92 +18,92 @@
 %destructor { ast_node_delete ($$); } <>
 
 
-%token IDENTIFIER       "identifier"
-%token CONSTANT         "constant"
-%token STRING_LITERAL   "string literal"
+%token IDENTIFIER	"identifier"
+%token CONSTANT		"constant"
+%token STRING_LITERAL	"string literal"
 
-%token SIZEOF           "sizeof"
+%token SIZEOF		"sizeof"
 
-%token PTR_OP           "->"
-%token INC_OP           "++"
-%token DEC_OP           "--"
-%token LEFT_OP          "<<"
-%token RIGHT_OP         ">>"
-%token LE_OP            "<="
-%token GE_OP            ">="
-%token EQ_OP            "=="
-%token NE_OP            "!="
-%token AND_OP           "&&"
-%token OR_OP            "||"
+%token PTR_OP		"->"
+%token INC_OP		"++"
+%token DEC_OP		"--"
+%token LEFT_OP		"<<"
+%token RIGHT_OP		">>"
+%token LE_OP		"<="
+%token GE_OP		">="
+%token EQ_OP		"=="
+%token NE_OP		"!="
+%token AND_OP		"&&"
+%token OR_OP		"||"
 
-%token MUL_ASSIGN       "*="
-%token DIV_ASSIGN       "/="
-%token MOD_ASSIGN       "%="
-%token ADD_ASSIGN       "+="
-%token SUB_ASSIGN       "-="
-%token LEFT_ASSIGN      "<<="
-%token RIGHT_ASSIGN     ">>="
-%token AND_ASSIGN       "&="
-%token XOR_ASSIGN       "^="
-%token OR_ASSIGN        "|="
-%token TYPE_NAME        "type name"
+%token MUL_ASSIGN	"*="
+%token DIV_ASSIGN	"/="
+%token MOD_ASSIGN	"%="
+%token ADD_ASSIGN	"+="
+%token SUB_ASSIGN	"-="
+%token LEFT_ASSIGN	"<<="
+%token RIGHT_ASSIGN	">>="
+%token AND_ASSIGN	"&="
+%token XOR_ASSIGN	"^="
+%token OR_ASSIGN	"|="
+%token TYPE_NAME	"type name"
 
-%token TYPEDEF          "typedef"
-%token EXTERN           "extern"
-%token STATIC           "static"
-%token AUTO             "auto"
-%token REGISTER         "register"
+%token TYPEDEF		"typedef"
+%token EXTERN		"extern"
+%token STATIC		"static"
+%token AUTO		"auto"
+%token REGISTER		"register"
 
-%token CHAR             "char"
-%token SHORT            "short"
-%token INT              "int"
-%token LONG             "long"
-%token SIGNED           "signed"
-%token UNSIGNED         "unsigned"
-%token FLOAT            "float"
-%token DOUBLE           "double"
-%token CONST            "const"
-%token VOLATILE         "volatile"
-%token VOID             "void"
+%token CHAR		"char"
+%token SHORT		"short"
+%token INT		"int"
+%token LONG		"long"
+%token SIGNED		"signed"
+%token UNSIGNED		"unsigned"
+%token FLOAT		"float"
+%token DOUBLE		"double"
+%token CONST		"const"
+%token VOLATILE		"volatile"
+%token VOID		"void"
 
-%token STRUCT           "struct"
-%token UNION            "union"
-%token ENUM             "enum"
-%token ELLIPSIS         "..."
+%token STRUCT		"struct"
+%token UNION		"union"
+%token ENUM		"enum"
+%token ELLIPSIS		"..."
 
-%token CASE             "case"
-%token DEFAULT          "default"
-%token IF               "if"
-%token ELSE             "else"
-%token SWITCH           "switch"
-%token WHILE            "while"
-%token DO               "do"
-%token FOR              "for"
-%token GOTO             "goto"
-%token CONTINUE         "continue"
-%token BREAK            "break"
-%token RETURN           "return"
+%token CASE		"case"
+%token DEFAULT		"default"
+%token IF		"if"
+%token ELSE		"else"
+%token SWITCH		"switch"
+%token WHILE		"while"
+%token DO		"do"
+%token FOR		"for"
+%token GOTO		"goto"
+%token CONTINUE		"continue"
+%token BREAK		"break"
+%token RETURN		"return"
 
 
 %start translation_unit
 %%
 
 primary_expression
-	: IDENTIFIER
-	| CONSTANT
-	| STRING_LITERAL
-	| '(' expression ')'
+	: IDENTIFIER								{ variable_expr }
+	| CONSTANT								{ constant }
+	| STRING_LITERAL							{ string_literal }
+	| '(' expression ')'							{ parenth_expr }
 	;
 
 postfix_expression
 	: primary_expression
-	| postfix_expression '[' expression ']'
-	| postfix_expression '(' ')'
-	| postfix_expression '(' argument_expression_list ')'
-	| postfix_expression '.' IDENTIFIER
-	| postfix_expression PTR_OP IDENTIFIER
-	| postfix_expression INC_OP
-	| postfix_expression DEC_OP
+	| postfix_expression '[' expression ']'					{ array_access }
+	| postfix_expression '(' ')'						{ function_call }
+	| postfix_expression '(' argument_expression_list ')'			{ function_call }
+	| postfix_expression '.' IDENTIFIER					{ struct_access }
+	| postfix_expression PTR_OP IDENTIFIER					{ pointer_access }
+	| postfix_expression INC_OP						{ post_increment }
+	| postfix_expression DEC_OP						{ post_decrement }
 	;
 
 argument_expression_list
@@ -112,107 +113,99 @@ argument_expression_list
 
 unary_expression
 	: postfix_expression
-	| INC_OP unary_expression
-	| DEC_OP unary_expression
-	| unary_operator cast_expression
-	| SIZEOF unary_expression
-	| SIZEOF '(' type_name ')'
-	;
-
-unary_operator
-	: '&'
-	| '*'
-	| '+'
-	| '-'
-	| '~'
-	| '!'
+	| INC_OP unary_expression						{ pre_increment }
+	| DEC_OP unary_expression						{ pre_decrement }
+	| '&' cast_expression							{ address_of }
+	| '*' cast_expression							{ pointer_dereference }
+	| '+' cast_expression							{ positive }
+	| '-' cast_expression							{ negate }
+	| '~' cast_expression							{ bitwise_negate }
+	| '!' cast_expression							{ logical_not }
+	| SIZEOF unary_expression						{ sizeof_var }
+	| SIZEOF '(' type_name ')'						{ sizeof_type }
 	;
 
 cast_expression
 	: unary_expression
-	| '(' type_name ')' cast_expression
+	| '(' type_name ')' cast_expression					{ type_cast }
 	;
 
 multiplicative_expression
 	: cast_expression
-	| multiplicative_expression '*' cast_expression
-	| multiplicative_expression '/' cast_expression
-	| multiplicative_expression '%' cast_expression
+	| multiplicative_expression '*' cast_expression				{ multiply }
+	| multiplicative_expression '/' cast_expression				{ divide }
+	| multiplicative_expression '%' cast_expression				{ modulo }
 	;
 
 additive_expression
 	: multiplicative_expression
-	| additive_expression '+' multiplicative_expression
-	| additive_expression '-' multiplicative_expression
+	| additive_expression '+' multiplicative_expression			{ add }
+	| additive_expression '-' multiplicative_expression			{ subtract }
 	;
 
 shift_expression
 	: additive_expression
-	| shift_expression LEFT_OP additive_expression
-	| shift_expression RIGHT_OP additive_expression
+	| shift_expression LEFT_OP additive_expression				{ left_shift }
+	| shift_expression RIGHT_OP additive_expression				{ right_shift }
 	;
 
 relational_expression
 	: shift_expression
-	| relational_expression '<' shift_expression
-	| relational_expression '>' shift_expression
-	| relational_expression LE_OP shift_expression
-	| relational_expression GE_OP shift_expression
+	| relational_expression '<' shift_expression				{ less_than }
+	| relational_expression '>' shift_expression				{ greater_than }
+	| relational_expression LE_OP shift_expression				{ less_than_equals }
+	| relational_expression GE_OP shift_expression				{ greater_than_equals }
 	;
 
 equality_expression
 	: relational_expression
-	| equality_expression EQ_OP relational_expression
-	| equality_expression NE_OP relational_expression
+	| equality_expression EQ_OP relational_expression			{ equals }
+	| equality_expression NE_OP relational_expression			{ not_equals }
 	;
 
 and_expression
 	: equality_expression
-	| and_expression '&' equality_expression
+	| and_expression '&' equality_expression				{ bitwise_and }
 	;
 
 exclusive_or_expression
 	: and_expression
-	| exclusive_or_expression '^' and_expression
+	| exclusive_or_expression '^' and_expression				{ bitwise_xor }
 	;
 
 inclusive_or_expression
 	: exclusive_or_expression
-	| inclusive_or_expression '|' exclusive_or_expression
+	| inclusive_or_expression '|' exclusive_or_expression			{ bitwise_or }
 	;
 
 logical_and_expression
 	: inclusive_or_expression
-	| logical_and_expression AND_OP inclusive_or_expression
+	| logical_and_expression AND_OP inclusive_or_expression			{ logical_and }
 	;
 
 logical_or_expression
 	: logical_and_expression
-	| logical_or_expression OR_OP logical_and_expression
+	| logical_or_expression OR_OP logical_and_expression			{ logical_or }
 	;
 
 conditional_expression
 	: logical_or_expression
-	| logical_or_expression '?' expression ':' conditional_expression
+	| logical_or_expression '?' expression ':' conditional_expression	{ ternary_op }
 	;
 
 assignment_expression
 	: conditional_expression
-	| unary_expression assignment_operator assignment_expression
-	;
-
-assignment_operator
-	: '='
-	| MUL_ASSIGN
-	| DIV_ASSIGN
-	| MOD_ASSIGN
-	| ADD_ASSIGN
-	| SUB_ASSIGN
-	| LEFT_ASSIGN
-	| RIGHT_ASSIGN
-	| AND_ASSIGN
-	| XOR_ASSIGN
-	| OR_ASSIGN
+	| unary_expression '=' assignment_expression				{ assign }
+	| unary_expression MUL_ASSIGN assignment_expression			{ multiply_assign }
+	| unary_expression DIV_ASSIGN assignment_expression			{ divide_assign }
+	| unary_expression MOD_ASSIGN assignment_expression			{ modulo_assign }
+	| unary_expression ADD_ASSIGN assignment_expression			{ add_assign }
+	| unary_expression SUB_ASSIGN assignment_expression			{ subtract_assign }
+	| unary_expression LEFT_ASSIGN assignment_expression			{ left_shift_assign }
+	| unary_expression RIGHT_ASSIGN assignment_expression			{ right_shift_assign }
+	| unary_expression AND_ASSIGN assignment_expression			{ and_assign }
+	| unary_expression XOR_ASSIGN assignment_expression			{ xor_assign }
+	| unary_expression OR_ASSIGN assignment_expression			{ or_assign }
 	;
 
 expression
@@ -225,17 +218,17 @@ constant_expression
 	;
 
 declaration
-	: declaration_specifiers ';'
-	| declaration_specifiers init_declarator_list ';'
+	: declaration_specifiers ';'						{ declaration }
+	| declaration_specifiers init_declarator_list ';'			{ declaration }
 	;
 
 declaration_specifiers
-	: storage_class_specifier
-	| storage_class_specifier declaration_specifiers
-	| type_specifier
-	| type_specifier declaration_specifiers
-	| type_qualifier
-	| type_qualifier declaration_specifiers
+	: storage_class_specifier						{ storage_decl_spec }
+	| storage_class_specifier declaration_specifiers			{ storage_decl_spec }
+	| type_specifier							{ type_spec_decl_spec }
+	| type_specifier declaration_specifiers					{ type_spec_decl_spec }
+	| type_qualifier							{ type_qual_decl_spec }
+	| type_qualifier declaration_specifiers					{ type_qual_decl_spec }
 	;
 
 init_declarator_list
@@ -245,36 +238,36 @@ init_declarator_list
 
 init_declarator
 	: declarator
-	| declarator '=' initializer
+	| declarator '=' initializer						{ init_declr }
 	;
 
 storage_class_specifier
-	: TYPEDEF
-	| EXTERN
-	| STATIC
-	| AUTO
-	| REGISTER
+	: TYPEDEF								{ typedef_str_class_spec }
+	| EXTERN								{ extern_str_class_spec }
+	| STATIC								{ static_str_class_spec }
+	| AUTO									{ auto_str_class_spec }
+	| REGISTER								{ register_str_class_spec }
 	;
 
 type_specifier
-	: VOID
-	| CHAR
-	| SHORT
-	| INT
-	| LONG
-	| FLOAT
-	| DOUBLE
-	| SIGNED
-	| UNSIGNED
+	: VOID									{ void_type_spec }
+	| CHAR									{ char_type_spec }
+	| SHORT									{ short_type_spec }
+	| INT									{ int_type_spec }
+	| LONG									{ long_type_spec }
+	| FLOAT									{ float_type_spec }
+	| DOUBLE								{ double_type_spec }
+	| SIGNED								{ signed_type_spec }
+	| UNSIGNED								{ unsigned_type_spec }
 	| struct_or_union_specifier
 	| enum_specifier
 	| TYPE_NAME
 	;
 
 struct_or_union_specifier
-	: struct_or_union IDENTIFIER '{' struct_declaration_list '}'
-	| struct_or_union '{' struct_declaration_list '}'
-	| struct_or_union IDENTIFIER
+	: struct_or_union IDENTIFIER '{' struct_declaration_list '}'		{ struct_definition_spec }
+	| struct_or_union '{' struct_declaration_list '}'			{ struct_definition_spec }
+	| struct_or_union IDENTIFIER						{ struct_definition_spec }
 	;
 
 struct_or_union
@@ -310,9 +303,9 @@ struct_declarator
 	;
 
 enum_specifier
-	: ENUM '{' enumerator_list '}'
-	| ENUM IDENTIFIER '{' enumerator_list '}'
-	| ENUM IDENTIFIER
+	: ENUM '{' enumerator_list '}'						{ defined_enum_spec }
+	| ENUM IDENTIFIER '{' enumerator_list '}'				{ defined_enum_spec }
+	| ENUM IDENTIFIER							{ referenced_enum_spec }
 	;
 
 enumerator_list
@@ -321,13 +314,13 @@ enumerator_list
 	;
 
 enumerator
-	: IDENTIFIER
-	| IDENTIFIER '=' constant_expression
+	: IDENTIFIER								{ enumerator }
+	| IDENTIFIER '=' constant_expression					{ enumerator }
 	;
 
 type_qualifier
-	: CONST
-	| VOLATILE
+	: CONST									{ const_type_qualifier }
+	| VOLATILE								{ volatile_type_qualifier }
 	;
 
 declarator
@@ -336,20 +329,20 @@ declarator
 	;
 
 direct_declarator
-	: IDENTIFIER
-	| '(' declarator ')'
-	| direct_declarator '[' constant_expression ']'
-	| direct_declarator '[' ']'
-	| direct_declarator '(' parameter_type_list ')'
-	| direct_declarator '(' identifier_list ')'
-	| direct_declarator '(' ')'
+	: IDENTIFIER								{ name_dir_declr }
+	| '(' declarator ')'							{ paren_dir_declr }
+	| direct_declarator '[' constant_expression ']'				{ bracket_dir_declr }
+	| direct_declarator '[' ']'						{ bracket_dir_declr }
+	| direct_declarator '(' parameter_type_list ')'				{ type_func_list_dir_declr }
+	| direct_declarator '(' identifier_list ')'				{ id_func_list_dir_declr }
+	| direct_declarator '(' ')'						{ type_func_list_dir_declr }
 	;
 
 pointer
-	: '*'
-	| '*' type_qualifier_list
-	| '*' pointer
-	| '*' type_qualifier_list pointer
+	: '*'									{ pointer }
+	| '*' type_qualifier_list						{ pointer }
+	| '*' pointer								{ pointer }
+	| '*' type_qualifier_list pointer					{ pointer }
 	;
 
 type_qualifier_list
@@ -423,16 +416,16 @@ statement
 	;
 
 labeled_statement
-	: IDENTIFIER ':' statement
-	| CASE constant_expression ':' statement
-	| DEFAULT ':' statement
+	: IDENTIFIER ':' statement						{ label_statement }
+	| CASE constant_expression ':' statement				{ case_label_statement }
+	| DEFAULT ':' statement							{ default_label_statement }
 	;
 
 compound_statement
-	: '{' '}'
-	| '{' statement_list '}'
-	| '{' declaration_list '}'
-	| '{' declaration_list statement_list '}'
+	: '{' '}'								{ compound_statement }
+	| '{' statement_list '}'						{ compound_statement }
+	| '{' declaration_list '}'						{ compound_statement }
+	| '{' declaration_list statement_list '}'				{ compound_statement }
 	;
 
 declaration_list
@@ -451,24 +444,25 @@ expression_statement
 	;
 
 selection_statement
-	: IF '(' expression ')' statement
-	| IF '(' expression ')' statement ELSE statement
-	| SWITCH '(' expression ')' statement
+	: IF '(' expression ')' statement					{ if_statement }
+	| IF '(' expression ')' statement ELSE statement			{ if_statement }
+	| SWITCH '(' expression ')' statement					{ switch_statement }
 	;
 
 iteration_statement
-	: WHILE '(' expression ')' statement
-	| DO statement WHILE '(' expression ')' ';'
-	| FOR '(' expression_statement expression_statement ')' statement
+	: WHILE '(' expression ')' statement					{ while_statement }
+	| DO statement WHILE '(' expression ')' ';'				{ do_statement }
+	| FOR '(' expression_statement expression_statement ')' statement	{ for_statement }
 	| FOR '(' expression_statement expression_statement expression ')' statement
+										{ for_statement }
 	;
 
 jump_statement
-	: GOTO IDENTIFIER ';'
-	| CONTINUE ';'
-	| BREAK ';'
-	| RETURN ';'
-	| RETURN expression ';'
+	: GOTO IDENTIFIER ';'							{ goto_statement }
+	| CONTINUE ';'								{ continue_statement }
+	| BREAK ';'								{ break_statement }
+	| RETURN ';'								{ return_statement }
+	| RETURN expression ';'							{ return_statement }
 	;
 
 translation_unit
