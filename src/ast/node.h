@@ -1,5 +1,5 @@
 typedef void fn_destruct (ast_node* node);
-typedef void fn_print (FILE* fh, ast_node const* node);
+typedef void fn_print (ast_node const* node, FILE* fh);
 
 struct ast_vtbl
 {

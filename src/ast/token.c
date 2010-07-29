@@ -46,7 +46,7 @@ ast_token_destruct (ast_node* object)
 }
 
 static void
-ast_token_print (FILE* fh, ast_node const* object)
+ast_token_print (ast_node const* object, FILE* fh)
 {
   self_type const* self = (self_type const*)object;
 
