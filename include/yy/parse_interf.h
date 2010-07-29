@@ -8,4 +8,4 @@
 #include <parser.h>
 #include <lexer.h>
 
-void yyerror (YYLTYPE const* llocp, parse_context* context, char const* s);
+void yyerror (YYLTYPE const* llocp, parse_context const* context, char const* s);

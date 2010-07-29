@@ -14,6 +14,8 @@
 %parse-param { parse_context* context }
 %lex-param { void* scanner }
 
+%destructor { ast_node_delete ($$); } <>
+
 
 %token IDENTIFIER       "identifier"
 %token CONSTANT         "constant"

@@ -3,9 +3,8 @@
 #include <stdio.h>
 
 void
-yyerror (YYLTYPE const* llocp, parse_context* context, char const* s)
+yyerror (YYLTYPE const* llocp, parse_context const* context, char const* s)
 {
-  fflush (stdout);
   printf ("%d:%d: %s\n", llocp->first_line, llocp->first_column, s);
 }
 
