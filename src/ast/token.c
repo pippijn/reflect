@@ -11,7 +11,7 @@ static fn_destruct ast_token_destruct;
 static fn_print ast_token_print;
 
 
-struct ast_vtbl ast_token_vtbl = {
+static struct ast_vtbl vtbl = {
   ast_token_destruct,
   ast_token_print,
 };
@@ -22,12 +22,20 @@ struct ast_vtbl ast_token_vtbl = {
 ast_node*
 ast_token_new (struct location const* loc, char const* text, size_t length, int token)
 {
-  struct ast_node_token* self = malloc (sizeof *self);
+  self_type* self = NULL;
 
-  ast_node_construct (&self->base, &ast_token_vtbl, loc);
+  assert (loc != NULL);
+  assert (text != NULL);
+  assert (length > 0);
 
+  /* base constructor */
+  NEW_SELF (AST_TOKEN, loc);
+
+  /* initialise our own data */
   self->text = strndup (text, length);
   self->token = token;
+
+  assert (self->text != NULL);
 
   return &self->base;
 }
@@ -38,7 +46,7 @@ ast_token_new (struct location const* loc, char const* text, size_t length, int 
 char const*
 ast_token_text (ast_node const* object)
 {
-  self_type const* self = (self_type const*)object;
+  CONST_SELF (AST_TOKEN);
 
   return self->text;
 }
@@ -46,7 +54,7 @@ ast_token_text (ast_node const* object)
 int
 ast_token_token (ast_node const* object)
 {
-  self_type const* self = (self_type const*)object;
+  CONST_SELF (AST_TOKEN);
 
   return self->token;
 }
@@ -57,17 +65,19 @@ ast_token_token (ast_node const* object)
 static void
 ast_token_destruct (ast_node* object)
 {
-  self_type* self = (self_type*)object;
+  SELF (AST_TOKEN);
 
-  ast_node_destruct (&self->base);
-
+  /* destroy our own data */
   free (self->text);
+
+  /* base destructor */
+  ast_node_destruct (&self->base);
 }
 
 static void
 ast_token_print (ast_node const* object, FILE* fh)
 {
-  self_type const* self = (self_type const*)object;
+  CONST_SELF (AST_TOKEN);
 
   fprintf (fh, "token { %s }", self->text);
 }
