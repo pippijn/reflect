@@ -1,14 +1,12 @@
-struct ast_node_for_statement
+struct ast_node_for_tok_statement
 {
   struct ast_node base;
 
-  /* we do not care about the semicolons... or do we?
-  struct ast_node_expression_statement initializer;
-  struct ast_node_expression_statement check;
-  */
-
-  struct ast_node_expression initializer;
-  struct ast_node_expression condition;
-  struct ast_node_expression increment;
-  struct ast_node_statement  body;
+  struct ast_node *for_tok;
+  struct ast_node *open_brace;
+  struct ast_node *initializer;
+  struct ast_node *condition;
+  struct ast_node *increment;
+  struct ast_node *close_brace;
+  struct ast_node *body;
 }

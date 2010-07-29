@@ -2,84 +2,118 @@
 
 /* type of *self */
 
-typedef struct ast_node_for_statement self_type;
+typedef struct ast_node_for_tok_statement self_type;
 
 
 /* vtable */
 
-static fn_destruct ast_for_statement_destruct;
-static fn_print ast_for_statement_print;
+static fn_print ast_for_tok_statement_print;
 
 
-struct ast_vtbl ast_for_statement_vtbl = {
-  ast_for_statement_destruct,
-  ast_for_statement_print,
+struct ast_vtbl ast_for_tok_statement_vtbl = {
+  ast_node_destruct,
+  ast_for_tok_statement_print,
 };
 
 
 /* public */
 
 ast_node*
-ast_for_statement_new (struct location const* loc, struct ast_node_expression initializer,
-                       struct ast_node_expression condition, struct ast_node_expression increment,
-                       struct ast_node_statement body)
+ast_for_tok_statement_new (struct location const* loc, struct ast_node *for,
+                       struct ast_node *open_brace, struct ast_node *initializer,
+		       struct ast_node *condition, struct ast_node *increment,
+                       struct ast_node *close_brace, struct ast_node *body)
 {
-  struct ast_node_for_statement *self = malloc (sizeof self);
+  self_type *self = malloc (sizeof *self_type);
 
-  ast_node_construct (&self->base, &ast_for_statement_vtbl, loc);
+  ast_node_construct (&self->base, &ast_for_tok_statement_vtbl, loc);
 
+  self->for_tok         = for;
+  self->open_brace  = open_brace;
   self->initializer = initializer;
   self->condition   = condition;
   self->increment   = increment;
+  self->close_brace = close_brace;
   self->body        = body;
 
+  ast_node_for_tok_statement_n
   return &self->base;
 }
 
 
 /* accessors */
 
-struct ast_node_expression
-ast_for_statement_initializer(ast_node const *object)
+struct ast_node *
+ast_for_tok_statement_for (ast_node *object)
 {
-  self_type const* self = (self_type const*)object;
+  self_type const* self = (self_type const *)object;
+
+  return self->for_tok;
+}
+
+struct ast_node *
+ast_for_tok_statement_open_brace (ast_node *object)
+{
+
+  self_type const* self = (self_type const *)object;
+
+  return self->open_brace;
+}
+
+struct ast_node *
+ast_for_tok_statement_initializer (ast_node const *object)
+{
+  self_type const* self = (self_type const *)object;
 
   return self->initializer;
 }
 
-/* TODO insert missing ones */
+struct ast_node *
+ast_for_tok_statement_condition (ast_node const *object)
+{
+  self_type const* self = (self_type const *)object;
 
+  return self->condition;
+}
+
+struct ast_node *
+ast_for_tok_statement_increment (ast_node const *object)
+{
+  self_type const* self = (self_type const *)object;
+
+  return self->increment;
+}
+
+struct ast_node *
+ast_for_tok_statement_close_brace (ast_node const *object)
+{
+  self_type const* self = (self_type const *)object;
+
+  return self->close_brace;
+}
+
+struct ast_node *
+ast_for_tok_statement_body (ast_node *object)
+{
+  self_type const* self = (self_type const *)object;
+
+  return self->body;
+}
 
 
 /* virtual */
 
 static void
-ast_for_statement_destruct (ast_node* object)
-{
-  self_type* self = (self_type*)object;
-
-  ast_node_destruct (&self->base);
-
-  /* do we do free them here? */
-  /*
-  free (self->initializer);
-  free (self->condition);
-  free (self->increment);
-  free (self->body);
-  */
-}
-
-static void
-ast_for_statement_print (ast_node const* object, FILE* fh)
+ast_for_tok_statement_print (ast_node const* object, FILE* fh)
 {
   self_type const* self = (self_type const*)object;
 
-  fputs ("for (", fh);
-  ast_expression_print(self->initializer);
-  fputs ("; ", fh);
-  ast_expression_print(self->condition);
-  fputs ("; ", fh);
-  ast_expression_print(self->increment);
-  fputs (") ", fh);
-  ast_expression_print(self->body);
+  ast_token_print (self->for_tok);
+  ast_token_print (self->open_brace);
+  ast_expression_statement_print (self->initializer);
+  ast_expression_statement_print (self->condition);
+  if (self->increment)
+    ast_expression_print (self->increment);
+  ast_token_print (self->close_brace);
+  ast_statement_print (self->body);
 }
