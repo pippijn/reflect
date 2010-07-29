@@ -1,4 +1,7 @@
-CPPFLAGS = -Iinclude -Isrc/parsing
+LEX		= flex
+YACC		= bison
+
+CPPFLAGS	= -Iinclude -Isrc/parsing
 
 SOURCES =			\
 	src/parsing/parser.y	\
