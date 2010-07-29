@@ -33,6 +33,25 @@ ast_token_new (struct location const* loc, char const* text, size_t length, int 
 }
 
 
+/* accessors */
+
+char const*
+ast_token_text (ast_node const* object)
+{
+  self_type const* self = (self_type const*)object;
+
+  return self->text;
+}
+
+int
+ast_token_token (ast_node const* object)
+{
+  self_type const* self = (self_type const*)object;
+
+  return self->token;
+}
+
+
 /* virtual */
 
 static void
