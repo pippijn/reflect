@@ -1,18 +1,86 @@
 %{
-#include "parser-pre.h"
+#include "yy/parse_interf.h"
+#define scanner parse_context_scanner_get (context)
 %}
 
-%token IDENTIFIER CONSTANT STRING_LITERAL SIZEOF
-%token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
-%token AND_OP OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN
-%token SUB_ASSIGN LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN
-%token XOR_ASSIGN OR_ASSIGN TYPE_NAME
+%define api.pure
+%locations
+%debug
+%error-verbose
+%expect 1
+%glr-parser
+%token-table
 
-%token TYPEDEF EXTERN STATIC AUTO REGISTER
-%token CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE CONST VOLATILE VOID
-%token STRUCT UNION ENUM ELLIPSIS
+%parse-param { parse_context* context }
+%lex-param { void* scanner }
 
-%token CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
+
+%token IDENTIFIER       "identifier"
+%token CONSTANT         "constant"
+%token STRING_LITERAL   "string literal"
+
+%token SIZEOF           "sizeof"
+
+%token PTR_OP           "->"
+%token INC_OP           "++"
+%token DEC_OP           "--"
+%token LEFT_OP          "<<"
+%token RIGHT_OP         ">>"
+%token LE_OP            "<="
+%token GE_OP            ">="
+%token EQ_OP            "=="
+%token NE_OP            "!="
+%token AND_OP           "&&"
+%token OR_OP            "||"
+
+%token MUL_ASSIGN       "*="
+%token DIV_ASSIGN       "/="
+%token MOD_ASSIGN       "%="
+%token ADD_ASSIGN       "+="
+%token SUB_ASSIGN       "-="
+%token LEFT_ASSIGN      "<<="
+%token RIGHT_ASSIGN     ">>="
+%token AND_ASSIGN       "&="
+%token XOR_ASSIGN       "^="
+%token OR_ASSIGN        "|="
+%token TYPE_NAME        "type name"
+
+%token TYPEDEF          "typedef"
+%token EXTERN           "extern"
+%token STATIC           "static"
+%token AUTO             "auto"
+%token REGISTER         "register"
+
+%token CHAR             "char"
+%token SHORT            "short"
+%token INT              "int"
+%token LONG             "long"
+%token SIGNED           "signed"
+%token UNSIGNED         "unsigned"
+%token FLOAT            "float"
+%token DOUBLE           "double"
+%token CONST            "const"
+%token VOLATILE         "volatile"
+%token VOID             "void"
+
+%token STRUCT           "struct"
+%token UNION            "union"
+%token ENUM             "enum"
+%token ELLIPSIS         "..."
+
+%token CASE             "case"
+%token DEFAULT          "default"
+%token IF               "if"
+%token ELSE             "else"
+%token SWITCH           "switch"
+%token WHILE            "while"
+%token DO               "do"
+%token FOR              "for"
+%token GOTO             "goto"
+%token CONTINUE         "continue"
+%token BREAK            "break"
+%token RETURN           "return"
+
 
 %start translation_unit
 %%
@@ -419,4 +487,3 @@ function_definition
 	;
 
 %%
-#include "parser-post.h"
