@@ -19,25 +19,25 @@ struct ast_vtbl ast_for_statement_vtbl = {
 /* public */
 
 ast_node*
-ast_for_statement_new (struct ast_node *for_tok,
-                           struct ast_node *open_bracket, struct ast_node *initializer,
-		           struct ast_node *condition, struct ast_node *increment,
-                           struct ast_node *close_bracket, struct ast_node *body)
+ast_for_statement_new (ast_node *for_tok,
+                       ast_node *open_bracket, ast_node *initializer,
+		       ast_node *condition, ast_node *increment,
+                       ast_node *close_bracket, ast_node *body)
 {
   self_type *self = malloc (sizeof (self_type*));
-  struct location *loc = malloc (sizeof (struct location*));
+  struct location loc;
   struct location const *start;
   struct location const *end;
 
   start = ast_node_location(for_tok);
   end   = ast_node_location(body);
 
-  loc->first_line = start->first_line;
-  loc->first_column = start->first_column;
-  loc->last_line = end->last_line;
-  loc->last_column = end->last_column;
+  loc.first_line = start->first_line;
+  loc.first_column = start->first_column;
+  loc.last_line = end->last_line;
+  loc.last_column = end->last_column;
 
-  ast_node_construct (&self->base, &ast_for_statement_vtbl, loc);
+  ast_node_construct (&self->base, &ast_for_statement_vtbl, &loc);
 
   self->for_tok       = for_tok;
   self->open_bracket  = open_bracket;
@@ -118,12 +118,12 @@ ast_for_statement_print (ast_node const* object, FILE* fh)
 {
   self_type const* self = (self_type const*)object;
 
-  ast_token_print (self->for_tok);
-  ast_token_print (self->open_bracket);
-  ast_expression_statement_print (self->initializer);
-  ast_expression_statement_print (self->condition);
+  ast_node_print (self->for_tok, fh);
+  ast_node_print (self->open_bracket, fh);
+  ast_node_print (self->initializer, fh);
+  ast_node_print (self->condition, fh);
   if (self->increment)
-    ast_expression_print (self->increment);
-  ast_token_print (self->close_bracket);
-  ast_statement_print (self->body);
+    ast_node_print (self->increment, fh);
+  ast_node_print (self->close_bracket, fh);
+  ast_node_print (self->body, fh);
 }
