@@ -452,9 +452,14 @@ selection_statement
 iteration_statement
 	: WHILE '(' expression ')' statement					{ /* while_statement */ }
 	| DO statement WHILE '(' expression ')' ';'				{ /* do_statement */ }
-	| FOR '(' expression_statement expression_statement ')' statement	{ /* for_statement */ }
+	| FOR '(' expression_statement expression_statement ')' statement
+	  { /* for_statement */ 
+	    ast_for_statement_new($n, @1, @2, @3, @4, NULL, @5, @6);
+          }
 	| FOR '(' expression_statement expression_statement expression ')' statement
-										{ /* for_statement */ }
+          { /* for_statement */
+            ast_for_statement_new(@n, @1, @2, @3, @4, @5, @6, @7);
+          }
 	;
 
 jump_statement
