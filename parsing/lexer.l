@@ -12,9 +12,9 @@
 
 %option bison-locations
 %option reentrant
-%option header-file="src/parsing/lexer.h"
+%option header-file="parsing/lexer.h"
 %option yylineno
-%option noyywrap
+%option noyywrap nounput noinput
 
 D			[0-9]
 L			[a-zA-Z_]

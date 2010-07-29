@@ -1,12 +1,13 @@
 LEX		= flex
 YACC		= bison
 
-CPPFLAGS	= -Iinclude -Isrc/parsing
+CPPFLAGS	= -Iinclude -Iparsing -include stdinc.h
+CFLAGS		= -Wall
 
 SOURCES =			\
-	src/parsing/parser.y	\
-	src/parsing/lexer.l	\
-	$(wildcard src/*.c)
+	parsing/parser.y	\
+	parsing/lexer.l		\
+	$(wildcard src/*.c src/*/*.c)
 
 OBJECTS = $(addsuffix .o,$(basename $(SOURCES)))
 
@@ -16,10 +17,10 @@ reflect: $(OBJECTS)
 clean:
 	$(RM) reflect
 	$(RM) $(OBJECTS)
-	$(RM) src/parsing/parser.c
-	$(RM) src/parsing/parser.h
-	$(RM) src/parsing/lexer.c
-	$(RM) src/parsing/lexer.h
+	$(RM) parsing/parser.c
+	$(RM) parsing/parser.h
+	$(RM) parsing/lexer.c
+	$(RM) parsing/lexer.h
 
 %.c: %.y
 	$(YACC) -d $< -o $@
@@ -31,5 +32,5 @@ clean:
 	$(COMPILE.c) $< -o $@
 
 -include prepare
-prepare: src/parsing/parser.c
-prepare: src/parsing/lexer.c
+prepare: parsing/parser.c
+prepare: parsing/lexer.c

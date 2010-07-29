@@ -2,6 +2,8 @@
 
 #include "yyinterf.h"
 
+#include <stdlib.h>
+
 struct parse_context
 {
   void* scanner;
