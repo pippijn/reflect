@@ -6,3 +6,4 @@
 
 #include <ast/for.h>
 #include <ast/token.h>
+#include <ast/while.h>

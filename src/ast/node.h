@@ -7,6 +7,7 @@ enum ast_kind
 
   AST_FOR_STATEMENT,
   AST_TOKEN,
+  AST_WHILE_STATEMENT,
 };
 
 
