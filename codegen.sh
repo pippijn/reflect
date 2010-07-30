@@ -1,8 +1,13 @@
 #!/bin/sh
+if [ ! -f ./Makefile ]
+then
+  echo "Error: this script must be run from the project root!"
+  exit 1
+fi
 
 while read line;
 do
-  base=`echo $line | awk '{ print $1 }' | sed 's/_.*//'`
+  base=`echo $line | awk '{ print $1 }' | sed 's/_[^_]*$//'`
   header=`echo $base | sed 's/$/.h/'`
   src=`echo $base | sed 's/$/.c/'`
   name=`echo $line | awk '{print $1 }'`

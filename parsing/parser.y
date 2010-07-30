@@ -418,9 +418,12 @@ statement
 	;
 
 labeled_statement
-	: IDENTIFIER ':' statement						{ /* label_statement */ }
-	| "case" constant_expression ':' statement				{ /* case_label_statement */ }
-	| "default" ':' statement						{ /* default_label_statement */ }
+	: IDENTIFIER ':' statement
+	  { $$ = ast_label_statement_new ($1, $2, $3); }
+	| "case" constant_expression ':' statement
+	  { $$ = ast_case_label_statement_new ($1, $2, $3, $4); }
+	| "default" ':' statement
+	  { $$ = ast_default_label_statement_new ($1, $2, $3); }
 	;
 
 compound_statement
