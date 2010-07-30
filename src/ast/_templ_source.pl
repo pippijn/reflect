@@ -60,7 +60,7 @@ print <<"EOF";
 /* internal */
 
 void
-ast_${name}_construct (self_type* self, ast_node *$members[0],
+ast_${name}_construct (self_type *self, ast_node *$members[0],
 EOF
 
 #for ((i=0; i<argc-2; i++))
@@ -86,7 +86,7 @@ for($i = 0; $i < $memc; $i++) {
 
 print <<"EOF";
 
-  COMPUTE_LOC ($members[0], $members[-1]) /* FIXME */;
+  COMPUTE_LOC ($members[0], $members[-1]); /* FIXME */
   BASE_CTOR (node, &loc);
 
 EOF
@@ -101,7 +101,7 @@ print <<"EOF";
 
 /* public */
 
-ast_node*
+ast_node *
 ast_${name}_new (ast_node *$members[0],
 EOF
 
@@ -131,7 +131,7 @@ foreach (@members) {
   if ($tmp =~ m/_tok$/) {
     $tmp =~ s/_tok$//;
     print <<"EOF";
-ast_node*
+ast_node *
 ast_${name}_$tmp (ast_node const *object)
 {
   CONST_SELF ();
@@ -151,7 +151,7 @@ print <<"EOF";
 /* virtual */
 
 void
-ast_${name}_print (ast_node const* object, FILE* fh)
+ast_${name}_print (ast_node const *object, FILE *fh)
 {
   CONST_SELF ();
 
