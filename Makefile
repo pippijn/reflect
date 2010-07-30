@@ -3,6 +3,13 @@ YACC		= bison
 
 CPPFLAGS	= -Iinclude -Iparsing -include stdinc.h
 CFLAGS		= -Wall -ggdb3 -O3
+CFLAGS		+= -Wredundant-decls			\
+		   -Wmissing-prototypes			\
+		   -Wnested-externs			\
+		   -Wmissing-parameter-type		\
+		   -Wbad-function-cast			\
+		   -Wdeclaration-after-statement	\
+		   -Wstrict-prototypes			\
 
 SOURCES =			\
 	parsing/parser.y	\
@@ -29,7 +36,8 @@ clean:
 	$(LEX) -o$@ $<
 
 %.o: %.c $(shell find . -name "*.h")
-	$(COMPILE.c) $< -o $@
+	@echo "  CC  " $@
+	@$(COMPILE.c) $< -o $@
 
 -include prepare
 prepare: parsing/parser.c

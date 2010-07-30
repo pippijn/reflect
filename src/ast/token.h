@@ -6,4 +6,10 @@ struct ast_node_token
   int token;
 };
 
+
 extern struct ast_vtbl const ast_token_vtbl;
+
+
+void ast_token_construct (struct ast_node_token* self,
+                          struct location const* loc, char const* text,
+                          size_t length, int token);

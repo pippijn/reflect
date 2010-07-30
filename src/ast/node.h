@@ -35,13 +35,17 @@ ast_node const* ast_cast_const (ast_node const* object, enum ast_kind kind);
 #define SELF()                  self_type      * self = (self_type      *)ast_cast_mutable (object, vtbl->kind)
 #define CONST_SELF()            self_type const* self = (self_type const*)ast_cast_const   (object, vtbl->kind)
 
-#define NEW_SELF(loc)           (ast_node_construct ((ast_node*)(self = malloc (sizeof *self)), vtbl, loc), self)
-#define BASE_DESTRUCT()         self->base.vtbl->base->destruct (&self->base)
+#define NEW(class, ...)         ({ self_type* self = malloc (sizeof *self); ast_##class##_construct (self, __VA_ARGS__); &self->base; })
+#define BASE_CTOR(base, ...)    ast_##base##_construct ((ast_##base*)self, vtbl, __VA_ARGS__)
+#define BASE_DTOR()             self->base.vtbl->base->destruct (&self->base)
+
+
+extern struct ast_vtbl const ast_node_vtbl;
 
 
 void ast_node_construct (ast_node* self, struct ast_vtbl const* vtbl, struct location const* loc);
 
-extern struct ast_vtbl const ast_node_vtbl;
-
 fn_destruct ast_node_destruct;
+#if 0
 fn_print ast_node_print;
+#endif

@@ -7,27 +7,32 @@ typedef struct ast_node_for_statement self_type;
 
 /* vtable */
 
+#if 0
+static fn_destruct ast_for_statement_destruct;
+#endif
 static fn_print ast_for_statement_print;
-
 
 static struct ast_vtbl const* const vtbl = &ast_for_statement_vtbl;
 struct ast_vtbl const ast_for_statement_vtbl = {
   &ast_node_vtbl,
   AST_FOR_STATEMENT,
+#if 0
+  ast_for_statement_destruct,
+#else
   ast_node_destruct,
+#endif
   ast_for_statement_print,
 };
 
 
-/* public */
+/* internal */
 
-ast_node*
-ast_for_statement_new (ast_node *for_tok,
-                       ast_node *open_bracket, ast_node *initializer,
-		       ast_node *condition, ast_node *increment,
-                       ast_node *close_bracket, ast_node *body)
+void
+ast_for_statement_construct (self_type* self, ast_node *for_tok,
+                             ast_node *open_bracket, ast_node *initializer,
+                             ast_node *condition, ast_node *increment,
+                             ast_node *close_bracket, ast_node *body)
 {
-  self_type *self = NULL;
   struct location loc;
   struct location const *start;
   struct location const *end;
@@ -48,7 +53,7 @@ ast_for_statement_new (ast_node *for_tok,
   loc.last_line = end->last_line;
   loc.last_column = end->last_column;
 
-  self = NEW_SELF (&loc);
+  BASE_CTOR (node, &loc);
 
   self->for_tok       = for_tok;
   self->open_bracket  = open_bracket;
@@ -57,8 +62,19 @@ ast_for_statement_new (ast_node *for_tok,
   self->increment     = increment;
   self->close_bracket = close_bracket;
   self->body          = body;
+}
 
-  return &self->base;
+
+/* public */
+
+ast_node*
+ast_for_statement_new (ast_node *for_tok,
+                       ast_node *open_bracket, ast_node *initializer,
+		       ast_node *condition, ast_node *increment,
+                       ast_node *close_bracket, ast_node *body)
+{
+  return NEW (for_statement, for_tok, open_bracket, initializer,
+              condition, increment, close_bracket, body);
 }
 
 
@@ -123,7 +139,7 @@ ast_for_statement_body (ast_node const* object)
 
 /* virtual */
 
-static void
+void
 ast_for_statement_print (ast_node const* object, FILE* fh)
 {
   CONST_SELF ();

@@ -20,27 +20,32 @@ struct ast_vtbl const ast_token_vtbl = {
 };
 
 
-/* public */
+/* internal */
 
-ast_node*
-ast_token_new (struct location const* loc, char const* text, size_t length, int token)
+void
+ast_token_construct (self_type* self, struct location const* loc, char const* text, size_t length, int token)
 {
-  self_type* self = NULL;
-
   assert (loc != NULL);
   assert (text != NULL);
   assert (length > 0);
 
   /* base constructor */
-  NEW_SELF (loc);
+  BASE_CTOR (node, loc);
 
   /* initialise our own data */
   self->text = strndup (text, length);
   self->token = token;
 
   assert (self->text != NULL);
+}
 
-  return &self->base;
+
+/* public */
+
+ast_node*
+ast_token_new (struct location const* loc, char const* text, size_t length, int token)
+{
+  return NEW (token, loc, text, length, token);
 }
 
 
@@ -76,7 +81,7 @@ ast_token_destruct (ast_node* object)
   free (self->text);
 
   /* base destructor */
-  BASE_DESTRUCT ();
+  BASE_DTOR ();
 }
 
 static void
