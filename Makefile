@@ -23,7 +23,7 @@ reflect: $(OBJECTS)
 	@$(LINK.c) $(OBJECTS) -o $@
 
 codegen: Rules.ast
-	./codegen.sh < $<
+	@./codegen.sh < $<
 
 clean:
 	$(RM) reflect

@@ -4,7 +4,9 @@ while read line;
 do
   header=`echo $line | awk '{ print $1 }' | sed 's/_.*/.h_/'`
   src=`echo $line | awk '{ print $1 }' | sed 's/_.*/.c_/'`
+  name=`echo $line | awk '{print $1 }'`
 
+  echo "  GEN $name"
   ./include/ast/_templ_header.pl $line > ./include/ast/$header
   ./src/ast/_templ_header.pl $line > ./src/ast/$header
   ./src/ast/_templ_source.pl $line > ./src/ast/$src
