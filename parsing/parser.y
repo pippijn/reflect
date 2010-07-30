@@ -445,7 +445,7 @@ expression_statement
 
 selection_statement
 	: "if" '(' expression ')' statement					{ /* if_statement */ }
-	| "if" '(' expression ')' statement ELSE statement			{ /* if_statement */ }
+	| "if" '(' expression ')' statement "else" statement			{ /* if_statement */ }
 	| "switch" '(' expression ')' statement					{ /* switch_statement */ }
 	;
 
