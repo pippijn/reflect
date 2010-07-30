@@ -14,9 +14,9 @@ static fn_print ast_do_statement_print;
 static struct ast_vtbl const* const vtbl = &ast_do_statement_vtbl;
 struct ast_vtbl const ast_do_statement_vtbl = {
   {
-     &ast_node_vtbl,
-     "do_statement",
-     AST_DO_STATEMENT,
+    &ast_node_vtbl,
+    "do_statement",
+    AST_DO_STATEMENT,
   },
 #if 0
   ast_do_statement_destruct,

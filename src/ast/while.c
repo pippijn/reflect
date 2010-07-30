@@ -15,9 +15,9 @@ static fn_print ast_while_statement_print;
 static struct ast_vtbl const* const vtbl = &ast_while_statement_vtbl; /* <- Was genau macht das? */
 struct ast_vtbl const ast_while_statement_vtbl = {
   {
-     &ast_node_vtbl,
-     "while_statement",
-     AST_WHILE_STATEMENT,
+    &ast_node_vtbl,
+    "while_statement",
+    AST_WHILE_STATEMENT,
   },
 #if 0
   ast_while_statement_destruct,
