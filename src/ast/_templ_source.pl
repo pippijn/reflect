@@ -63,16 +63,11 @@ void
 ast_${name}_construct (self_type *self, ast_node *$members[0],
 EOF
 
-#for ((i=0; i<argc-2; i++))
-#do
-#  printf "%s                ast_node *\n" $(echo $name | tr 'a-z0-9_' '%') | sed 's/%/ /g'
-#done
-#printf "%s                ast_node *)\n" $(echo $name | tr 'a-z0-9_' '%') | sed 's/%/ /g'
 for($i = 1; $i < $memc - 1; $i++) {
   print "$filler                ast_node *$members[$i],\n";
 }
 
-print "$filler                ast_node *$members[-1]);\n";
+print "$filler                ast_node *$members[-1])\n";
 
 print <<"EOF";
 {
@@ -81,7 +76,7 @@ print <<"EOF";
 EOF
 
 for($i = 0; $i < $memc; $i++) {
-  print "  assert (); /* FIXME */\n";
+  print "  assert (1); /* FIXME */\n";
 }
 
 print <<"EOF";
@@ -114,7 +109,7 @@ for($i = 1; $i < $memc - 1; $i++) {
   print "$filler          ast_node *$members[$i],\n";
 }
 
-print "$filler          ast_node *$members[-1]);\n";
+print "$filler          ast_node *$members[-1])\n";
 
 print <<"EOF";
 {

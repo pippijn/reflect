@@ -2,9 +2,13 @@
 
 #include "node.h"
 
+#include "break.h"
+#include "continue.h"
 #include "do.h"
 #include "for.h"
+#include "goto.h"
 #include "if.h"
-#include "token.h"
+#include "return.h"
 #include "switch.h"
+#include "token.h"
 #include "while.h"
