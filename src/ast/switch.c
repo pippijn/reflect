@@ -75,10 +75,10 @@ ast_switch_statement_switch (ast_node const* object)
   return self->switch_tok;
 }
 
-  ACCESSOR (switch_statement, open_bracket);
-  ACCESSOR (switch_statement, expr);
-  ACCESSOR (switch_statement, close_bracket);
-  ACCESSOR (switch_statement, body);
+ACCESSOR (switch_statement, open_bracket);
+ACCESSOR (switch_statement, expr);
+ACCESSOR (switch_statement, close_bracket);
+ACCESSOR (switch_statement, body);
 
 
 /* virtual */

@@ -104,7 +104,7 @@ EOF
 
 for ((i=0; i<argc; i++))
 do
-  echo "  ACCESSOR (${name}, );"
+  echo "ACCESSOR (${name}, );"
 done
 
 cat <<EOF
