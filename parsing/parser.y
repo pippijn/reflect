@@ -464,11 +464,16 @@ iteration_statement
 	;
 
 jump_statement
-	: "goto" IDENTIFIER ';'							{ /* goto_statement */ }
-	| "continue" ';'							{ /* continue_statement */ }
-	| "break" ';'								{ /* break_statement */ }
-	| "return" ';'								{ /* return_statement */ }
-	| "return" expression ';'						{ /* return_statement */ }
+	: "goto" IDENTIFIER ';'
+	  { $$ = ast_goto_statement_new ($1, $2, $3); }
+	| "continue" ';'
+	  { $$ = ast_continue_statement_new ($1, $2); }
+	| "break" ';'
+	  { $$ = ast_break_statement_new ($1, $2); }
+	| "return" ';'
+	  { $$ = ast_return_statement_new ($1, NULL, $2); }
+	| "return" expression ';'
+	  { $$ = ast_return_statement_new ($1, $2, $3); }
 	;
 
 translation_unit
