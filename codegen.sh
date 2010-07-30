@@ -1,16 +1,27 @@
 #!/bin/sh
+
 if [ ! -f ./Makefile ]
 then
   echo "Error: this script must be run from the project root!"
   exit 1
 fi
 
+rm -f src/ast/kinds.h
+rm -f src/ast/nodes.h
+rm -f include/ast/nodes.h
+
 while read line;
 do
   argv=`echo $line | cut -f 2- -d ' '`
+  fullbase=`echo $line | cut -f 2 -d ' '`
   base=`echo $line | cut -f 1 -d ' '`
-  header=`echo $base | sed 's/$/.h/'`
-  src=`echo $base | sed 's/$/.c/'`
+  ucase=`echo $fullbase | tr a-z A-Z`
+  header=$base.h
+  src=$base.c
+
+  echo "  AST_$ucase," >> src/ast/kinds.h
+  echo "#include \"$header\"" >> src/ast/nodes.h
+  echo "#include <ast/$header>" >> include/ast/nodes.h
 
   if [ -f ./include/ast/$header ]
   then
