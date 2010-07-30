@@ -452,7 +452,8 @@ selection_statement
 iteration_statement
 	: "while" '(' expression ')' statement
 	  { $$ = ast_while_statement_new ($1, $2, $3, $4, $5); }
-	| "do" statement "while" '(' expression ')' ';'				{ /* do_statement */ }
+	| "do" statement "while" '(' expression ')' ';'
+	  { $$ = ast_do_statement_new ($1, $2, $3, $4, $5, $6, $7); }
 	| "for" '(' expression_statement expression_statement ')' statement
 	  { $$ = ast_for_statement_new ($1, $2, $3, $4, NULL, $5, $6); }
 	| "for" '(' expression_statement expression_statement expression ')' statement
