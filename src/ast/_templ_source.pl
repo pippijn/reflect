@@ -60,14 +60,21 @@ print <<"EOF";
 /* internal */
 
 void
-ast_${name}_construct (self_type *self, ast_node *$members[0],
 EOF
+
+if ($memc > 1) {
+  print "ast_${name}_construct (self_type *self, ast_node *$members[0],\n";
+} else {
+  print "ast_${name}_construct (self_type *self, ast_node *$members[0])\n";
+}
 
 for($i = 1; $i < $memc - 1; $i++) {
   print "$filler                ast_node *$members[$i],\n";
 }
 
-print "$filler                ast_node *$members[-1])\n";
+if ($memc > 1) {
+  print "$filler                ast_node *$members[-1])\n";
+}
 
 print <<"EOF";
 {
@@ -97,19 +104,21 @@ print <<"EOF";
 /* public */
 
 ast_node *
-ast_${name}_new (ast_node *$members[0],
 EOF
 
-#for ((i=0; i<argc-2; i++))
-#do
-#  printf "%s          ast_node *\n" $(echo $name | tr 'a-z0-9_' '%') | sed 's/%/ /g'
-#done
-#printf "%s          ast_node *)\n" $(echo $name | tr 'a-z0-9_' '%') | sed 's/%/ /g'
+if ($memc > 1) {
+  print "ast_${name}_new (ast_node *$members[0],\n";
+} else {
+  print "ast_${name}_new (ast_node *$members[0])\n";
+}
+
 for($i = 1; $i < $memc - 1; $i++) {
   print "$filler          ast_node *$members[$i],\n";
 }
 
-print "$filler          ast_node *$members[-1])\n";
+if ($memc > 1) {
+  print "$filler          ast_node *$members[-1])\n";
+}
 
 print <<"EOF";
 {

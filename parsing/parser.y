@@ -321,8 +321,10 @@ enumerator
 	;
 
 type_qualifier
-	: "const"								{ /* const_type_qualifier */ }
-	| "volatile"								{ /* volatile_type_qualifier */ }
+	: "const"
+	  { $$ = ast_const_type_qualifier_new ($1); }
+	| "volatile"
+	  { $$ = ast_volatile_type_qualifier_new ($1); }
 	;
 
 declarator

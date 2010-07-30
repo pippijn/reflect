@@ -7,10 +7,10 @@ fi
 
 while read line;
 do
-  base=`echo $line | awk '{ print $1 }' | sed 's/_[^_]*$//'`
+  argv=`echo $line | cut -f 2- -d ' '`
+  base=`echo $line | cut -f 1 -d ' '`
   header=`echo $base | sed 's/$/.h/'`
   src=`echo $base | sed 's/$/.c/'`
-  name=`echo $line | awk '{print $1 }'`
 
   if [ -f ./include/ast/$header ]
   then
@@ -19,8 +19,8 @@ do
     src=${src}_
   fi
 
-  echo "  GEN  $name"
-  ./include/ast/_templ_header.pl $line > ./include/ast/$header
-  ./src/ast/_templ_header.pl $line > ./src/ast/$header
-  ./src/ast/_templ_source.pl $line > ./src/ast/$src
+  echo "  GEN  $base"
+  ./include/ast/_templ_header.pl $argv > ./include/ast/$header
+  ./src/ast/_templ_header.pl $argv > ./src/ast/$header
+  ./src/ast/_templ_source.pl $argv > ./src/ast/$src
 done 

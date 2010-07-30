@@ -21,15 +21,21 @@ print <<"EOF";
  */
 
 /* constructor */
-ast_node*       ast_${name}_new           (ast_node *$members[0],
 EOF
+
+if ($memc > 1) {
+  print "ast_node*       ast_${name}_new           (ast_node *$members[0],\n";
+} else {
+  print "ast_node*       ast_${name}_new           (ast_node *$members[0]);\n";
+}
 
 for($i = 1; $i < $memc - 1; $i++) {
   print "$filler                                    ast_node *$members[$i],\n";
 }
 
-print "$filler                                    ast_node *$members[$memc - 1]);\n";
-
+if ($memc > 1) {
+  print "$filler                                    ast_node *$members[-1]);\n";
+}
 
 print <<"EOF";
 

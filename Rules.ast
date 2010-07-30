@@ -1,13 +1,15 @@
-for_statement           for_tok open_bracket initializer condition increment close_bracket body
-while_statement         while_tok open_bracket condition close_bracket body
-do_statement            do_tok body while_tok open_bracket condition close_bracket semicolon
-switch_statement        switch_tok open_bracket expr close_bracket body
-if_statement            if_tok open_bracket condition close_bracket if_body else_tok else_body
-goto_statement          goto_tok label semicolon
-continue_statement      continue_tok semicolon
-break_statement         break_tok semicolon
-return_statement        return_tok expr semicolon
-enumerator              identifier equals expr
-label_statement         label colon statement
-case_label_statement    case_tok expr colon statement
-default_label_statement default_tok colon statement
+for           for_statement           for_tok open_bracket initializer condition increment close_bracket body
+while         while_statement         while_tok open_bracket condition close_bracket body
+do            do_statement            do_tok body while_tok open_bracket condition close_bracket semicolon
+switch        switch_statement        switch_tok open_bracket expr close_bracket body
+if            if_statement            if_tok open_bracket condition close_bracket if_body else_tok else_body
+goto          goto_statement          goto_tok label semicolon
+continue      continue_statement      continue_tok semicolon
+break         break_statement         break_tok semicolon
+return        return_statement        return_tok expr semicolon
+enumerator    enumerator              identifier equals expr
+label         label_statement         label colon statement
+case          case_label_statement    case_tok expr colon statement
+default       default_label_statement default_tok colon statement
+const         const_type_qualifier    const_tok
+volatile      volatile_type_qualifier volatile_tok
