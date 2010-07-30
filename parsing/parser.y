@@ -444,8 +444,10 @@ expression_statement
 	;
 
 selection_statement
-	: "if" '(' expression ')' statement					{ /* if_statement */ }
-	| "if" '(' expression ')' statement "else" statement			{ /* if_statement */ }
+	: "if" '(' expression ')' statement
+	  { $$ = ast_if_statement_new ($1, $2, $3, $4, $5, NULL, NULL); }
+	| "if" '(' expression ')' statement "else" statement
+	  { $$ = ast_if_statement_new ($1, $2, $3, $4, $5, $6, $7); }
 	| "switch" '(' expression ')' statement
 	  { $$ = ast_switch_statement_new ($1, $2, $3, $4, $5); }
 	;
