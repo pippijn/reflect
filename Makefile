@@ -22,6 +22,9 @@ reflect: $(OBJECTS)
 	@echo "  CCLD" $@
 	@$(LINK.c) $(OBJECTS) -o $@
 
+codegen: Rules.ast
+	./codegen.sh < $<
+
 clean:
 	$(RM) reflect
 	$(RM) $(OBJECTS)
