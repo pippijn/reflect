@@ -19,7 +19,8 @@ SOURCES =			\
 OBJECTS = $(addsuffix .o,$(basename $(SOURCES)))
 
 reflect: $(OBJECTS)
-	$(LINK.c) $(OBJECTS) -o $@
+	@echo "  CCLD" $@
+	@$(LINK.c) $(OBJECTS) -o $@
 
 clean:
 	$(RM) reflect
@@ -30,10 +31,12 @@ clean:
 	$(RM) parsing/lexer.h
 
 %.c: %.y
-	$(YACC) -d $< -o $@
+	@echo " YACC " $@
+	@$(YACC) -d $< -o $@
 
 %.c: %.l
-	$(LEX) -o$@ $<
+	@echo "  LEX " $@
+	@$(LEX) -o$@ $<
 
 %.o: %.c $(shell find . -name "*.h")
 	@echo "  CC  " $@
