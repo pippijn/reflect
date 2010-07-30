@@ -242,31 +242,40 @@ init_declarator
 	;
 
 storage_class_specifier
-	: "typedef"								{ /* typedef_str_class_spec */ }
+	: "typedef"
 	  { $$ = ast_typedef_str_class_spec_new ($1); }
-	| "extern"								{ /* extern_str_class_spec */ }
+	| "extern"
 	  { $$ = ast_extern_str_class_spec_new ($1); }
-	| "static"								{ /* static_str_class_spec */ }
+	| "static"
 	  { $$ = ast_static_str_class_spec_new ($1); }
-	| "auto"								{ /* auto_str_class_spec */ }
+	| "auto"
 	  { $$ = ast_auto_str_class_spec_new ($1); }
-	| "register"								{ /* register_str_class_spec */ }
+	| "register"
 	  { $$ = ast_register_str_class_spec_new ($1); }
 	;
 
 type_specifier
-	: "void"								{ /* void_type_spec */ }
-	| "char"								{ /* char_type_spec */ }
-	| "short"								{ /* short_type_spec */ }
-	| "int"									{ /* int_type_spec */ }
-	| "long"								{ /* long_type_spec */ }
-	| "float"								{ /* float_type_spec */ }
-	| "double"								{ /* double_type_spec */ }
-	| "signed"								{ /* signed_type_spec */ }
-	| "unsigned"								{ /* unsigned_type_spec */ }
+	: "void"
+	  { $$ = ast_void_type_spec_new ($1); }
+	| "char"
+	  { $$ = ast_char_type_spec_new ($1); }
+	| "short"
+	  { $$ = ast_short_type_spec_new ($1); }
+	| "int"
+	  { $$ = ast_int_type_spec_new ($1); }
+	| "long"
+	  { $$ = ast_long_type_spec_new ($1); }
+	| "float"
+	  { $$ = ast_float_type_spec_new ($1); }
+	| "double"
+	  { $$ = ast_double_type_spec_new ($1); }
+	| "signed"
+	  { $$ = ast_signed_type_spec_new ($1); }
+	| "unsigned"
+	  { $$ = ast_unsigned_type_spec_new ($1); }
 	| struct_or_union_specifier
 	| enum_specifier
-	| TYPE_NAME
+	| TYPE_NAME								{ /* would it be sufficient to just save the token, here? */ }
 	;
 
 struct_or_union_specifier
@@ -451,8 +460,10 @@ statement_list
 	;
 
 expression_statement
-	: ';'									{ /* expression_statement */ }
-	| expression ';'							{ /* expression_statement */ }
+	: ';'
+	  { $$ = ast_expression_statement_new (NULL, $1); }
+	| expression ';'
+	  { $$ = ast_expression_statement_new ($1, $2); }
 	;
 
 selection_statement
