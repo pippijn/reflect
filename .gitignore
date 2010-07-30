@@ -1,0 +1,4 @@
+*.o
+/parsing/lexer.[ch]
+/parsing/parser.[ch]
+/reflect
