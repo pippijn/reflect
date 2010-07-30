@@ -101,9 +101,9 @@ postfix_expression
 	| postfix_expression '(' ')'						{ /* function_call */ }
 	| postfix_expression '(' argument_expression_list ')'			{ /* function_call */ }
 	| postfix_expression '.' IDENTIFIER					{ /* struct_access */ }
-	| postfix_expression PTR_OP IDENTIFIER					{ /* pointer_access */ }
-	| postfix_expression INC_OP						{ /* post_increment */ }
-	| postfix_expression DEC_OP						{ /* post_decrement */ }
+	| postfix_expression "->" IDENTIFIER					{ /* pointer_access */ }
+	| postfix_expression "++"						{ /* post_increment */ }
+	| postfix_expression "--"						{ /* post_decrement */ }
 	;
 
 argument_expression_list
@@ -113,16 +113,16 @@ argument_expression_list
 
 unary_expression
 	: postfix_expression							{ $$ = $1; }
-	| INC_OP unary_expression						{ /* pre_increment */ }
-	| DEC_OP unary_expression						{ /* pre_decrement */ }
+	| "++" unary_expression							{ /* pre_increment */ }
+	| "--" unary_expression							{ /* pre_decrement */ }
 	| '&' cast_expression							{ /* address_of */ }
 	| '*' cast_expression							{ /* pointer_dereference */ }
 	| '+' cast_expression							{ /* positive */ }
 	| '-' cast_expression							{ /* negate */ }
 	| '~' cast_expression							{ /* bitwise_negate */ }
 	| '!' cast_expression							{ /* logical_not */ }
-	| SIZEOF unary_expression						{ /* sizeof_var */ }
-	| SIZEOF '(' type_name ')'						{ /* sizeof_type */ }
+	| "sizeof" unary_expression						{ /* sizeof_var */ }
+	| "sizeof" '(' type_name ')'						{ /* sizeof_type */ }
 	;
 
 cast_expression
@@ -145,22 +145,22 @@ additive_expression
 
 shift_expression
 	: additive_expression							{ $$ = $1; }
-	| shift_expression LEFT_OP additive_expression				{ /* left_shift */ }
-	| shift_expression RIGHT_OP additive_expression				{ /* right_shift */ }
+	| shift_expression "<<" additive_expression				{ /* left_shift */ }
+	| shift_expression ">>" additive_expression				{ /* right_shift */ }
 	;
 
 relational_expression
 	: shift_expression							{ $$ = $1; }
 	| relational_expression '<' shift_expression				{ /* less_than */ }
 	| relational_expression '>' shift_expression				{ /* greater_than */ }
-	| relational_expression LE_OP shift_expression				{ /* less_than_equals */ }
-	| relational_expression GE_OP shift_expression				{ /* greater_than_equals */ }
+	| relational_expression "<=" shift_expression				{ /* less_than_equals */ }
+	| relational_expression ">=" shift_expression				{ /* greater_than_equals */ }
 	;
 
 equality_expression
 	: relational_expression							{ $$ = $1; }
-	| equality_expression EQ_OP relational_expression			{ /* equals */ }
-	| equality_expression NE_OP relational_expression			{ /* not_equals */ }
+	| equality_expression "==" relational_expression			{ /* equals */ }
+	| equality_expression "!=" relational_expression			{ /* not_equals */ }
 	;
 
 and_expression
@@ -180,12 +180,12 @@ inclusive_or_expression
 
 logical_and_expression
 	: inclusive_or_expression						{ $$ = $1; }
-	| logical_and_expression AND_OP inclusive_or_expression			{ /* logical_and */ }
+	| logical_and_expression "&&" inclusive_or_expression			{ /* logical_and */ }
 	;
 
 logical_or_expression
 	: logical_and_expression						{ $$ = $1; }
-	| logical_or_expression OR_OP logical_and_expression			{ /* logical_or */ }
+	| logical_or_expression "||" logical_and_expression			{ /* logical_or */ }
 	;
 
 conditional_expression
@@ -196,16 +196,16 @@ conditional_expression
 assignment_expression
 	: conditional_expression						{ $$ = $1; }
 	| unary_expression '=' assignment_expression				{ /* assign */ }
-	| unary_expression MUL_ASSIGN assignment_expression			{ /* multiply_assign */ }
-	| unary_expression DIV_ASSIGN assignment_expression			{ /* divide_assign */ }
-	| unary_expression MOD_ASSIGN assignment_expression			{ /* modulo_assign */ }
-	| unary_expression ADD_ASSIGN assignment_expression			{ /* add_assign */ }
-	| unary_expression SUB_ASSIGN assignment_expression			{ /* subtract_assign */ }
-	| unary_expression LEFT_ASSIGN assignment_expression			{ /* left_shift_assign */ }
-	| unary_expression RIGHT_ASSIGN assignment_expression			{ /* right_shift_assign */ }
-	| unary_expression AND_ASSIGN assignment_expression			{ /* and_assign */ }
-	| unary_expression XOR_ASSIGN assignment_expression			{ /* xor_assign */ }
-	| unary_expression OR_ASSIGN assignment_expression			{ /* or_assign */ }
+	| unary_expression "*=" assignment_expression				{ /* multiply_assign */ }
+	| unary_expression "/=" assignment_expression				{ /* divide_assign */ }
+	| unary_expression "%=" assignment_expression				{ /* modulo_assign */ }
+	| unary_expression "+=" assignment_expression				{ /* add_assign */ }
+	| unary_expression "-=" assignment_expression				{ /* subtract_assign */ }
+	| unary_expression "<<=" assignment_expression				{ /* left_shift_assign */ }
+	| unary_expression ">>=" assignment_expression				{ /* right_shift_assign */ }
+	| unary_expression "&=" assignment_expression				{ /* and_assign */ }
+	| unary_expression "^=" assignment_expression				{ /* xor_assign */ }
+	| unary_expression "|=" assignment_expression				{ /* or_assign */ }
 	;
 
 expression
@@ -242,23 +242,23 @@ init_declarator
 	;
 
 storage_class_specifier
-	: TYPEDEF								{ /* typedef_str_class_spec */ }
-	| EXTERN								{ /* extern_str_class_spec */ }
-	| STATIC								{ /* static_str_class_spec */ }
-	| AUTO									{ /* auto_str_class_spec */ }
-	| REGISTER								{ /* register_str_class_spec */ }
+	: "typedef"								{ /* typedef_str_class_spec */ }
+	| "extern"								{ /* extern_str_class_spec */ }
+	| "static"								{ /* static_str_class_spec */ }
+	| "auto"								{ /* auto_str_class_spec */ }
+	| "register"								{ /* register_str_class_spec */ }
 	;
 
 type_specifier
-	: VOID									{ /* void_type_spec */ }
-	| CHAR									{ /* char_type_spec */ }
-	| SHORT									{ /* short_type_spec */ }
-	| INT									{ /* int_type_spec */ }
-	| LONG									{ /* long_type_spec */ }
-	| FLOAT									{ /* float_type_spec */ }
-	| DOUBLE								{ /* double_type_spec */ }
-	| SIGNED								{ /* signed_type_spec */ }
-	| UNSIGNED								{ /* unsigned_type_spec */ }
+	: "void"								{ /* void_type_spec */ }
+	| "char"								{ /* char_type_spec */ }
+	| "short"								{ /* short_type_spec */ }
+	| "int"									{ /* int_type_spec */ }
+	| "long"								{ /* long_type_spec */ }
+	| "float"								{ /* float_type_spec */ }
+	| "double"								{ /* double_type_spec */ }
+	| "signed"								{ /* signed_type_spec */ }
+	| "unsigned"								{ /* unsigned_type_spec */ }
 	| struct_or_union_specifier
 	| enum_specifier
 	| TYPE_NAME
@@ -271,8 +271,8 @@ struct_or_union_specifier
 	;
 
 struct_or_union
-	: STRUCT
-	| UNION
+	: "struct"
+	| "union"
 	;
 
 struct_declaration_list
@@ -303,9 +303,9 @@ struct_declarator
 	;
 
 enum_specifier
-	: ENUM '{' enumerator_list '}'						{ /* defined_enum_spec */ }
-	| ENUM IDENTIFIER '{' enumerator_list '}'				{ /* defined_enum_spec */ }
-	| ENUM IDENTIFIER							{ /* referenced_enum_spec */ }
+	: "enum" '{' enumerator_list '}'					{ /* defined_enum_spec */ }
+	| "enum" IDENTIFIER '{' enumerator_list '}'				{ /* defined_enum_spec */ }
+	| "enum" IDENTIFIER							{ /* referenced_enum_spec */ }
 	;
 
 enumerator_list
@@ -319,8 +319,8 @@ enumerator
 	;
 
 type_qualifier
-	: CONST									{ /* const_type_qualifier */ }
-	| VOLATILE								{ /* volatile_type_qualifier */ }
+	: "const"								{ /* const_type_qualifier */ }
+	| "volatile"								{ /* volatile_type_qualifier */ }
 	;
 
 declarator
@@ -353,7 +353,7 @@ type_qualifier_list
 
 parameter_type_list
 	: parameter_list							{ /* parameter_type_list */ }
-	| parameter_list ',' ELLIPSIS						{ /* parameter_type_list */ }
+	| parameter_list ',' "..."						{ /* parameter_type_list */ }
 	;
 
 parameter_list
@@ -417,8 +417,8 @@ statement
 
 labeled_statement
 	: IDENTIFIER ':' statement						{ /* label_statement */ }
-	| CASE constant_expression ':' statement				{ /* case_label_statement */ }
-	| DEFAULT ':' statement							{ /* default_label_statement */ }
+	| "case" constant_expression ':' statement				{ /* case_label_statement */ }
+	| "default" ':' statement						{ /* default_label_statement */ }
 	;
 
 compound_statement
@@ -444,27 +444,27 @@ expression_statement
 	;
 
 selection_statement
-	: IF '(' expression ')' statement					{ /* if_statement */ }
-	| IF '(' expression ')' statement ELSE statement			{ /* if_statement */ }
-	| SWITCH '(' expression ')' statement					{ /* switch_statement */ }
+	: "if" '(' expression ')' statement					{ /* if_statement */ }
+	| "if" '(' expression ')' statement ELSE statement			{ /* if_statement */ }
+	| "switch" '(' expression ')' statement					{ /* switch_statement */ }
 	;
 
 iteration_statement
-	: WHILE '(' expression ')' statement
+	: "while" '(' expression ')' statement
 	  { $$ = ast_while_statement_new ($1, $2, $3, $4, $5); }
-	| DO statement WHILE '(' expression ')' ';'				{ /* do_statement */ }
-	| FOR '(' expression_statement expression_statement ')' statement
+	| "do" statement "while" '(' expression ')' ';'				{ /* do_statement */ }
+	| "for" '(' expression_statement expression_statement ')' statement
 	  { $$ = ast_for_statement_new ($1, $2, $3, $4, NULL, $5, $6); }
-	| FOR '(' expression_statement expression_statement expression ')' statement
+	| "for" '(' expression_statement expression_statement expression ')' statement
 	  { $$ = ast_for_statement_new ($1, $2, $3, $4, $5, $6, $7);	}
 	;
 
 jump_statement
-	: GOTO IDENTIFIER ';'							{ /* goto_statement */ }
-	| CONTINUE ';'								{ /* continue_statement */ }
-	| BREAK ';'								{ /* break_statement */ }
-	| RETURN ';'								{ /* return_statement */ }
-	| RETURN expression ';'							{ /* return_statement */ }
+	: "goto" IDENTIFIER ';'							{ /* goto_statement */ }
+	| "continue" ';'							{ /* continue_statement */ }
+	| "break" ';'								{ /* break_statement */ }
+	| "return" ';'								{ /* return_statement */ }
+	| "return" expression ';'						{ /* return_statement */ }
 	;
 
 translation_unit
