@@ -1,7 +1,7 @@
 %{
 // vim:noexpandtab
 #include "yy/parse_interf.h"
-#define scanner parse_context_scanner_get (context)
+#define scanner parse_context_scanner (context)
 %}
 
 %define api.pure
@@ -453,13 +453,9 @@ iteration_statement
 	: WHILE '(' expression ')' statement					{ /* while_statement */ }
 	| DO statement WHILE '(' expression ')' ';'				{ /* do_statement */ }
 	| FOR '(' expression_statement expression_statement ')' statement
-	  { /* for_statement */ 
-	    ast_for_statement_new($1, $2, $3, $4, NULL, $5, $6);
-          }
+	  { $$ = ast_for_statement_new ($1, $2, $3, $4, NULL, $5, $6); }
 	| FOR '(' expression_statement expression_statement expression ')' statement
-          { /* for_statement */
-            ast_for_statement_new($1, $2, $3, $4, $5, $6, $7);
-          }
+	  { $$ = ast_for_statement_new ($1, $2, $3, $4, $5, $6, $7);	}
 	;
 
 jump_statement

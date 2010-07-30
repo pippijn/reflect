@@ -30,7 +30,7 @@ parse_context_delete (parse_context* self)
 
 
 void*
-parse_context_scanner_get (parse_context* self)
+parse_context_scanner (parse_context* self)
 {
   return self->scanner;
 }

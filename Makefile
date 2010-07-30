@@ -2,7 +2,7 @@ LEX		= flex
 YACC		= bison
 
 CPPFLAGS	= -Iinclude -Iparsing -include stdinc.h
-CFLAGS		= -Wall
+CFLAGS		= -Wall -ggdb3 -O3
 
 SOURCES =			\
 	parsing/parser.y	\

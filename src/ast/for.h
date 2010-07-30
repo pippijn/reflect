@@ -1,12 +1,14 @@
 struct ast_node_for_statement
 {
-  struct ast_node base;
+  ast_node base;
 
-  struct ast_node *for_tok;
-  struct ast_node *open_bracket;
-  struct ast_node *initializer;
-  struct ast_node *condition;
-  struct ast_node *increment;
-  struct ast_node *close_bracket;
-  struct ast_node *body;
+  ast_node* for_tok;
+  ast_node* open_bracket;
+  ast_node* initializer;
+  ast_node* condition;
+  ast_node* increment;
+  ast_node* close_bracket;
+  ast_node* body;
 };
+
+extern struct ast_vtbl const ast_for_statement_vtbl;

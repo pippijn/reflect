@@ -4,6 +4,5 @@
 
 #include <ast/node.h>
 
-#include <ast/token.h>
-
 #include <ast/for.h>
+#include <ast/token.h>
