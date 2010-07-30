@@ -44,7 +44,7 @@ void
 ast_${name}_construct (self_type* self, ast_node *,
 EOF
 
-for ((i=0; i<argc-1; i++))
+for ((i=0; i<argc-2; i++))
 do
   printf "%s                ast_node *\n" $(echo $name | tr 'a-z0-9_' '%') | sed 's/%/ /g'
 done
@@ -84,7 +84,7 @@ ast_node*
 ast_${name}_new (ast_node *,
 EOF
 
-for ((i=0; i<argc-1; i++))
+for ((i=0; i<argc-2; i++))
 do
   printf "%s          ast_node *\n" $(echo $name | tr 'a-z0-9_' '%') | sed 's/%/ /g'
 done
@@ -93,7 +93,7 @@ printf "%s          ast_node *)\n" $(echo $name | tr 'a-z0-9_' '%') | sed 's/%/ 
 
 cat <<EOF
 {
-  return NEW (
+  return NEW (${name}, 
               );
 }
 

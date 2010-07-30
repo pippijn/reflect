@@ -5,4 +5,5 @@
 #include "do.h"
 #include "for.h"
 #include "token.h"
+#include "switch.h"
 #include "while.h"
