@@ -13,8 +13,11 @@ static fn_print ast_token_print;
 
 static struct ast_vtbl const* const vtbl = &ast_token_vtbl;
 struct ast_vtbl const ast_token_vtbl = {
-  &ast_node_vtbl,
-  AST_TOKEN,
+  {
+    &ast_node_vtbl,
+    "token",
+    AST_TOKEN,
+  },
   ast_token_destruct,
   ast_token_print,
 };

@@ -8,8 +8,11 @@ typedef struct ast_node_token self_type;
 /* vtable */
 
 struct ast_vtbl const ast_node_vtbl = {
-  NULL,
-  AST_NODE,
+  {
+    NULL,
+    "node",
+    AST_NODE,
+  },
   ast_node_destruct,
   (fn_print*)pure_virtual,
 };
@@ -73,7 +76,7 @@ ast_kind_is (ast_node const* object, enum ast_kind kind)
   if (object == NULL)
     return false;
   assert (object->vtbl != NULL);
-  return object->vtbl->kind == kind;
+  return object->vtbl->ti.kind == kind;
 }
 
 bool
@@ -85,8 +88,8 @@ ast_kind_derived (ast_node const* object, enum ast_kind kind)
 
   assert (object->vtbl != NULL);
 
-  for (vtbl = object->vtbl; vtbl; vtbl = vtbl->base)
-    if (vtbl->kind == kind)
+  for (vtbl = object->vtbl; vtbl; vtbl = vtbl->ti.base)
+    if (vtbl->ti.kind == kind)
       return true;
 
   return false;

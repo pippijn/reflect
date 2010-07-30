@@ -14,8 +14,11 @@ static fn_print ast_for_statement_print;
 
 static struct ast_vtbl const* const vtbl = &ast_for_statement_vtbl;
 struct ast_vtbl const ast_for_statement_vtbl = {
-  &ast_node_vtbl,
-  AST_FOR_STATEMENT,
+  {
+    &ast_node_vtbl,
+    "for_statement",
+    AST_FOR_STATEMENT,
+  },
 #if 0
   ast_for_statement_destruct,
 #else

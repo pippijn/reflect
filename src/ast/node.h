@@ -12,8 +12,12 @@ enum ast_kind
 
 struct ast_vtbl
 {
-  struct ast_vtbl const* base;
-  enum ast_kind kind;
+  struct type_info
+  {
+    struct ast_vtbl const* base;
+    char const* name;
+    enum ast_kind kind;
+  } ti;
   fn_destruct* destruct;
   fn_print* print;
 };
@@ -32,12 +36,12 @@ bool ast_kind_derived (ast_node const* object, enum ast_kind kind);
 ast_node* ast_cast_mutable (ast_node* object, enum ast_kind kind);
 ast_node const* ast_cast_const (ast_node const* object, enum ast_kind kind);
 
-#define SELF()                  self_type      * self = (self_type      *)ast_cast_mutable (object, vtbl->kind)
-#define CONST_SELF()            self_type const* self = (self_type const*)ast_cast_const   (object, vtbl->kind)
+#define SELF()                  self_type      * self = (self_type      *)ast_cast_mutable (object, vtbl->ti.kind)
+#define CONST_SELF()            self_type const* self = (self_type const*)ast_cast_const   (object, vtbl->ti.kind)
 
 #define NEW(class, ...)         ({ self_type* self = malloc (sizeof *self); ast_##class##_construct (self, __VA_ARGS__); &self->base; })
 #define BASE_CTOR(base, ...)    ast_##base##_construct ((ast_##base*)self, vtbl, __VA_ARGS__)
-#define BASE_DTOR()             self->base.vtbl->base->destruct (&self->base)
+#define BASE_DTOR()             self->base.vtbl->ti.base->destruct (&self->base)
 
 
 extern struct ast_vtbl const ast_node_vtbl;
