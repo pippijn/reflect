@@ -243,10 +243,15 @@ init_declarator
 
 storage_class_specifier
 	: "typedef"								{ /* typedef_str_class_spec */ }
+	  { $$ = ast_typedef_str_class_spec_new ($1); }
 	| "extern"								{ /* extern_str_class_spec */ }
+	  { $$ = ast_extern_str_class_spec_new ($1); }
 	| "static"								{ /* static_str_class_spec */ }
+	  { $$ = ast_static_str_class_spec_new ($1); }
 	| "auto"								{ /* auto_str_class_spec */ }
+	  { $$ = ast_auto_str_class_spec_new ($1); }
 	| "register"								{ /* register_str_class_spec */ }
+	  { $$ = ast_register_str_class_spec_new ($1); }
 	;
 
 type_specifier

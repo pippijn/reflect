@@ -13,3 +13,8 @@ case          case_label_statement    case_tok expr colon statement
 default       default_label_statement default_tok colon statement
 const         const_type_qualifier    const_tok
 volatile      volatile_type_qualifier volatile_tok
+typedef       typedef_str_class_spec  typedef_tok
+extern        extern_str_class_spec   extern_tok
+static        static_str_class_spec   static_tok
+auto          auto_str_class_spec     auto_tok
+register      register_str_class_spec register_tok
