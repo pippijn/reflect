@@ -44,6 +44,28 @@ ast_node const* ast_cast_const (ast_node const* object, enum ast_kind kind);
 #define BASE_CTOR(base, ...)    ast_##base##_construct ((ast_##base*)self, vtbl, __VA_ARGS__)
 #define BASE_DTOR()             self->base.vtbl->ti.base->destruct (&self->base)
 
+/* helper macros */
+
+#define ACCESSOR(base, elem)                 \
+ast_node*                                    \
+ast_##base##_##elem (ast_node const *object) \
+{                                            \
+  CONST_SELF ();                             /* use definition directly here? */ \
+  return self->elem;                         \
+}
+
+#define COMPUTE_LOC(start_node, end_node)  \
+{                                          \
+  struct location const *start, *end;      \
+  start = ast_node_location (start_node);  \
+  end   = ast_node_location (end_node);    \
+                                           \
+  loc.first_line = start->first_line;      \
+  loc.first_column = start->first_column;  \
+  loc.last_line = end->last_line;          \
+  loc.last_column = end->last_column;      \
+}
+
 
 extern struct ast_vtbl const ast_node_vtbl;
 

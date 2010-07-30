@@ -54,6 +54,12 @@ ast_token_new (struct location const* loc, char const* text, size_t length, int 
 
 /* accessors */
 
+#if 0
+/* return values don't match */
+ACCESSOR (token, text);
+ACCESSOR (token, token);
+#endif
+
 char const*
 ast_token_text (ast_node const* object)
 {

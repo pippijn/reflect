@@ -44,19 +44,7 @@ ast_while_statement_construct (struct ast_node_while_statement *self,
   assert (ast_kind_is (close_bracket, AST_TOKEN));
   assert (body != NULL);
 
-  /* let's maybe have a macro for this, too - its always the same? */
-#define COMPUTE_LOC(start_node, end_node)  \
-  struct location const *start, *end;      \
-  start = ast_node_location (start_node);  \
-  end   = ast_node_location (end_node);    \
-                                           \
-  loc.first_line = start->first_line;      \
-  loc.first_column = start->first_column;  \
-  loc.last_line = end->last_line;          \
-  loc.last_column = end->last_column;
-
   COMPUTE_LOC (while_tok, body);
-#undef COMPUTE_LOC
   BASE_CTOR (node, &loc);
 
   self->while_tok     = while_tok;
@@ -87,22 +75,10 @@ ast_while_statement_while (ast_node const *object)
   return self->while_tok;
 }
 
-/* if you like this, move it to node.h
- * (doesn't work for "while_tok" etc obviously) */
-#define ACCESSOR(base, elem)                 \
-ast_node*                                    \
-ast_##base##_##elem (ast_node const *object) \
-{                                            \
-  CONST_SELF ();                             \
-  return self->elem;                         \
-}
-
 ACCESSOR (while_statement, open_bracket)
 ACCESSOR (while_statement, condition)
 ACCESSOR (while_statement, close_bracket)
 ACCESSOR (while_statement, body)
-#undef ACCESSOR
-
 
 /* virtual */
 

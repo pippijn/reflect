@@ -37,8 +37,6 @@ ast_for_statement_construct (self_type* self, ast_node *for_tok,
                              ast_node *close_bracket, ast_node *body)
 {
   struct location loc;
-  struct location const *start;
-  struct location const *end;
 
   assert (ast_kind_is (for_tok, AST_TOKEN));
   assert (ast_kind_is (open_bracket, AST_TOKEN));
@@ -48,14 +46,7 @@ ast_for_statement_construct (self_type* self, ast_node *for_tok,
   assert (ast_kind_is (close_bracket, AST_TOKEN));
   assert (body != NULL);
 
-  start = ast_node_location (for_tok);
-  end   = ast_node_location (body);
-
-  loc.first_line = start->first_line;
-  loc.first_column = start->first_column;
-  loc.last_line = end->last_line;
-  loc.last_column = end->last_column;
-
+  COMPUTE_LOC (for_tok, body);
   BASE_CTOR (node, &loc);
 
   self->for_tok       = for_tok;
@@ -91,53 +82,12 @@ ast_for_statement_for (ast_node const* object)
   return self->for_tok;
 }
 
-ast_node*
-ast_for_statement_open_bracket (ast_node const* object)
-{
-  CONST_SELF ();
-
-  return self->open_bracket;
-}
-
-ast_node*
-ast_for_statement_initializer (ast_node const* object)
-{
-  CONST_SELF ();
-
-  return self->initializer;
-}
-
-ast_node*
-ast_for_statement_condition (ast_node const* object)
-{
-  CONST_SELF ();
-
-  return self->condition;
-}
-
-ast_node*
-ast_for_statement_increment (ast_node const* object)
-{
-  CONST_SELF ();
-
-  return self->increment;
-}
-
-ast_node*
-ast_for_statement_close_bracket (ast_node const* object)
-{
-  CONST_SELF ();
-
-  return self->close_bracket;
-}
-
-ast_node*
-ast_for_statement_body (ast_node const* object)
-{
-  CONST_SELF ();
-
-  return self->body;
-}
+ACCESSOR (for_statement, open_bracket);
+ACCESSOR (for_statement, initializer);
+ACCESSOR (for_statement, condition);
+ACCESSOR (for_statement, increment);
+ACCESSOR (for_statement, close_bracket);
+ACCESSOR (for_statement, body);
 
 
 /* virtual */
