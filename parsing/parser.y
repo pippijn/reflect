@@ -314,8 +314,10 @@ enumerator_list
 	;
 
 enumerator
-	: IDENTIFIER								{ /* enumerator */ }
-	| IDENTIFIER '=' constant_expression					{ /* enumerator */ }
+	: IDENTIFIER
+	  { $$ = ast_enumerator_new ($1, NULL, NULL); }
+	| IDENTIFIER '=' constant_expression
+	  { $$ = ast_enumerator_new ($1, $2, $3); }
 	;
 
 type_qualifier

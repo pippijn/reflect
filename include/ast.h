@@ -7,6 +7,7 @@
 #include <ast/break.h>
 #include <ast/continue.h>
 #include <ast/do.h>
+#include <ast/enumerator.h>
 #include <ast/for.h>
 #include <ast/goto.h>
 #include <ast/if.h>

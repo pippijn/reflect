@@ -5,6 +5,7 @@
 #include "break.h"
 #include "continue.h"
 #include "do.h"
+#include "enumerator.h"
 #include "for.h"
 #include "goto.h"
 #include "if.h"

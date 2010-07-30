@@ -2,12 +2,14 @@
 
 while read line;
 do
-  header=`echo $line | awk '{ print $1 }' | sed 's/_.*/.h/'`
-  src=`echo $line | awk '{ print $1 }' | sed 's/_.*/.c/'`
+  base=`echo $line | awk '{ print $1 }' | sed 's/_.*//'`
+  header=`echo $base | sed 's/$/.h/'`
+  src=`echo $base | sed 's/$/.c/'`
   name=`echo $line | awk '{print $1 }'`
 
   if [ -f ./include/ast/$header ]
   then
+    continue		# remove this, if you want to diff
     header=${header}_
     src=${src}_
   fi
