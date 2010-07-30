@@ -3,21 +3,23 @@
 name=$1
 argc=$2
 
+echo "/*"
+
+echo " * $namen" | sed 's/_/ /g'
+
 cat <<EOF
-/*
- * for statement
  */
 
 /* constructor */
-ast_node*       ast_for_statement_new           (ast_node *
+ast_node*       ast_${name}_new           (ast_node *
 EOF
 
 for ((i=0; i<argc-2; i++))
 do
-  printf "%s                                                 ast_node *\n" $(echo $name | tr 'a-z0-9_' ' ');
+  printf "%s                                    ast_node *\n" $(echo $name | tr 'a-z0-9_' '%') | sed 's/%/ /g';
 done
 
-printf "%s                                                 ast_node *);\n" $(echo $name | tr 'a-z0-9_' ' ');
+printf "%s                                    ast_node *);\n" $(echo $name | tr 'a-z0-9_' '%') | sed 's/%/ /g';
 
 cat <<EOF
 

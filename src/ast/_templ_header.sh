@@ -27,7 +27,7 @@ EOF
 
 for ((i=0; i<argc-1; i++))
 do
-  printf "%s                                  ast_node *\n" $(echo $name | tr 'a-z0-9_' ' ');
+  printf "%s                     ast_node *\n" $(echo $name | tr 'a-z0-9_' '%') | sed 's/%/ /g'
 done
 
-printf "%s                                  ast_node *);\n" $(echo $name | tr 'a-z0-9_' ' ');
+printf "%s                     ast_node *);\n" $(echo $name | tr 'a-z0-9_' '%') | sed 's/%/ /g'
