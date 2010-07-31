@@ -489,14 +489,19 @@ identifier_list
 	;
 
 type_name
-	: specifier_qualifier_list						{ /* type_name */ }
-	| specifier_qualifier_list abstract_declarator				{ /* type_name */ }
+	: specifier_qualifier_list
+	  { $$ = ast_type_name_new ($1, NULL); }
+	| specifier_qualifier_list abstract_declarator
+	  { $$ = ast_type_name_new ($1, $2); }
 	;
 
 abstract_declarator
-	: pointer								{ /* abstract_declarator */ }
-	| direct_abstract_declarator						{ /* abstract_declarator */ }
-	| pointer direct_abstract_declarator					{ /* abstract_declarator */ }
+	: pointer
+	  { $$ = ast_abstract_declarator_new ($1, NULL); }
+	| direct_abstract_declarator
+	  { $$ = ast_abstract_declarator_new (NULL, $1); }
+	| pointer direct_abstract_declarator
+	  { $$ = ast_abstract_declarator_new ($1, $2); }
 	;
 
 direct_abstract_declarator
@@ -541,10 +546,14 @@ labeled_statement
 	;
 
 compound_statement
-	: '{' '}'								{ /* compound_statement */ }
-	| '{' statement_list '}'						{ /* compound_statement */ }
-	| '{' declaration_list '}'						{ /* compound_statement */ }
-	| '{' declaration_list statement_list '}'				{ /* compound_statement */ }
+	: '{' '}'
+	  { $$ = ast_compound_statement_new ($1, NULL, NULL, $2); }
+	| '{' statement_list '}'
+	  { $$ = ast_compound_statement_new ($1, NULL, $2, $3); }
+	| '{' declaration_list '}'
+	  { $$ = ast_compound_statement_new ($1, $2, NULL, $3); }
+	| '{' declaration_list statement_list '}'
+	  { $$ = ast_compound_statement_new ($1, $2, $3, $4); }
 	;
 
 declaration_list

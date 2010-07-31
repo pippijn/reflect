@@ -95,3 +95,6 @@ struct_decl     struct_declaration              spec_qual_list struct_decl_list
 pointer         pointer                         op type_qual_list pointer
 bitfield_dec    bitfield_declarator             decl colon const_expr
 function_def    function_definition             return_type name arg_list body
+compound        compound_statement              lbrace declarations body rbrace
+abstract_dec    abstract_declarator             pointer direct_abstr_decl
+type_name       type_name                       spec_qual_list abstr_decl
