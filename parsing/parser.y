@@ -207,33 +207,45 @@ equality_expression
 	;
 
 and_expression
-	: equality_expression							{ $$ = $1; }
-	| and_expression '&' equality_expression				{ /* bitwise_and */ }
+	: equality_expression
+	  { $$ = $1; }
+	| and_expression '&' equality_expression
+	  { $$ = ast_bitwise_and_new ($1, $2, $3); }
 	;
 
 exclusive_or_expression
-	: and_expression							{ $$ = $1; }
-	| exclusive_or_expression '^' and_expression				{ /* bitwise_xor */ }
+	: and_expression
+	  { $$ = $1; }
+	| exclusive_or_expression '^' and_expression
+	  { $$ = ast_bitwise_xor_new ($1, $2, $3); }
 	;
 
 inclusive_or_expression
-	: exclusive_or_expression						{ $$ = $1; }
-	| inclusive_or_expression '|' exclusive_or_expression			{ /* bitwise_or */ }
+	: exclusive_or_expression
+	  { $$ = $1; }
+	| inclusive_or_expression '|' exclusive_or_expression
+	  { $$ = ast_bitwise_or_new ($1, $2, $3); }
 	;
 
 logical_and_expression
-	: inclusive_or_expression						{ $$ = $1; }
-	| logical_and_expression "&&" inclusive_or_expression			{ /* logical_and */ }
+	: inclusive_or_expression
+	  { $$ = $1; }
+	| logical_and_expression "&&" inclusive_or_expression
+	  { $$ = ast_logical_and_new ($1, $2, $3); }
 	;
 
 logical_or_expression
-	: logical_and_expression						{ $$ = $1; }
-	| logical_or_expression "||" logical_and_expression			{ /* logical_or */ }
+	: logical_and_expression
+	  { $$ = $1; }
+	| logical_or_expression "||" logical_and_expression
+	  { $$ = ast_logical_or_new ($1, $2, $3); }
 	;
 
 conditional_expression
-	: logical_or_expression							{ $$ = $1; }
-	| logical_or_expression '?' expression ':' conditional_expression	{ /* ternary_op */ }
+	: logical_or_expression
+	  { $$ = $1; }
+	| logical_or_expression '?' expression ':' conditional_expression
+	  { $$ = ast_ternary_op_new ($1, $2, $3, $4, $5); }
 	;
 
 assignment_expression

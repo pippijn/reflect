@@ -62,3 +62,9 @@ less_eq         less_than_equals                expr1 op expr2
 greater_eq      greater_than_equals             expr1 op expr2
 eq              equals                          expr1 op expr2
 not_eq          not_equals                      expr1 op expr2
+bit_and         bitwise_and                     expr1 op expr2
+bit_xor         bitwise_xor                     expr1 op expr2
+bit_or          bitwise_or                      expr1 op expr2
+log_and         logical_and                     expr1 op expr2
+log_or          logical_or                      expr1 op expr2
+ternary         ternary_op                      condition op_quest then_expr op_colon else_expr
