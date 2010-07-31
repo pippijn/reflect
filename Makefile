@@ -1,5 +1,6 @@
 LEX		= flex
 YACC		= bison
+MKDIR		= mkdir
 
 CPPFLAGS	= -Iinclude -Iparsing -include stdinc.h
 CFLAGS		= -Wall -ggdb3 -O3
@@ -23,6 +24,8 @@ reflect: $(OBJECTS)
 	@$(LINK.c) $(OBJECTS) -o $@
 
 codegen: astgen data/pt.ast
+	$(MKDIR) -p include/ast/gen
+	$(MKDIR) -p src/ast/gen
 	@./$+
 
 clean:
