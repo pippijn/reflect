@@ -54,3 +54,11 @@ divide          divide                          dividend op divisor
 modulo          modulo                          dividend op divisor
 add             add                             summand1 op summand2
 subtract        subtract                        minuend op subtrahend
+left_shift      left_shift                      expr op amount
+right_shift     right_shift                     expr op amount
+less            less_than                       expr1 op expr2
+greater         greater_than                    expr1 op expr2
+less_eq         less_than_equals                expr1 op expr2
+greater_eq      greater_than_equals             expr1 op expr2
+eq              equals                          expr1 op expr2
+not_eq          not_equals                      expr1 op expr2

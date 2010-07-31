@@ -176,23 +176,34 @@ additive_expression
 	;
 
 shift_expression
-	: additive_expression							{ $$ = $1; }
-	| shift_expression "<<" additive_expression				{ /* left_shift */ }
-	| shift_expression ">>" additive_expression				{ /* right_shift */ }
+	: additive_expression
+	  { $$ = $1; }
+	| shift_expression "<<" additive_expression
+	  { $$ = ast_left_shift_new ($1, $2, $3); }
+	| shift_expression ">>" additive_expression
+	  { $$ = ast_right_shift_new ($1, $2, $3); }
 	;
 
 relational_expression
-	: shift_expression							{ $$ = $1; }
-	| relational_expression '<' shift_expression				{ /* less_than */ }
-	| relational_expression '>' shift_expression				{ /* greater_than */ }
-	| relational_expression "<=" shift_expression				{ /* less_than_equals */ }
-	| relational_expression ">=" shift_expression				{ /* greater_than_equals */ }
+	: shift_expression
+	  { $$ = $1; }
+	| relational_expression '<' shift_expression
+	  { $$ = ast_less_than_new ($1, $2, $3); }
+	| relational_expression '>' shift_expression
+	  { $$ = ast_greater_than_new ($1, $2, $3); }
+	| relational_expression "<=" shift_expression
+	  { $$ = ast_less_than_equals_new ($1, $2, $3); }
+	| relational_expression ">=" shift_expression
+	  { $$ = ast_greater_than_equals_new ($1, $2, $3); }
 	;
 
 equality_expression
-	: relational_expression							{ $$ = $1; }
-	| equality_expression "==" relational_expression			{ /* equals */ }
-	| equality_expression "!=" relational_expression			{ /* not_equals */ }
+	: relational_expression	
+	  { $$ = $1; }
+	| equality_expression "==" relational_expression
+	  { $$ = ast_equals_new ($1, $2, $3); }
+	| equality_expression "!=" relational_expression
+	  { $$ = ast_not_equals_new ($1, $2, $3); }
 	;
 
 and_expression
