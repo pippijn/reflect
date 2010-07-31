@@ -7,4 +7,4 @@
 
 #include <parser.h>
 
-void lexer_update_lloc (YYLTYPE* yylloc, int lineno, int column, int leng);
+void lexer_update_lloc (YYLTYPE *yylloc, int lineno, int column, int leng);

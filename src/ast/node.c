@@ -14,7 +14,7 @@ struct ast_vtbl const ast_node_vtbl = {
     AST_NODE,
   },
   ast_node_destruct,
-  (fn_print*)pure_virtual,
+  (fn_print *)pure_virtual,
 };
 
 
@@ -25,7 +25,7 @@ struct ast_vtbl const ast_node_vtbl = {
 /* destructor */
 
 void
-ast_node_delete (ast_node* self)
+ast_node_delete (ast_node *self)
 {
   assert (self != NULL);
   assert (self->vtbl != NULL);
@@ -38,8 +38,8 @@ ast_node_delete (ast_node* self)
 
 /* accessors */
 
-struct location const*
-ast_node_location (ast_node const* self)
+struct location const *
+ast_node_location (ast_node const *self)
 {
   assert (self != NULL);
   return &self->location;
@@ -49,7 +49,7 @@ ast_node_location (ast_node const* self)
 /* methods */
 
 void
-ast_node_print (ast_node const* self, FILE* fh)
+ast_node_print (ast_node const *self, FILE *fh)
 {
   assert (self != NULL);
   assert (self->vtbl != NULL);
@@ -71,7 +71,7 @@ pure_virtual (void)
 }
 
 bool
-ast_kind_is (ast_node const* object, enum ast_kind kind)
+ast_kind_is (ast_node const *object, enum ast_kind kind)
 {
   if (object == NULL)
     return false;
@@ -80,9 +80,10 @@ ast_kind_is (ast_node const* object, enum ast_kind kind)
 }
 
 bool
-ast_kind_derived (ast_node const* object, enum ast_kind kind)
+ast_kind_derived (ast_node const *object, enum ast_kind kind)
 {
-  struct ast_vtbl const* vtbl = NULL;
+  struct ast_vtbl const *vtbl = NULL;
+
   if (object == NULL)
     return false;
 
@@ -95,15 +96,15 @@ ast_kind_derived (ast_node const* object, enum ast_kind kind)
   return false;
 }
 
-ast_node*
-ast_cast_mutable (ast_node* object, enum ast_kind kind)
+ast_node *
+ast_cast_mutable (ast_node *object, enum ast_kind kind)
 {
   assert (ast_kind_derived (object, kind));
   return ast_kind_derived (object, kind) ? object : NULL;
 }
 
-ast_node const*
-ast_cast_const (ast_node const* object, enum ast_kind kind)
+ast_node const *
+ast_cast_const (ast_node const *object, enum ast_kind kind)
 {
   assert (ast_kind_derived (object, kind));
   return ast_kind_derived (object, kind) ? object : NULL;
@@ -116,7 +117,7 @@ ast_cast_const (ast_node const* object, enum ast_kind kind)
  */
 
 void
-ast_node_construct (ast_node* self, struct ast_vtbl const* vtbl, struct location const* loc)
+ast_node_construct (ast_node *self, struct ast_vtbl const *vtbl, struct location const *loc)
 {
   assert (self != NULL);
   assert (vtbl != NULL);
@@ -127,7 +128,7 @@ ast_node_construct (ast_node* self, struct ast_vtbl const* vtbl, struct location
 }
 
 void
-ast_node_destruct (ast_node* self)
+ast_node_destruct (ast_node *self)
 {
   assert (self != NULL);
   assert (self->vtbl != NULL);

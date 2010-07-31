@@ -5,7 +5,7 @@
 
 #include <parse_context.h>
 
-#include <parser.h>
 #include <lexer.h>
+#include <parser.h>
 
-void yyerror (YYLTYPE const* llocp, parse_context const* context, char const* s);
+void yyerror (YYLTYPE const *llocp, parse_context const *context, char const *s);

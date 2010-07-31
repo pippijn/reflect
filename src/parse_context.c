@@ -6,13 +6,13 @@
 
 struct parse_context
 {
-  void* scanner;
+  void *scanner;
 };
 
-parse_context*
+parse_context *
 parse_context_new (void)
 {
-  parse_context* self = malloc (sizeof *self);
+  parse_context *self = malloc (sizeof *self);
 
   yylex_init (&self->scanner);
   yyset_extra (self, self->scanner);
@@ -21,7 +21,7 @@ parse_context_new (void)
 }
 
 void
-parse_context_delete (parse_context* self)
+parse_context_delete (parse_context *self)
 {
   yylex_destroy (self->scanner);
 
@@ -29,8 +29,8 @@ parse_context_delete (parse_context* self)
 }
 
 
-void*
-parse_context_scanner (parse_context* self)
+void *
+parse_context_scanner (parse_context *self)
 {
   return self->scanner;
 }

@@ -5,4 +5,4 @@
 #define YYSTYPE YYSTYPE
 #define YYSTYPE_IS_TRIVIAL 1
 
-typedef ast_node* YYSTYPE;
+typedef ast_node *YYSTYPE;
