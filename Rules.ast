@@ -38,3 +38,9 @@ bitwise_neg     bitwise_negate                  op expr
 logical_not     logical_not                     op expr
 sizeof_var      sizeof_var                      op expr
 sizeof_type     sizeof_type                     op lbrack expr rbrack
+array_access    array_access                    expr lsqbrack idx rsqbrack
+funcall         function_call                   expr lbrack arglist rbrack
+struct_access   struct_access                   expr op identifier
+pointer_access  pointer_access                  expr op identifier
+post_inc        post_increment                  expr op
+post_dec        post_decrement                  expr op

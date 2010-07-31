@@ -96,14 +96,22 @@ primary_expression
 	;
 
 postfix_expression
-	: primary_expression							{ $$ = $1; }
-	| postfix_expression '[' expression ']'					{ /* array_access */ }
-	| postfix_expression '(' ')'						{ /* function_call */ }
-	| postfix_expression '(' argument_expression_list ')'			{ /* function_call */ }
-	| postfix_expression '.' IDENTIFIER					{ /* struct_access */ }
-	| postfix_expression "->" IDENTIFIER					{ /* pointer_access */ }
-	| postfix_expression "++"						{ /* post_increment */ }
-	| postfix_expression "--"						{ /* post_decrement */ }
+	: primary_expression		
+	  { $$ = $1; }
+	| postfix_expression '[' expression ']'
+	  { $$ = ast_array_access_new ($1, $2, $3, $4); }
+	| postfix_expression '(' ')'
+	  { $$ = ast_function_call_new ($1, $2, NULL, $3); }
+	| postfix_expression '(' argument_expression_list ')'
+	  { $$ = ast_function_call_new ($1, $2, $3, $4); }
+	| postfix_expression '.' IDENTIFIER
+	  { $$ = ast_struct_access_new ($1, $2, $3); }
+	| postfix_expression "->" IDENTIFIER
+	  { $$ = ast_pointer_access_new ($1, $2, $3); }
+	| postfix_expression "++"
+	  { $$ = ast_post_increment_new ($1, $2); }
+	| postfix_expression "--"
+	  { $$ = ast_post_decrement_new ($1, $2); }
 	;
 
 argument_expression_list
@@ -112,17 +120,28 @@ argument_expression_list
 	;
 
 unary_expression
-	: postfix_expression							{ $$ = $1; }
-	| "++" unary_expression							{ /* pre_increment */ }
-	| "--" unary_expression							{ /* pre_decrement */ }
-	| '&' cast_expression							{ /* address_of */ }
-	| '*' cast_expression							{ /* pointer_dereference */ }
-	| '+' cast_expression							{ /* positive */ }
-	| '-' cast_expression							{ /* negate */ }
-	| '~' cast_expression							{ /* bitwise_negate */ }
-	| '!' cast_expression							{ /* logical_not */ }
-	| "sizeof" unary_expression						{ /* sizeof_var */ }
-	| "sizeof" '(' type_name ')'						{ /* sizeof_type */ }
+	: postfix_expression
+	  { $$ = $1; }
+	| "++" unary_expression
+	  { $$ = ast_pre_increment_new ($1, $2); }
+	| "--" unary_expression
+	  { $$ = ast_pre_decrement_new ($1, $2); }
+	| '&' cast_expression
+	  { $$ = ast_address_of_new ($1, $2); }
+	| '*' cast_expression
+	  { $$ = ast_pointer_dereference_new ($1, $2); }
+	| '+' cast_expression
+	  { $$ = ast_positive_new ($1, $2); }
+	| '-' cast_expression
+	  { $$ = ast_negate_new ($1, $2); }
+	| '~' cast_expression
+	  { $$ = ast_bitwise_negate_new ($1, $2); }
+	| '!' cast_expression
+	  { $$ = ast_logical_not_new ($1, $2); }
+	| "sizeof" unary_expression
+	  { $$ = ast_sizeof_var_new ($1, $2); }
+	| "sizeof" '(' type_name ')'
+	  { $$ = ast_sizeof_type_new ($1, $2, $3, $4); }
 	;
 
 cast_expression
