@@ -2,7 +2,7 @@
 
 {
    for => [
-      for_statement => ["for_tok", "lbrack", "initializer", "condition", "increment", "rbrack", "body"]
+      for_statement => ["for_tok", "lbrack", "initializer", "condition", ["increment"], "rbrack", "body"]
    ],
    while => [
       while_statement => ["while_tok", "lbrack", "condition", "rbrack", "body"]
@@ -14,7 +14,7 @@
       switch_statement => ["switch_tok", "lbrack", "expr", "rbrack", "body"]
    ],
    if => [
-      if_statement => ["if_tok", "lbrack", "condition", "rbrack", "if_body", "else_tok", "else_body"]
+      if_statement => ["if_tok", "lbrack", "condition", "rbrack", "if_body", ["else_tok", "else_body"]]
    ],
    goto => [
       goto_statement => ["goto_tok", "label", "semicolon"]
@@ -26,10 +26,10 @@
       break_statement => ["break_tok", "semicolon"]
    ],
    return => [
-      return_statement => ["return_tok", "expr", "semicolon"]
+      return_statement => ["return_tok", ["expr"], "semicolon"]
    ],
    enumerator => [
-      enumerator => ["identifier", "equals", "expr"]
+      enumerator => ["identifier", ["equals", "expr"]]
    ],
    label => [
       label_statement => ["label", "colon", "statement"]
@@ -89,7 +89,7 @@
       unsigned_type_spec => ["unsigned_tok"]
    ],
    statement => [
-      expression_statement => ["expr", "semicolon"]
+      expression_statement => [["expr"], "semicolon"]
    ],
    preinc => [
       pre_increment => ["op", "expr"]
@@ -125,7 +125,7 @@
       array_access => ["expr", "lsqbrack", "idx", "rsqbrack"]
    ],
    funcall => [
-      function_call => ["expr", "lbrack", "arglist", "rbrack"]
+      function_call => ["expr", "lbrack", ["arglist"], "rbrack"]
    ],
    struct_access => [
       struct_access => ["expr", "op", "identifier"]
@@ -254,51 +254,51 @@
       union => ["union_tok"]
    ],
    enum_def => [
-      defined_enum_spec => ["enum_tok", "identifier", "lbrace", "enum_list", "rbrace"]
+      defined_enum_spec => ["enum_tok", ["identifier"], "lbrace", "enum_list", "rbrace"]
    ],
    enum_ref => [
       referenced_enum_spec => ["enum_tok", "identifier"]
    ],
    struct_def => [
-      struct_definition_spec => ["struct_tok", "identifier", "lbrace", "struct_list", "rbrace"]
+      struct_definition_spec => ["struct_tok", ["identifier"], ["lbrace", "struct_list", "rbrace"]]
    ],
    declarator => [
-      declarator => ["pointer", "direct_decl"]
+      declarator => [["pointer"], "direct_decl"]
    ],
    declaration => [
-      declaration => ["decl_specifier", "init_list", "semicolon"]
+      declaration => ["decl_specifier", ["init_list"], "semicolon"]
    ],
    storage => [
-      storage_decl_spec => ["storage_class_spec", "decl_spec"]
+      storage_decl_spec => ["storage_class_spec", ["decl_spec"]]
    ],
    type_spec => [
-      type_spec_decl_spec => ["type_spec", "decl_spec"]
+      type_spec_decl_spec => ["type_spec", ["decl_spec"]]
    ],
    type_qual => [
-      type_qual_decl_spec => ["type_qual", "decl_spec"]
+      type_qual_decl_spec => ["type_qual", ["decl_spec"]]
    ],
    init_dec => [
-      init_declr => ["decl", "op", "init"]
+      init_declr => ["decl", ["op", "init"]]
    ],
    struct_decl => [
       struct_declaration => ["spec_qual_list", "struct_decl_list"]
    ],
    pointer => [
-      pointer => ["op", "type_qual_list", "pointer"]
+      pointer => ["op", ["type_qual_list"], ["pointer"]]
    ],
    bitfield_dec => [
-      bitfield_declarator => ["decl", "colon", "const_expr"]
+      bitfield_declarator => [["decl"], ["colon", "const_expr"]]
    ],
    function_def => [
-      function_definition => ["return_type", "name", "arg_list", "body"]
+      function_definition => [["return_type"], "name", ["arg_list"], "body"]
    ],
    compound => [
-      compound_statement => ["lbrace", "declarations", "body", "rbrace"]
+      compound_statement => ["lbrace", ["declarations"], ["body"], "rbrace"]
    ],
    abstract_dec => [
-      abstract_declarator => ["pointer", "direct_abstr_decl"]
+      abstract_declarator => [["pointer"], ["direct_abstr_decl"]]
    ],
    type_name => [
-      type_name => ["spec_qual_list", "abstr_decl"]
+      type_name => ["spec_qual_list", ["abstr_decl"]]
    ],
 }
