@@ -7,7 +7,7 @@ enum ast_kind
 
   AST_TOKEN,
 
-#include "kinds.h"
+#include "gen/kinds.h"
 };
 
 

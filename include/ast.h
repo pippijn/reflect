@@ -6,4 +6,4 @@
 
 #include <ast/token.h>
 
-#include <ast/nodes.h>
+#include <ast/gen/nodes.h>

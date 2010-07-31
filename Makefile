@@ -22,8 +22,8 @@ reflect: $(OBJECTS)
 	@echo "  CCLD" $@
 	@$(LINK.c) $(OBJECTS) -o $@
 
-codegen: Rules.ast
-	@./codegen.sh < $<
+codegen: astgen data/pt.ast
+	@./$+
 
 clean:
 	$(RM) reflect
@@ -32,6 +32,8 @@ clean:
 	$(RM) parsing/parser.h
 	$(RM) parsing/lexer.c
 	$(RM) parsing/lexer.h
+	$(RM) include/ast/gen/*
+	$(RM) src/ast/gen/*
 
 %.c: %.y
 	@echo " YACC " $@

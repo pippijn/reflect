@@ -4,4 +4,4 @@
 
 #include "token.h"
 
-#include "nodes.h"
+#include "gen/nodes.h"
