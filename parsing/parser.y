@@ -149,21 +149,30 @@ unary_expression
 	;
 
 cast_expression
-	: unary_expression							{ $$ = $1; }
-	| '(' type_name ')' cast_expression					{ /* type_cast */ }
+	: unary_expression
+	  { $$ = $1; }
+	| '(' type_name ')' cast_expression
+	  { $$ = ast_type_cast_new ($1, $2, $3, $4); }
 	;
 
 multiplicative_expression
-	: cast_expression							{ $$ = $1; }
-	| multiplicative_expression '*' cast_expression				{ /* multiply */ }
-	| multiplicative_expression '/' cast_expression				{ /* divide */ }
-	| multiplicative_expression '%' cast_expression				{ /* modulo */ }
+	: cast_expression
+	  { $$ = $1; }
+	| multiplicative_expression '*' cast_expression
+	  { $$ = ast_multiply_new ($1, $2, $3); }
+	| multiplicative_expression '/' cast_expression
+	  { $$ = ast_divide_new ($1, $2, $3); }
+	| multiplicative_expression '%' cast_expression
+	  { $$ = ast_modulo_new ($1, $2, $3); }
 	;
 
 additive_expression
-	: multiplicative_expression						{ $$ = $1; }
-	| additive_expression '+' multiplicative_expression			{ /* add */ }
-	| additive_expression '-' multiplicative_expression			{ /* subtract */ }
+	: multiplicative_expression
+	  { $$ = $1; }
+	| additive_expression '+' multiplicative_expression
+	  { $$ = ast_add_new ($1, $2, $3); }
+	| additive_expression '-' multiplicative_expression
+	  { $$ = ast_subtract_new ($1, $2, $3); }
 	;
 
 shift_expression

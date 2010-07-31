@@ -48,3 +48,9 @@ variable        variable                        identifier
 constant        constant                        constant
 string          string_literal                  string
 brack_expr      bracket_expression              lbrack expr rbrack
+type_cast       type_cast                       lbrack type rbrack expr
+multiply        multiply                        factor1 op factor2
+divide          divide                          dividend op divisor
+modulo          modulo                          dividend op divisor
+add             add                             summand1 op summand2
+subtract        subtract                        minuend op subtrahend
