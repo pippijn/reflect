@@ -15,7 +15,7 @@
 %parse-param { parse_context* context }
 %lex-param { void* scanner }
 
-%destructor { ast_node_delete ($$); } <>
+%destructor { ast_node_unref ($$); } <>
 
 
 %token IDENTIFIER	"identifier"
@@ -607,8 +607,10 @@ jump_statement
 	;
 
 translation_unit
-	: external_declaration							{ /* translation_unit */ }
-	| translation_unit external_declaration					{ /* translation_unit */ }
+	: external_declaration
+	  { $$ = $1; parse_context_unit_set (context, $1); }
+	| translation_unit external_declaration
+	  { /* translation_unit */ }
 	;
 
 external_declaration

@@ -9,3 +9,4 @@
 #include <parser.h>
 
 void yyerror (YYLTYPE const *llocp, parse_context const *context, char const *s);
+extern int yydebug;

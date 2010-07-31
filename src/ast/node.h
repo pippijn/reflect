@@ -18,6 +18,7 @@ struct ast_vtbl
     struct ast_vtbl const *base;
     char const *name;
     enum ast_kind kind;
+    size_t size;
   } ti;
   fn_destruct *destruct;
   fn_print *print;
@@ -26,8 +27,9 @@ struct ast_vtbl
 
 struct ast_node
 {
-  struct ast_vtbl const *vtbl;
-  struct location location;
+  struct ast_vtbl const * const vtbl;
+  struct location const location;
+  int refcnt;
 };
 
 
@@ -40,8 +42,8 @@ ast_node const *ast_cast_const (ast_node const *object, enum ast_kind kind);
 #define SELF()                  self_type       *self = (self_type       *)ast_cast_mutable (object, vtbl->ti.kind)
 #define CONST_SELF()            self_type const *self = (self_type const *)ast_cast_const   (object, vtbl->ti.kind)
 
-#define NEW(class, ...)         ({ self_type *self = malloc (sizeof *self); ast_##class##_construct (self, __VA_ARGS__); &self->base; })
-#define BASE_CTOR(base, ...)    ast_##base##_construct ((ast_##base *)self, vtbl, __VA_ARGS__)
+#define NEW(class, ...)         ({ self_type *self = alloc (sizeof *self); ast_##class##_construct (self, __VA_ARGS__); &self->base; })
+#define BASE_CTOR(BASE, ...)    ast_##BASE##_construct (&self->base, vtbl, __VA_ARGS__)
 #define BASE_DTOR()             self->base.vtbl->ti.base->destruct (&self->base)
 
 /* helper macros */

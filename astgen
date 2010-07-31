@@ -127,6 +127,7 @@ struct ast_vtbl const ast_${name}_vtbl = {
     &ast_node_vtbl,
     "$name",
     AST_$NAME,
+    sizeof (struct ast_node_$name),
   },
 EOF
    print $fh "  ast_${name}_$_,\n"
@@ -166,6 +167,7 @@ EOF
    }
    print $fh "\n  COMPUTE_LOC (fst, lst);";
    print $fh "\n  BASE_CTOR (node, &loc);\n";
+   #print $fh "\n  self->$_ = ast_node_ref_ornull ($_);"
    print $fh "\n  self->$_ = $_;"
       for all $members;
    print $fh "\n}\n";
@@ -205,6 +207,13 @@ ast_${name}_destruct (ast_node *object)
 {
   SELF ();
 
+EOF
+
+   print $fh "  ast_node_unref_ornull (self->$_); self->$_ = NULL;\n"
+      for all $members;
+
+   print $fh <<EOF;
+
   BASE_DTOR ();
 }
 EOF
@@ -218,8 +227,24 @@ ast_${name}_print (ast_node const *object, FILE *fh)
   CONST_SELF ();
 
 EOF
-   print $fh "  ast_node_print (self->$_, fh);\n"
-      for all $members;
+   print $fh "  fprintf (fh, \"<$name>\\n\");\n";
+   for my $member (@$members) {
+      if (ref $member eq "ARRAY") {
+         for my $mem (@$member) {
+            print $fh "  if (self->$mem != NULL)\n";
+            print $fh "    {\n";
+            print $fh "      fprintf (fh, \"<$mem>\\n\");\n";
+            print $fh "      ast_node_print (self->$mem, fh);\n";
+            print $fh "      fprintf (fh, \"</$mem>\\n\");\n";
+            print $fh "    }\n";
+         }
+      } else {
+         print $fh "  fprintf (fh, \"<$member>\\n\");\n";
+         print $fh "  ast_node_print (self->$member, fh);\n";
+         print $fh "  fprintf (fh, \"</$member>\\n\");\n";
+      }
+   }
+   print $fh "  fprintf (fh, \"</$name>\\n\");\n";
    print $fh "}\n";
 }
 

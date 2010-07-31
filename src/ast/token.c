@@ -87,16 +87,67 @@ ast_token_destruct (ast_node* object)
   assert (self->text);
 
   /* destroy our own data */
-  free (self->text);
+  sever (self->text, strlen (self->text));
 
   /* base destructor */
   BASE_DTOR ();
+}
+
+
+static char const *
+xml_escape (char const *text)
+{
+  static char buf[1024];
+  char const *it = text;
+  char const *et = text + strlen (text);
+  char *ptr = buf;
+
+  for (; it != et; it++)
+    switch (*it)
+      {
+      case '>':
+        assert (ptr - buf < sizeof buf - 4);
+        *ptr++ = '&';
+        *ptr++ = 'g';
+        *ptr++ = 't';
+        *ptr++ = ';';
+        break;
+      case '<':
+        assert (ptr - buf < sizeof buf - 4);
+        *ptr++ = '&';
+        *ptr++ = 'l';
+        *ptr++ = 't';
+        *ptr++ = ';';
+        break;
+      case '&':
+        assert (ptr - buf < sizeof buf - 5);
+        *ptr++ = '&';
+        *ptr++ = 'a';
+        *ptr++ = 'm';
+        *ptr++ = 'p';
+        *ptr++ = ';';
+        break;
+      default:
+        assert (ptr - buf < sizeof buf);
+        *ptr++ = *it;
+        break;
+      }
+
+  *ptr = '\0';
+
+  return buf;
 }
 
 static void
 ast_token_print (ast_node const* object, FILE* fh)
 {
   CONST_SELF ();
+  struct location const *loc = ast_node_location (object);
 
-  fprintf (fh, "token { \"%s\" }\n", self->text);
+  fprintf ( fh
+          , "<token left=\"%d:%d\" right=\"%d:%d\">%s</token>\n"
+          , loc->first_line, loc->first_column
+          , loc->last_line, loc->last_column
+          , xml_escape (self->text)
+          );
 }

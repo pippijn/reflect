@@ -4,8 +4,11 @@ typedef struct ast_node ast_node;
  * node base
  */
 
-/* destructor */
-void                    ast_node_delete         (ast_node *self);
+/* refcounting */
+ast_node*               ast_node_ref            (ast_node *self);
+ast_node*               ast_node_ref_ornull     (ast_node *self);
+void                    ast_node_unref          (ast_node *self);
+void                    ast_node_unref_ornull   (ast_node *self);
 
 /* accessors */
 struct location const  *ast_node_location       (ast_node const *self);
