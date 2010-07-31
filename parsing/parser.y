@@ -288,17 +288,25 @@ constant_expression
 	;
 
 declaration
-	: declaration_specifiers ';'						{ /* declaration */ }
-	| declaration_specifiers init_declarator_list ';'			{ /* declaration */ }
+	: declaration_specifiers ';'
+	  { $$ = ast_declaration_new ($1, NULL, $2); }
+	| declaration_specifiers init_declarator_list ';'
+	  { $$ = ast_declaration_new ($1, $2, $3); }
 	;
 
 declaration_specifiers
-	: storage_class_specifier						{ /* storage_decl_spec */ }
-	| storage_class_specifier declaration_specifiers			{ /* storage_decl_spec */ }
-	| type_specifier							{ /* type_spec_decl_spec */ }
-	| type_specifier declaration_specifiers					{ /* type_spec_decl_spec */ }
-	| type_qualifier							{ /* type_qual_decl_spec */ }
-	| type_qualifier declaration_specifiers					{ /* type_qual_decl_spec */ }
+	: storage_class_specifier
+	  { $$ = ast_storage_decl_spec_new ($1, NULL); }
+	| storage_class_specifier declaration_specifiers
+	  { $$ = ast_storage_decl_spec_new ($1, $2); }
+	| type_specifier
+	  { $$ = ast_type_spec_decl_spec_new ($1, NULL); }
+	| type_specifier declaration_specifiers
+	  { $$ = ast_type_spec_decl_spec_new ($1, $2); }
+	| type_qualifier
+	  { $$ = ast_type_qual_decl_spec_new ($1, NULL); }
+	| type_qualifier declaration_specifiers
+	  { $$ = ast_type_qual_decl_spec_new ($1, $2); }
 	;
 
 init_declarator_list
@@ -307,8 +315,10 @@ init_declarator_list
 	;
 
 init_declarator
-	: declarator								{ /* init_declr */ }
-	| declarator '=' initializer						{ /* init_declr */ }
+	: declarator
+	  { $$ = ast_init_declr_new ($1, NULL, NULL); }
+	| declarator '=' initializer
+	  { $$ = ast_init_declr_new ($1, $2, $3); }
 	;
 
 storage_class_specifier
@@ -370,7 +380,8 @@ struct_declaration_list
 	;
 
 struct_declaration
-	: specifier_qualifier_list struct_declarator_list ';'			{ /* struct_declaration */ }
+	: specifier_qualifier_list struct_declarator_list ';'
+	  { $$ = ast_struct_declaration_new ($1, $2); }
 	;
 
 specifier_qualifier_list
@@ -421,9 +432,9 @@ type_qualifier
 
 declarator
 	: pointer direct_declarator
-	{ $$ = $1; /* FIXME are you sure? */ }
+	{ $$ = ast_declarator_new ($1, $2); }
 	| direct_declarator
-	{ $$ = $1; }
+	{ $$ = ast_declarator_new (NULL, $1); }
 	;
 
 direct_declarator
@@ -437,10 +448,14 @@ direct_declarator
 	;
 
 pointer
-	: '*'									{ /* pointer */ }
-	| '*' type_qualifier_list						{ /* pointer */ }
-	| '*' pointer								{ /* pointer */ }
-	| '*' type_qualifier_list pointer					{ /* pointer */ }
+	: '*'
+	  { $$ = ast_pointer_new ($1, NULL, NULL); }
+	| '*' type_qualifier_list
+	  { $$ = ast_pointer_new ($1, $2, NULL); }
+	| '*' pointer
+	  { $$ = ast_pointer_new ($1, NULL, $2); }
+	| '*' type_qualifier_list pointer
+	  { $$ = ast_pointer_new ($1, $2, $3); }
 	;
 
 type_qualifier_list

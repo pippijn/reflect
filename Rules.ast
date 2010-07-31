@@ -85,3 +85,11 @@ union           union                           union_tok
 enum_def        defined_enum_spec               enum_tok identifier lbrace enum_list rbrace
 enum_ref        referenced_enum_spec            enum_tok identifier
 struct_def      struct_definition_spec          struct_tok identifier lbrace struct_list rbrace
+declarator      declarator                      pointer direct_decl
+declaration     declaration                     decl_specifier init_list semicolon
+storage         storage_decl_spec               storage_class_spec decl_spec
+type_spec       type_spec_decl_spec             type_spec decl_spec
+type_qual       type_qual_decl_spec             type_qual decl_spec
+init_dec        init_declr                      decl op init
+struct_decl     struct_declaration              spec_qual_list struct_decl_list
+pointer         pointer                         op type_qual_list pointer
