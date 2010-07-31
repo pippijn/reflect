@@ -356,7 +356,9 @@ struct_or_union_specifier
 
 struct_or_union
 	: "struct"
+	  { $$ = ast_struct_new ($1); }
 	| "union"
+	  { $$ = ast_union_new ($1); }
 	;
 
 struct_declaration_list

@@ -80,3 +80,5 @@ assign_and      and_assign                      lvalue op expr
 assign_xor      xor_assign                      lvalue op expr
 assign_or       or_assign                       lvalue op expr
 comma           comma                           expr1 op expr2
+struct          struct                          struct_tok
+union           union                           union_tok
