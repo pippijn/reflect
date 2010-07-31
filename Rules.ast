@@ -93,3 +93,5 @@ type_qual       type_qual_decl_spec             type_qual decl_spec
 init_dec        init_declr                      decl op init
 struct_decl     struct_declaration              spec_qual_list struct_decl_list
 pointer         pointer                         op type_qual_list pointer
+bitfield_dec    bitfield_declarator             decl colon const_expr
+function_def    function_definition             return_type name arg_list body

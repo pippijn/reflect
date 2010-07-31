@@ -397,9 +397,12 @@ struct_declarator_list
 	;
 
 struct_declarator
-	: declarator								{ $$ = $1; }
-	| ':' constant_expression						{ /* bitfield_declarator */ }
-	| declarator ':' constant_expression					{ /* bitfield_declarator */ }
+	: declarator
+	  { $$ = ast_bitfield_declarator_new ($1, NULL, NULL); }
+	| ':' constant_expression
+	  { $$ = ast_bitfield_declarator_new (NULL, $1, $2); }
+	| declarator ':' constant_expression
+	  { $$ = ast_bitfield_declarator_new ($1, $2, $3); }
 	;
 
 enum_specifier
@@ -600,15 +603,21 @@ translation_unit
 	;
 
 external_declaration
-	: function_definition							{ $$ = $1; }
-	| declaration								{ $$ = $1; }
+	: function_definition
+	  { $$ = $1; }
+	| declaration
+	  { $$ = $1; }
 	;
 
 function_definition
-	: declaration_specifiers declarator declaration_list compound_statement	{ /* function_definition */ }
-	| declaration_specifiers declarator compound_statement			{ /* function_definition */ }
-	| declarator declaration_list compound_statement			{ /* function_definition */ }
-	| declarator compound_statement						{ /* function_definition */ }
+	: declaration_specifiers declarator declaration_list compound_statement
+	  { $$ = ast_function_definition_new ($1, $2, $3, $4); }
+	| declaration_specifiers declarator compound_statement
+	  { $$ = ast_function_definition_new ($1, $2, NULL, $3); }
+	| declarator declaration_list compound_statement
+	  { $$ = ast_function_definition_new (NULL, $1, $2, $3); }
+	| declarator compound_statement
+	  { $$ = ast_function_definition_new (NULL, $1, NULL, $2); }
 	;
 
 %%
