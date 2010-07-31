@@ -349,9 +349,12 @@ type_specifier
 	;
 
 struct_or_union_specifier
-	: struct_or_union IDENTIFIER '{' struct_declaration_list '}'		{ /* struct_definition_spec */ }
-	| struct_or_union '{' struct_declaration_list '}'			{ /* struct_definition_spec */ }
-	| struct_or_union IDENTIFIER						{ /* struct_definition_spec */ }
+	: struct_or_union IDENTIFIER '{' struct_declaration_list '}'
+	  { $$ = ast_struct_definition_spec_new ($1, $2, $3, $4, $5); }
+	| struct_or_union '{' struct_declaration_list '}'
+	  { $$ = ast_struct_definition_spec_new ($1, NULL, $2, $3, $4); }
+	| struct_or_union IDENTIFIER
+	  { $$ = ast_struct_definition_spec_new ($1, $2, NULL, NULL, NULL); }
 	;
 
 struct_or_union
@@ -389,9 +392,12 @@ struct_declarator
 	;
 
 enum_specifier
-	: "enum" '{' enumerator_list '}'					{ /* defined_enum_spec */ }
-	| "enum" IDENTIFIER '{' enumerator_list '}'				{ /* defined_enum_spec */ }
-	| "enum" IDENTIFIER							{ /* referenced_enum_spec */ }
+	: "enum" '{' enumerator_list '}'
+	  { $$ = ast_defined_enum_spec_new ($1, NULL, $2, $3, $4); }
+	| "enum" IDENTIFIER '{' enumerator_list '}'
+	  { $$ = ast_defined_enum_spec_new ($1, $2, $3, $4, $5); }
+	| "enum" IDENTIFIER
+	  { $$ = ast_referenced_enum_spec_new ($1, $2); }
 	;
 
 enumerator_list
@@ -414,8 +420,10 @@ type_qualifier
 	;
 
 declarator
-	: pointer direct_declarator						{ $$ = $1; }
-	| direct_declarator							{ $$ = $1; }
+	: pointer direct_declarator
+	{ $$ = $1; /* FIXME are you sure? */ }
+	| direct_declarator
+	{ $$ = $1; }
 	;
 
 direct_declarator

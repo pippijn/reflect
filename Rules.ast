@@ -82,3 +82,6 @@ assign_or       or_assign                       lvalue op expr
 comma           comma                           expr1 op expr2
 struct          struct                          struct_tok
 union           union                           union_tok
+enum_def        defined_enum_spec               enum_tok identifier lbrace enum_list rbrace
+enum_ref        referenced_enum_spec            enum_tok identifier
+struct_def      struct_definition_spec          struct_tok identifier lbrace struct_list rbrace
