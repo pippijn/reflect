@@ -68,3 +68,15 @@ bit_or          bitwise_or                      expr1 op expr2
 log_and         logical_and                     expr1 op expr2
 log_or          logical_or                      expr1 op expr2
 ternary         ternary_op                      condition op_quest then_expr op_colon else_expr
+assign          assign                          lvalue op expr
+assign_mult     multiply_assign                 lvalue op expr
+assign_div      divide_assign                   lvalue op expr
+assign_mod      modulo_assign                   lvalue op expr
+assign_add      add_assign                      lvalue op expr
+assign_sub      subtract_assign                 lvalue op expr
+assign_lshift   left_shift_assign               lvalue op expr
+assign_rshift   right_shift_assign              lvalue op expr
+assign_and      and_assign                      lvalue op expr
+assign_xor      xor_assign                      lvalue op expr
+assign_or       or_assign                       lvalue op expr
+comma           comma                           expr1 op expr2

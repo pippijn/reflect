@@ -249,27 +249,42 @@ conditional_expression
 	;
 
 assignment_expression
-	: conditional_expression						{ $$ = $1; }
-	| unary_expression '=' assignment_expression				{ /* assign */ }
-	| unary_expression "*=" assignment_expression				{ /* multiply_assign */ }
-	| unary_expression "/=" assignment_expression				{ /* divide_assign */ }
-	| unary_expression "%=" assignment_expression				{ /* modulo_assign */ }
-	| unary_expression "+=" assignment_expression				{ /* add_assign */ }
-	| unary_expression "-=" assignment_expression				{ /* subtract_assign */ }
-	| unary_expression "<<=" assignment_expression				{ /* left_shift_assign */ }
-	| unary_expression ">>=" assignment_expression				{ /* right_shift_assign */ }
-	| unary_expression "&=" assignment_expression				{ /* and_assign */ }
-	| unary_expression "^=" assignment_expression				{ /* xor_assign */ }
-	| unary_expression "|=" assignment_expression				{ /* or_assign */ }
+	: conditional_expression
+	  { $$ = $1; }
+	| unary_expression '=' assignment_expression
+	  { $$ = ast_assign_new ($1, $2, $3); }
+	| unary_expression "*=" assignment_expression
+	  { $$ = ast_multiply_assign_new ($1, $2, $3); }
+	| unary_expression "/=" assignment_expression
+	  { $$ = ast_divide_assign_new ($1, $2, $3); }
+	| unary_expression "%=" assignment_expression
+	  { $$ = ast_modulo_assign_new ($1, $2, $3); }
+	| unary_expression "+=" assignment_expression
+	  { $$ = ast_add_assign_new ($1, $2, $3); }
+	| unary_expression "-=" assignment_expression
+	  { $$ = ast_subtract_assign_new ($1, $2, $3); }
+	| unary_expression "<<=" assignment_expression
+	  { $$ = ast_left_shift_assign_new ($1, $2, $3); }
+	| unary_expression ">>=" assignment_expression
+	  { $$ = ast_right_shift_assign_new ($1, $2, $3); }
+	| unary_expression "&=" assignment_expression
+	  { $$ = ast_and_assign_new ($1, $2, $3); }
+	| unary_expression "^=" assignment_expression
+	  { $$ = ast_xor_assign_new ($1, $2, $3); }
+	| unary_expression "|=" assignment_expression
+	  { $$ = ast_or_assign_new ($1, $2, $3); }
 	;
 
 expression
-	: assignment_expression							{ $$ = $1; }
-	| expression ',' assignment_expression					{ /* comma */ }
+	: assignment_expression
+	  { $$ = $1; }
+	| expression ',' assignment_expression
+	  { $$ = ast_comma_new ($1, $2, $3); }
 	;
 
 constant_expression
-	: conditional_expression						{ $$ = $1; }
+	: conditional_expression
+	  { $$ = $1; }
 	;
 
 declaration
