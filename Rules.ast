@@ -44,3 +44,7 @@ struct_access   struct_access                   expr op identifier
 pointer_access  pointer_access                  expr op identifier
 post_inc        post_increment                  expr op
 post_dec        post_decrement                  expr op
+variable        variable                        identifier
+constant        constant                        constant
+string          string_literal                  string
+brack_expr      bracket_expression              lbrack expr rbrack

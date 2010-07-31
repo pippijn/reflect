@@ -89,10 +89,14 @@
 %%
 
 primary_expression
-	: IDENTIFIER								{ /* variable_expr */ }
-	| CONSTANT								{ /* constant */ }
-	| STRING_LITERAL							{ /* string_literal */ }
-	| '(' expression ')'							{ /* parenth_expr */ }
+	: IDENTIFIER
+	  { $$ = ast_variable_new ($1); }
+	| CONSTANT
+	  { $$ = ast_constant_new ($1); }
+	| STRING_LITERAL
+	  { $$ = ast_string_literal_new ($1); }
+	| '(' expression ')'
+	  { $$ = ast_bracket_expression_new ($1, $2, $3); }
 	;
 
 postfix_expression
