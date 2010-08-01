@@ -43,6 +43,9 @@ clean:
 	$(RM) include/pt/gen/*
 	$(RM) src/pt/gen/*
 
+depclean: clean
+	$(RM) $(OBJECTS:.o=.d)
+
 %.c: %.y
 	@echo " YACC " $@
 	@$(YACC) -d $< -o $@
