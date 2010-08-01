@@ -78,36 +78,36 @@ cast_expression
 	| '(' type_name ')' bracketed_initialiser_list
 	  { $$ = pt_fmt205_new ($1, $2, $3, $4); }
 	| '(' type_name ')' cast_expression
-	  { $$ = pt_fmt206_new ($1, $2, $3, $4); }
+	  { $$ = pt_type_cast_new ($1, $2, $3, $4); }
 	;
 
 multiplicative_expression
 	: cast_expression
 	  { $$ = pt_fmt207_new ($1); }
 	| multiplicative_expression '*' cast_expression
-	  { $$ = pt_fmt208_new ($1, $2, $3); }
+	  { $$ = pt_multiply_new ($1, $2, $3); }
 	| multiplicative_expression '/' cast_expression
-	  { $$ = pt_fmt209_new ($1, $2, $3); }
+	  { $$ = pt_divide_new ($1, $2, $3); }
 	| multiplicative_expression '%' cast_expression
-	  { $$ = pt_fmt210_new ($1, $2, $3); }
+	  { $$ = pt_modulo_new ($1, $2, $3); }
 	;
 
 additive_expression
 	: multiplicative_expression
 	  { $$ = pt_fmt211_new ($1); }
 	| additive_expression '+' multiplicative_expression
-	  { $$ = pt_fmt212_new ($1, $2, $3); }
+	  { $$ = pt_add_new ($1, $2, $3); }
 	| additive_expression '-' multiplicative_expression
-	  { $$ = pt_fmt213_new ($1, $2, $3); }
+	  { $$ = pt_subtract_new ($1, $2, $3); }
 	;
 
 shift_expression
 	: additive_expression
 	  { $$ = pt_fmt214_new ($1); }
 	| shift_expression LSH_OP additive_expression
-	  { $$ = pt_fmt215_new ($1, $2, $3); }
+	  { $$ = pt_shift_left_new ($1, $2, $3); }
 	| shift_expression RSH_OP additive_expression
-	  { $$ = pt_fmt216_new ($1, $2, $3); }
+	  { $$ = pt_shift_right_new ($1, $2, $3); }
 	;
 
 relational_expression

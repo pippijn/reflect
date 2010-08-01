@@ -615,38 +615,38 @@ $main::dataname = "pt";
    fmt205 => [
       fmt205 => ["n1", "n2", "n3", "n4"]
    ],
-   fmt206 => [
-      fmt206 => ["n1", "n2", "n3", "n4"]
+   type_cast => [
+      type_cast => ["n1", "n2", "n3", "n4"]
    ],
    fmt207 => [
       fmt207 => ["n1"]
    ],
-   fmt208 => [
-      fmt208 => ["n1", "n2", "n3"]
+   multiply => [
+      multiply => ["n1", "n2", "n3"]
    ],
-   fmt209 => [
-      fmt209 => ["n1", "n2", "n3"]
+   divide => [
+      divide => ["n1", "n2", "n3"]
    ],
-   fmt210 => [
-      fmt210 => ["n1", "n2", "n3"]
+   modulo => [
+      modulo => ["n1", "n2", "n3"]
    ],
    fmt211 => [
       fmt211 => ["n1"]
    ],
-   fmt212 => [
-      fmt212 => ["n1", "n2", "n3"]
+   add => [
+      add => ["n1", "n2", "n3"]
    ],
-   fmt213 => [
-      fmt213 => ["n1", "n2", "n3"]
+   subtract => [
+      subtract => ["n1", "n2", "n3"]
    ],
    fmt214 => [
       fmt214 => ["n1"]
    ],
-   fmt215 => [
-      fmt215 => ["n1", "n2", "n3"]
+   shift_left=> [
+      shift_left => ["n1", "n2", "n3"]
    ],
-   fmt216 => [
-      fmt216 => ["n1", "n2", "n3"]
+   shift_right => [
+      shift_right => ["n1", "n2", "n3"]
    ],
    fmt217 => [
       fmt217 => ["n1"]
