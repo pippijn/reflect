@@ -16,19 +16,19 @@ postfix_expression
 	: primary_expression
 	  { $$ = pt_fmt180_new ($1); }
 	| postfix_expression '[' expression ']'
-	  { $$ = pt_fmt181_new ($1, $2, $3, $4); }
+	  { $$ = pt_array_access_new ($1, $2, $3, $4); }
 	| postfix_expression '(' ')'
-	  { $$ = pt_fmt182_new ($1, $2, $3); }
+	  { $$ = pt_function_call_new ($1, $2, NULL, $4); }
 	| postfix_expression '(' argument_expression_list ')'
-	  { $$ = pt_fmt183_new ($1, $2, $3, $4); }
+	  { $$ = pt_function_call_new ($1, $2, $3, $4); }
 	| postfix_expression '.' IDENTIFIER
-	  { $$ = pt_fmt184_new ($1, $2, $3); }
+	  { $$ = pt_struct_access_new ($1, $2, $3); }
 	| postfix_expression PTR_OP IDENTIFIER
-	  { $$ = pt_fmt185_new ($1, $2, $3); }
+	  { $$ = pt_pointer_access_new ($1, $2, $3); }
 	| postfix_expression INC_OP
-	  { $$ = pt_fmt186_new ($1, $2); }
+	  { $$ = pt_post_increment_new ($1, $2); }
 	| postfix_expression DEC_OP
-	  { $$ = pt_fmt187_new ($1, $2); }
+	  { $$ = pt_post_decrement_new ($1, $2); }
 	| postfix_expression '.' TYPEDEF_NAME
 	  { $$ = pt_fmt188_new ($1, $2, $3); }
 	| postfix_expression PTR_OP TYPEDEF_NAME

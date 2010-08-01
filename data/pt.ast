@@ -543,26 +543,23 @@ $main::dataname = "pt";
    fmt180 => [
       fmt180 => ["n1"]
    ],
-   fmt181 => [
-      fmt181 => ["n1", "n2", "n3", "n4"]
+   array_access => [
+      array_access => ["n1", "n2", "n3", "n4"]
    ],
-   fmt182 => [
-      fmt182 => ["n1", "n2", "n3"]
+   function_call => [
+      function_call => ["n1", "n2", ["n3"], "n4"]
    ],
-   fmt183 => [
-      fmt183 => ["n1", "n2", "n3", "n4"]
+   struct_access => [
+      struct_access => ["n1", "n2", "n3"]
    ],
-   fmt184 => [
-      fmt184 => ["n1", "n2", "n3"]
+   pointer_access => [
+      pointer_access => ["n1", "n2", "n3"]
    ],
-   fmt185 => [
-      fmt185 => ["n1", "n2", "n3"]
+   post_increment => [
+      post_increment => ["n1", "n2"]
    ],
-   fmt186 => [
-      fmt186 => ["n1", "n2"]
-   ],
-   fmt187 => [
-      fmt187 => ["n1", "n2"]
+   post_decrement => [
+      post_decrement => ["n1", "n2"]
    ],
    fmt188 => [
       fmt188 => ["n1", "n2", "n3"]
