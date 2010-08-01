@@ -468,8 +468,10 @@ type_qualifier_list
 
 
 parameter_type_list
-	: parameter_list							{ /* parameter_type_list */ }
-	| parameter_list ',' "..."						{ /* parameter_type_list */ }
+	: parameter_list
+	  { $$ = ast_parameter_type_list_new ($1, NULL, NULL); }
+	| parameter_list ',' "..."
+	  { $$ = ast_parameter_type_list_new ($1, $2, $3); }
 	;
 
 parameter_list

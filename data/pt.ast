@@ -301,4 +301,7 @@
    type_name => [
       type_name => ["spec_qual_list", ["abstr_decl"]]
    ],
+   param_type_l => [
+      parameter_type_list => ["param_list", ["comma", "ellipsis"]]
+   ],
 }
