@@ -33,7 +33,7 @@ codegen: ast.codegen.stamp pt.codegen.stamp
 
 clean:
 	$(RM) reflect
-	$(RM) $(OBJECTS)
+	$(RM) $(shell find . -name "*.o")
 	$(RM) parsing/parser.c
 	$(RM) parsing/parser.h
 	$(RM) parsing/lexer.c
@@ -44,7 +44,7 @@ clean:
 	$(RM) src/pt/gen/*
 
 depclean: clean
-	$(RM) $(OBJECTS:.o=.d)
+	$(RM) $(shell find . -name "*.d")
 
 %.c: %.y
 	@echo " YACC " $@

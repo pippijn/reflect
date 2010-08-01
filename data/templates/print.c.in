@@ -1,0 +1,31 @@
+void
+${dataname}_${name}_print (${dataname}_node const *object, FILE *fh)
+{
+  CONST_SELF ();
+
+  fprintf (fh, "<$name>\n");
+
+  [% FOREACH member = members %]
+    [% IF member.optional %]
+      [% FOREACH mem = member %]
+
+  if (self->$mem != NULL)
+    {
+      fprintf (fh, "<$mem>\n");
+      ${dataname}_node_print (self->$mem, fh);
+      fprintf (fh, "</$mem>\n");
+    }
+
+      [% END %]
+    [% ELSE %]
+
+  fprintf (fh, "<$member>\n");
+  ${dataname}_node_print (self->$member, fh);
+  fprintf (fh, "</$member>\n");
+
+    [% END %]
+  [% END %]
+
+  fprintf (fh, "</$name>\n");
+}
+
