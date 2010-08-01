@@ -1,6 +1,13 @@
 sub gen_header {
    my ($file, $dataname, $name, $members) = @_;
 
+   my $longest = 0;
+   for (all $members) {
+     if ($longest < length $_) {
+       $longest = length $_;
+     }
+   };
+
    my $fh = maybe_open ("include/${dataname}/gen/$file.h")
       or return;
 
@@ -19,8 +26,10 @@ sub gen_header {
    }
 
    print $fh "/* accessors */\n";
-   print $fh "${dataname}_node *${dataname}_${name}_$_ (${dataname}_node const *self);\n"
-      for all $members;
+   for (all $members) {
+     print $fh "${dataname}_node *${dataname}_${name}_$_" . ' ' x ($longest - length $_)
+               . " (${dataname}_node const *self);\n";
+   }
 }
 
 
