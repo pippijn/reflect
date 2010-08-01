@@ -14,6 +14,26 @@ vtbl_type const L (node_vtbl) = {
   (fn_store *)L (pure_virtual),
 };
 
+static void
+type_info_verify (struct type_info const *ti)
+{
+  assert (ti->name != NULL);
+  assert (ti->kind != U (NODE));
+  assert (ti->size != 0);
+}
+
+static void
+vtbl_verify (vtbl_type const *vtbl)
+{
+  assert (vtbl != NULL);
+  type_info_verify (&vtbl->ti);
+#define VFN_VERIFY(fn) assert (vtbl->fn != NULL && vtbl->fn != (fn_##fn*)L (pure_virtual))
+  VFN_VERIFY (destruct);
+  VFN_VERIFY (print);
+  VFN_VERIFY (store);
+#undef VFN_VERIFY
+}
+
 
 /*
  * public
@@ -75,6 +95,8 @@ L (node_construct) (node_type *self, vtbl_type const *vtbl, struct location cons
   assert (self != NULL);
   assert (vtbl != NULL);
   assert (loc != NULL);
+
+  vtbl_verify (vtbl);
 
 #if 0
   printf ("constructing %s: %p\n", vtbl->ti.name, self);
