@@ -10,6 +10,7 @@ use astgen::source::new;
 use astgen::source::self_type;
 use astgen::source::functions;
 use astgen::source::vtbl;
+use astgen::source::virtual::store;
 
 sub generate {
    my ($file, $dataname, $name, $members) = @_;
@@ -23,6 +24,7 @@ sub generate {
    gen_new $fh, $dataname, $name, $members;
    gen_accessors $fh, $dataname, $name, $members;
    gen_functions $fh, $dataname, $name, $members;
+   gen_store $fh, $dataname, $name, $members;
 }
 
 

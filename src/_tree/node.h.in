@@ -7,6 +7,7 @@ typedef enum L (kind) kind_type;
 
 typedef void fn_destruct (node_type *node);
 typedef void fn_print (node_type const *node, FILE *fh);
+typedef void fn_store (node_type const *node, FILE *fh);
 
 enum L (kind)
 {
@@ -29,6 +30,7 @@ struct L (vtbl)
   } ti;
   fn_destruct *destruct;
   fn_print *print;
+  fn_store *store;
 };
 
 
