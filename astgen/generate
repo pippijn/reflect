@@ -8,9 +8,11 @@ use astgen::util;
 use astgen::gen_header_internal;
 use astgen::gen_header;
 use astgen::gen_source;
+use astgen::gen_visitor;
 
 our $dataname;
-our @vfuns = qw/destruct print store/;
+our @vfuns = qw/destruct print store accept/;
+our @visitors = qw/print store/;
 
 my $rules = do {
    my $file = $ARGV[0]
@@ -20,20 +22,50 @@ my $rules = do {
 
 my $DATANAME = uc $dataname;
 
-open my $nodes_h, ">", "include/${dataname}/nodes.h"
+open my $nodes_h, ">", "include/${dataname}/gen/nodes.h"
+   or die $!;
+open my $visitor_h, ">", "include/${dataname}/gen/visitor.h"
+   or die $!;
+open my $internal_kinds_h, ">", "src/${dataname}/gen/kinds.h"
    or die $!;
 open my $internal_nodes_h, ">", "src/${dataname}/gen/nodes.h"
    or die $!;
-open my $internal_kinds_h, ">", "src/${dataname}/gen/kinds.h"
+open my $internal_visitor_h, ">", "src/${dataname}/gen/visitor.h"
+   or die $!;
+open my $internal_visitor_c, ">", "src/${dataname}/gen/visitor.c"
    or die $!;
 
 print "  ASTGEN  $ARGV[0]\n";
 
+sub gen_visitor_c {
+   my ($fh, $name) = @_;
+
+   print $internal_visitor_c <<EOF;
+
+void
+${dataname}_visitor_visit_$name (${dataname}_visitor *self, ${dataname}_node const *node)
+{
+  self->vtbl->visit_$name (self, node);
+}
+EOF
+}
+
+print $internal_visitor_c "#include \"../internal.h\"\n";
+
+astgen::visitor::generate $dataname, $rules;
+
 for my $file (sort keys %$rules) {
-   print $nodes_h "#include <${dataname}/$file.h>\n";
+   my ($name, $members) = @{ $rules->{$file} };
+
+   print $nodes_h "#include <${dataname}/gen/$file.h>\n";
+   print $visitor_h "  ${dataname}_visit_fn *visit_$name;\n";
+   print $internal_kinds_h "  ${DATANAME}_" . (uc $name) . ",\n";
    print $internal_nodes_h "#include \"$file.h\"\n";
-   print $internal_kinds_h "  ${DATANAME}_" . (uc $rules->{$file}[0]) . ",\n";
-   gen_header_internal $file, $dataname, @{ $rules->{$file} };
-   gen_header          $file, $dataname, @{ $rules->{$file} };
-   astgen::source::generate  $file, $dataname, @{ $rules->{$file} };
+   print $internal_visitor_h "void ${dataname}_visitor_visit_$name (${dataname}_visitor *self, ${dataname}_node const *node);\n";
+
+   gen_visitor_c $internal_visitor_c, $name;
+
+   gen_header_internal $file, $dataname, $name, $members;
+   gen_header          $file, $dataname, $name, $members;
+   astgen::source::generate  $file, $dataname, $name, $members;
 }

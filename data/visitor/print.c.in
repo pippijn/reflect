@@ -1,0 +1,162 @@
+#include <$dataname/visitors.h>
+#include <$dataname/visitor/impl.h>
+
+typedef struct ${dataname}_print_visitor self_type;
+
+struct ${dataname}_print_visitor
+{
+  ${dataname}_visitor base;
+
+  FILE *fh;
+};
+
+[% FOREACH rule = rules %]
+[% name = rule.value.0 %]
+[% members = rule.value.1 %]
+
+static void
+${dataname}_print_visitor_visit_${name} (visitor_type *object, node_type const *node)
+{
+  SELF ();
+
+  fprintf (self->fh, "<$name>\n");
+
+  [% FOREACH member = members %]
+    [% IF member.optional %]
+      [% FOREACH mem = member %]
+
+  if (${dataname}_${name}_${mem} (node) != NULL)
+    {
+      fprintf (self->fh, "<$mem>\n");
+      ${dataname}_node_accept (${dataname}_${name}_${mem} (node), &self->base);
+      fprintf (self->fh, "</$mem>\n");
+    }
+
+      [% END %]
+    [% ELSE %]
+
+  fprintf (self->fh, "<$member>\n");
+  ${dataname}_node_accept (${dataname}_${name}_${member} (node), &self->base);
+  fprintf (self->fh, "</$member>\n");
+
+    [% END %]
+  [% END %]
+
+  fprintf (self->fh, "</$name>\n");
+}
+
+[% END %]
+
+
+#define strlen my_strlen
+static size_t
+my_strlen (char const *str)
+{
+  size_t sz = 0;
+
+  while (*str++)
+    ++sz;
+  return sz;
+}
+
+static char const *
+xml_escape (char const *text)
+{
+  static char buf[1024];
+  char const* it = text;
+  char const* et = text + strlen (text);
+  char *ptr = buf;
+
+  for (; it != et; it++)
+    switch (*it)
+      {
+      case '>':
+        assert (ptr - buf < sizeof buf - 4);
+        *ptr++ = '&';
+        *ptr++ = 'g';
+        *ptr++ = 't';
+        *ptr++ = ';';
+        break;
+      case '<':
+        assert (ptr - buf < sizeof buf - 4);
+        *ptr++ = '&';
+        *ptr++ = 'l';
+        *ptr++ = 't';
+        *ptr++ = ';';
+        break;
+      case '&':
+        assert (ptr - buf < sizeof buf - 5);
+        *ptr++ = '&';
+        *ptr++ = 'a';
+        *ptr++ = 'm';
+        *ptr++ = 'p';
+        *ptr++ = ';';
+        break;
+      default:
+        assert (ptr - buf < sizeof buf);
+        *ptr++ = *it;
+        break;
+      }
+
+  *ptr = '\0';
+
+  return buf;
+}
+
+static void
+${dataname}_print_visitor_visit_token (visitor_type *object, node_type const *node)
+{
+  SELF ();
+  struct location const *loc = ${dataname}_node_location (node);
+
+  fprintf ( self->fh
+          , "<token left=\"%d:%d\" right=\"%d:%d\">%s</token>\n"
+          , loc->first_line, loc->first_column
+          , loc->last_line, loc->last_column
+          , xml_escape (${dataname}_token_text (node))
+          );
+}
+
+
+static struct ${dataname}_visitor_vtbl ${dataname}_print_visitor_vtbl = {
+  {
+    "${dataname}_visitor",
+    sizeof (self_type),
+  },
+  ${dataname}_print_visitor_visit_token,
+
+[% FOREACH rule = rules %]
+[% name = rule.value.0 %]
+  ${dataname}_print_visitor_visit_${name},
+
+[% END %]
+};
+
+static void
+${dataname}_print_visitor_construct (self_type *self, FILE *fh)
+{
+  assert (self != NULL);
+  assert (fh != NULL);
+
+  ${dataname}_visitor_construct (&self->base, &${dataname}_print_visitor_vtbl);
+
+  self->fh = fh;
+}
+
+visitor_type *
+${dataname}_print_visitor_new (FILE *fh)
+{
+  self_type *self = alloc (sizeof *self);
+
+  ${dataname}_print_visitor_construct (self, fh);
+
+  return &self->base;
+}
+
+void
+${dataname}_print_visitor_delete (visitor_type *object)
+{
+  SELF ();
+
+  sever (self, self->base.vtbl->ti.size);
+}

@@ -9,6 +9,4 @@
 
 #include "token.h"
 
-#if 0
-#include "gen/nodes.h"
-#endif
+#include "gen/visitor.h"

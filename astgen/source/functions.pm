@@ -22,13 +22,13 @@ sub gen_functions {
 
    print $fh "\n\n/* virtual */\n\n";
 
-   process $template $_, {
+   (process $template "data/virtual/$_.c.in", {
       dataname => $dataname,
       name     => $name,
       members  => $members,
-   }, $fh
+   }, $fh)
       || die $template->error
-         for <data/templates/*.c.in>
+         for @main::vfuns
 }
 
 

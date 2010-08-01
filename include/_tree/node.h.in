@@ -4,6 +4,8 @@
 typedef struct L (node) L (node);
 typedef struct L (visitor) L (visitor);
 
+typedef void L (visit_fn) (L (visitor) *self, L (node) const *node);
+
 /*
  * node base
  */

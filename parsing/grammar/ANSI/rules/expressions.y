@@ -3,7 +3,7 @@
 
 primary_expression
 	: IDENTIFIER
-	  { $$ = ast_variable_new ($1); }
+	  { $$ = pt_variable_new ($1); }
 	| constant
 	  { $$ = pt_constant_new ($1); }
 	| string_literal_list
