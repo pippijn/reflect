@@ -31,6 +31,7 @@ include layer2v/Rules.mk
 include reflect/Rules.mk
 
 clean:
+	$(RM) -r bin
 	$(RM) $(shell find . -name "*.o")
 
 depclean: clean
