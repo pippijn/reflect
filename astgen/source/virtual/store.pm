@@ -29,7 +29,7 @@ EOF
          }
       } else {
          print $fh "  fputs (\"($member \", fh);\n";
-         print $fh "  ${dataname}_node_print (self->$member, fh);\n";
+         print $fh "  ${dataname}_node_store (self->$member, fh);\n";
          print $fh "  fputs (\")\\n\", fh);\n";
       }
    }

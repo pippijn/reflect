@@ -15,3 +15,4 @@ struct location const  *ast_node_location       (ast_node const *self);
 
 /* methods */
 void                    ast_node_print          (ast_node const *self, FILE *fh);
+void                    ast_node_store          (ast_node const *self, FILE *fh);

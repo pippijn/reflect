@@ -15,3 +15,4 @@ struct location const  *pt_node_location       (pt_node const *self);
 
 /* methods */
 void                    pt_node_print          (pt_node const *self, FILE *fh);
+void                    pt_node_store          (pt_node const *self, FILE *fh);

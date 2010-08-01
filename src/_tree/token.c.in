@@ -17,6 +17,7 @@ typedef struct L (node_token) self_type;
 
 static fn_destruct L (token_destruct);
 static fn_print L (token_print);
+static fn_store L (token_store);
 
 
 static vtbl_type const* const vtbl = &L (token_vtbl);
@@ -29,6 +30,7 @@ vtbl_type const L (token_vtbl) = {
   },
   L (token_destruct),
   L (token_print),
+  L (token_store),
 };
 
 
@@ -160,4 +162,13 @@ L (token_print) (node_type const* object, FILE* fh)
           , loc->last_line, loc->last_column
           , xml_escape (self->text, self->text + strlen (self->text))
           );
+}
+
+static void
+L (token_store) (node_type const* object, FILE* fh)
+{
+  CONST_SELF ();
+  struct location const *loc = L (node_location) (object);
+
+  assert (!"TODO");
 }
