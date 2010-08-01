@@ -1,3 +1,3 @@
 #include "internal.h"
 
-#include "../.tree/node.c.in"
+#include "../_tree/node.c.in"

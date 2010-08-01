@@ -1,3 +1,3 @@
 #include "internal.h"
 
-#include "../.tree/typecheck.c.in"
+#include "../_tree/typecheck.c.in"

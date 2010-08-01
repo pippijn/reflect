@@ -1,3 +1,3 @@
 #include "internal.h"
 
-#include "../.tree/token.c.in"
+#include "../_tree/token.c.in"
