@@ -13,7 +13,7 @@ CFLAGS		+= -Wredundant-decls			\
 		   -Wstrict-prototypes			\
 		   -Wconversion				\
 
-SOURCES =			\
+SOURCES :=			\
 	parsing/parser.y	\
 	parsing/lexer.l		\
 	$(shell find src -name "*.c")
