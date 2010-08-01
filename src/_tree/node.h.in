@@ -1,6 +1,3 @@
-#define L(tok) PASTE (L_TREE, PASTE (_, tok))
-#define U(tok) PASTE (U_TREE, PASTE (_, tok))
-
 typedef struct L (node) node_type;
 typedef struct L (vtbl) vtbl_type;
 typedef enum L (kind) kind_type;

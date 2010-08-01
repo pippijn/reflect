@@ -2,8 +2,14 @@
 
 #include <location.h>
 
-#include <pt/node.h>
+#define L_TREE pt
+#define U_TREE PT
 
-#include <pt/token.h>
+#include <_tree/node.h.in>
 
-#include <pt/gen/nodes.h>
+#include <_tree/token.h.in>
+
+#include <pt/nodes.h>
+
+#undef U_TREE
+#undef L_TREE

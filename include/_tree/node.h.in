@@ -1,0 +1,23 @@
+#define L(tok) PASTE (L_TREE, PASTE (_, tok))
+#define U(tok) PASTE (U_TREE, PASTE (_, tok))
+
+typedef struct L (node) L (node);
+typedef struct L (visitor) L (visitor);
+
+/*
+ * node base
+ */
+
+/* refcounting */
+L (node)               *L (node_ref)            (L (node) *self);
+L (node)               *L (node_ref_ornull)     (L (node) *self);
+void                    L (node_unref)          (L (node) *self);
+void                    L (node_unref_ornull)   (L (node) *self);
+
+/* accessors */
+struct location const  *L (node_location)       (L (node) const *self);
+
+/* methods */
+void                    L (node_print)          (L (node) const *self, FILE *fh);
+void                    L (node_store)          (L (node) const *self, FILE *fh);
+void                    L (node_accept)         (L (node) const *self, L (visitor) *visitor);
