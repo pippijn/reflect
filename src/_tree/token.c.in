@@ -198,7 +198,7 @@ L (token_store) (node_type const* object, FILE* fh, int indent)
           , "(%d:%d %d:%d %s)\n"
 	  , loc->first_line, loc->first_column
 	  , loc->last_line,  loc->last_column
-          , strcmp (self->text, "\"<empty>\"")
+          , strcmp (self->text, "<empty>") == 0
 	    ? "NIL"
 	    : sexpr_escape (self->text, self->text + strlen (self->text))
 	  );
