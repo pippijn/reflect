@@ -3,7 +3,7 @@ ${dataname}_${name}_store (${dataname}_node const *object, FILE *fh)
 {
   CONST_SELF ();
 
-  fprintf (fh, "(name\n");
+  fprintf (fh, "(${name}\n");
 
   [% FOREACH member = members %]
     [% IF member.optional %]
