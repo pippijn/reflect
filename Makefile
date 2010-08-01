@@ -26,7 +26,7 @@ reflect: $(OBJECTS)
 
 codegen: ast.codegen.stamp pt.codegen.stamp
 
-%.codegen.stamp: treegen data/%.ast
+%.codegen.stamp: astgen/generate data/%.ast
 	$(MKDIR_P) include/$*/gen
 	$(MKDIR_P) src/$*/gen
 	@./$+
