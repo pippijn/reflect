@@ -2,7 +2,7 @@ LEX		= flex
 YACC		= bison
 MKDIR_P		= mkdir -p
 
-CPPFLAGS	= -Iinclude -Iparsing -include stdinc.h
+CPPFLAGS	= -Iinclude -Iparsing -include stdinc.h -MD
 CFLAGS		= -Wall -Wextra -ggdb3 -O3
 CFLAGS		+= -Wredundant-decls			\
 		   -Wmissing-prototypes			\
@@ -51,7 +51,7 @@ clean:
 	@echo "  LEX " $@
 	@$(LEX) -o$@ $<
 
-%.o: %.c #$(shell find . -name "*.h")
+%.o: %.c
 	@echo "  CC  " $@
 	@$(COMPILE.c) $< -o $@
 
@@ -60,3 +60,4 @@ prepare: parsing/parser.c
 prepare: parsing/lexer.c
 
 include parsing/parser.mk
+-include $(shell find parsing src -name "*.d")
