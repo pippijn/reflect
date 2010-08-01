@@ -17,7 +17,7 @@ main (void)
   yydebug = 0;
   yyparse (pctx);
   pt_node_print (parse_context_unit (pctx), stdout);
-  pt_node_store (parse_context_unit (pctx), stdout);
+  pt_node_store (parse_context_unit (pctx), stdout, 0);
   parse_context_delete (pctx);
 
   return 0;
