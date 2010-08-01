@@ -1,6 +1,9 @@
-*.o
+*.[od]
 /parsing/lexer.[ch]
 /parsing/parser.[ch]
+/parsing/gen/*
 /include/ast/gen/*
+/include/pt/gen/*
 /src/ast/gen/*
+/src/pt/gen/*
 /reflect
