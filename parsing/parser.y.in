@@ -23,6 +23,6 @@
 
 empty
 	: /* empty */
-	  { $$ = pt_token_new (@$, "<empty>", 7, EOF); }
+	  { $$ = pt_token_new (&@$, "<empty>", 7, EOF); }
 	;
 %%
