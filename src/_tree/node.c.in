@@ -12,6 +12,7 @@ vtbl_type const L (node_vtbl) = {
   L (node_destruct),
   (fn_print *)L (pure_virtual),
   (fn_store *)L (pure_virtual),
+  (fn_accept *)L (pure_virtual),
 };
 
 static void
@@ -81,6 +82,15 @@ L (node_store) (node_type const *self, FILE *fh, int indent)
   assert (self->vtbl != NULL);
 
   self->vtbl->store (self, fh, indent);
+}
+
+void
+L (node_accept) (node_type const *self, visitor_type *visitor)
+{
+  assert (self != NULL);
+  assert (self->vtbl != NULL);
+
+  self->vtbl->accept (self, visitor);
 }
 
 

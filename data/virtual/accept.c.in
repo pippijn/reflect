@@ -1,0 +1,7 @@
+void
+${dataname}_${name}_accept (${dataname}_node const *object, ${dataname}_visitor *visitor)
+{
+  CONST_SELF ();
+
+  ${dataname}_visitor_visit_$name (visitor, &self->base);
+}

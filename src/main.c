@@ -1,3 +1,4 @@
+#include <pt/visitors.h>
 #include "yyinterf.h"
 
 #include <stdio.h>
@@ -16,7 +17,11 @@ main (void)
   pctx = parse_context_new ();
   yydebug = 0;
   yyparse (pctx);
-  pt_node_print (parse_context_unit (pctx), stdout);
+  {
+    pt_visitor *printer = pt_print_visitor_new (stdout);
+    pt_node_accept (parse_context_unit (pctx), printer);
+    pt_print_visitor_delete (printer);
+  }
   pt_node_store (parse_context_unit (pctx), stdout, 0);
   parse_context_delete (pctx);
 

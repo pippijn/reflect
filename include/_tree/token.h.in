@@ -11,3 +11,5 @@ L (node)               *L (token_new)           ( struct location const *loc
 /* accessors */
 char const             *L (token_text)          (L (node) const *self);
 int                     L (token_token)         (L (node) const *self);
+
+void                    L (visitor_visit_token) (L (visitor) *visitor, L (node) const *node);

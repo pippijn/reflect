@@ -6,4 +6,6 @@
 /include/pt/*
 /src/ast/gen/*
 /src/pt/gen/*
+/src/visitor/ast/*
+/src/visitor/pt/*
 /reflect

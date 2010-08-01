@@ -3,7 +3,7 @@ YACC		= bison
 MKDIR_P		= mkdir -p
 
 CPPFLAGS	= -Iinclude -Iparsing -include stdinc.h -MD
-CFLAGS		= -Wall -Wextra -ggdb3 -O3
+CFLAGS		= -Wall -Wextra -ggdb3 -O0
 CFLAGS		+= -Wredundant-decls			\
 		   -Wmissing-prototypes			\
 		   -Wnested-externs			\
@@ -27,7 +27,7 @@ reflect: $(OBJECTS)
 codegen: ast.codegen.stamp pt.codegen.stamp
 
 %.codegen.stamp: astgen/generate data/%.ast
-	$(MKDIR_P) include/$*
+	$(MKDIR_P) include/$*/gen
 	$(MKDIR_P) src/$*/gen
 	@./$+
 
@@ -38,10 +38,12 @@ clean:
 	$(RM) parsing/parser.h
 	$(RM) parsing/lexer.c
 	$(RM) parsing/lexer.h
-	$(RM) include/ast/*
+	$(RM) include/ast/gen/*
 	$(RM) src/ast/gen/*
-	$(RM) include/pt/*
+	$(RM) include/pt/gen/*
 	$(RM) src/pt/gen/*
+	$(RM) src/visitor/ast/*
+	$(RM) src/visitor/pt/*
 
 depclean: clean
 	$(RM) $(shell find . -name "*.d")

@@ -1,10 +1,12 @@
 typedef struct L (node) node_type;
+typedef struct L (visitor) visitor_type;
 typedef struct L (vtbl) vtbl_type;
 typedef enum L (kind) kind_type;
 
 typedef void fn_destruct (node_type *node);
 typedef void fn_print (node_type const *node, FILE *fh);
 typedef void fn_store (node_type const *node, FILE *fh, int indent);
+typedef void fn_accept (node_type const *node, visitor_type *visitor);
 
 enum L (kind)
 {
@@ -28,6 +30,7 @@ struct L (vtbl)
   fn_destruct *destruct;
   fn_print *print;
   fn_store *store;
+  fn_accept *accept;
 };
 
 
@@ -88,6 +91,3 @@ extern vtbl_type const L (node_vtbl);
 void L (node_construct) (node_type *self, vtbl_type const *vtbl, struct location const *loc);
 
 fn_destruct L (node_destruct);
-#if 0
-fn_print L (node_print);
-#endif

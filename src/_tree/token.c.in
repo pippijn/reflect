@@ -20,6 +20,7 @@ typedef struct L (node_token) self_type;
 static fn_destruct L (token_destruct);
 static fn_print L (token_print);
 static fn_store L (token_store);
+static fn_accept L (token_accept);
 
 
 static vtbl_type const* const vtbl = &L (token_vtbl);
@@ -33,6 +34,7 @@ vtbl_type const L (token_vtbl) = {
   L (token_destruct),
   L (token_print),
   L (token_store),
+  L (token_accept),
 };
 
 
@@ -197,4 +199,12 @@ L (token_store) (node_type const* object, FILE* fh, int indent)
 	  , loc->last_line,  loc->last_column
 	  , sexpr_escape (self->text, self->text + strlen (self->text))
 	  );
+}
+
+static void
+L (token_accept) (node_type const* object, visitor_type *visitor)
+{
+  CONST_SELF ();
+
+  L (visitor_visit_token) (visitor, &self->base);
 }

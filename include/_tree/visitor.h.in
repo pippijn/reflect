@@ -1,0 +1,19 @@
+struct L (visitor_vtbl)
+{
+  struct L (visitor_type_info)
+  {
+    char const *name;
+    size_t size;
+  } ti;
+  L (visit_fn) *visit_token;
+
+#include VISITOR_H
+};
+
+
+struct L (visitor)
+{
+  struct L (visitor_vtbl) const * const vtbl;
+};
+
+void                    L (visitor_construct)   (L (visitor) *self, struct L (visitor_vtbl) const *vtbl);
