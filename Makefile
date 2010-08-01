@@ -3,7 +3,7 @@ YACC		= bison
 MKDIR_P		= mkdir -p
 
 CPPFLAGS	= -Iinclude -Iparsing -include stdinc.h -MD
-CFLAGS		= -Wall -Wextra -ggdb3 -O0
+CFLAGS		= -Wall -Wextra -ggdb3 -O3
 CFLAGS		+= -Wredundant-decls			\
 		   -Wmissing-prototypes			\
 		   -Wnested-externs			\

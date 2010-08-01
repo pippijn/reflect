@@ -124,7 +124,7 @@ static struct ${dataname}_visitor_vtbl ${dataname}_print_visitor_vtbl = {
     sizeof (self_type),
   },
   ${dataname}_print_visitor_visit_token,
-  
+
 [% FOREACH rule = rules %]
 [% name = rule.value.0 %]
   ${dataname}_print_visitor_visit_${name},

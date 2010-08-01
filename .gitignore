@@ -2,8 +2,8 @@
 /parsing/lexer.[ch]
 /parsing/parser.[chy]
 /parsing/gen/*
-/include/ast/*
-/include/pt/*
+/include/ast/gen/*
+/include/pt/gen/*
 /src/ast/gen/*
 /src/pt/gen/*
 /src/visitor/ast/*
