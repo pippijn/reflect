@@ -14,7 +14,7 @@ use astgen::source::vtbl;
 sub generate {
    my ($file, $dataname, $name, $members) = @_;
 
-   my $fh = maybe_open "src/${dataname}/gen/$file.c"
+   my $fh = maybe_open "layer1/src/${dataname}/gen/$file.c"
       or return;
 
    gen_self_type $file, $fh, $dataname, $name, $members;

@@ -22,7 +22,7 @@ sub gen_functions {
 
    print $fh "\n\n/* virtual */\n\n";
 
-   (process $template "data/virtual/$_.c.in", {
+   (process $template "generate/data/virtual/$_.c.in", {
       dataname => $dataname,
       name     => $name,
       members  => $members,

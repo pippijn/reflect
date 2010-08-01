@@ -1,0 +1,5 @@
+L (visitor) *L (print_visitor_new) (FILE *fh);
+void L (print_visitor_delete) (L (visitor) *fh);
+
+L (visitor) *L (store_visitor_new) (FILE *fh, int indent);
+void L (store_visitor_delete) (L (visitor) *fh);

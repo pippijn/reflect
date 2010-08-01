@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 
 use common::sense;
+use lib 'generate';
 
 use constant USAGE => "Usage: astgen <rule-file>";
 
@@ -22,17 +23,17 @@ my $rules = do {
 
 my $DATANAME = uc $dataname;
 
-open my $nodes_h, ">", "include/${dataname}/gen/nodes.h"
+open my $nodes_h, ">", "layer1/include/${dataname}/gen/nodes.h"
    or die $!;
-open my $visitor_h, ">", "include/${dataname}/gen/visitor.h"
+open my $visitor_vtbl_h, ">", "layer1/include/${dataname}/gen/visitor_vtbl.h"
    or die $!;
-open my $internal_kinds_h, ">", "src/${dataname}/gen/kinds.h"
+open my $internal_kinds_h, ">", "layer1/src/${dataname}/gen/kinds.h"
    or die $!;
-open my $internal_nodes_h, ">", "src/${dataname}/gen/nodes.h"
+open my $internal_nodes_h, ">", "layer1/src/${dataname}/gen/nodes.h"
    or die $!;
-open my $internal_visitor_h, ">", "src/${dataname}/gen/visitor.h"
+open my $internal_visitor_h, ">", "layer1/src/${dataname}/gen/visitor.h"
    or die $!;
-open my $internal_visitor_c, ">", "src/${dataname}/gen/visitor.c"
+open my $internal_visitor_c, ">", "layer1/src/${dataname}/gen/visitor.c"
    or die $!;
 
 print "  ASTGEN  $ARGV[0]\n";
@@ -58,7 +59,7 @@ for my $file (sort keys %$rules) {
    my ($name, $members) = @{ $rules->{$file} };
 
    print $nodes_h "#include <${dataname}/gen/$file.h>\n";
-   print $visitor_h "  ${dataname}_visit_fn *visit_$name;\n";
+   print $visitor_vtbl_h "  ${dataname}_visit_fn *visit_$name;\n";
    print $internal_kinds_h "  ${DATANAME}_" . (uc $name) . ",\n";
    print $internal_nodes_h "#include \"$file.h\"\n";
    print $internal_visitor_h "void ${dataname}_visitor_visit_$name (${dataname}_visitor *self, ${dataname}_node const *node);\n";

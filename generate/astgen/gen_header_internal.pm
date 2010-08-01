@@ -1,7 +1,7 @@
 sub gen_header_internal {
    my ($file, $dataname, $name, $members) = @_;
 
-   my $fh = maybe_open ("src/$dataname/gen/$file.h")
+   my $fh = maybe_open ("layer1/src/$dataname/gen/$file.h")
       or return;
 
    print $fh <<EOF;

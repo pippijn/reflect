@@ -1,9 +1,12 @@
+all: bin/reflect
+
 LEX		= flex
 YACC		= bison
 MKDIR_P		= mkdir -p
 
-CPPFLAGS	= -Iinclude -Iparsing -include stdinc.h -MD
-CFLAGS		= -Wall -Wextra -ggdb3 -O3
+LDFLAGS		= -Wl,-z,defs -Wl,-rpath,$(PWD)/bin -Lbin
+CPPFLAGS	= -include stdinc.h -MD
+CFLAGS		= -Wall -Wextra -ggdb3 -O3 -fPIC
 CFLAGS		+= -Wredundant-decls			\
 		   -Wmissing-prototypes			\
 		   -Wnested-externs			\
@@ -13,42 +16,6 @@ CFLAGS		+= -Wredundant-decls			\
 		   -Wstrict-prototypes			\
 		   -Wconversion				\
 
-SOURCES :=			\
-	parsing/parser.y	\
-	parsing/lexer.l		\
-	$(shell find src -name "*.c")
-
-OBJECTS = $(addsuffix .o,$(basename $(SOURCES)))
-
-reflect: $(OBJECTS)
-	@echo "  CCLD" $@
-	@$(LINK.c) $(OBJECTS) -o $@
-
-codegen: ast.codegen.stamp pt.codegen.stamp
-
-%.codegen.stamp: astgen/generate data/%.ast
-	$(MKDIR_P) include/$*/gen
-	$(MKDIR_P) src/$*/gen
-	$(MKDIR_P) src/visitor/$*/gen
-	@./$+
-
-clean:
-	$(RM) reflect
-	$(RM) $(shell find . -name "*.o")
-	$(RM) parsing/parser.c
-	$(RM) parsing/parser.h
-	$(RM) parsing/lexer.c
-	$(RM) parsing/lexer.h
-	$(RM) include/ast/gen/*
-	$(RM) src/ast/gen/*
-	$(RM) include/pt/gen/*
-	$(RM) src/pt/gen/*
-	$(RM) src/visitor/ast/gen/*
-	$(RM) src/visitor/pt/gen/*
-
-depclean: clean
-	$(RM) $(shell find . -name "*.d")
-
 %.c: %.y
 	@echo " YACC " $@
 	@$(YACC) -d $< -o $@
@@ -57,13 +24,27 @@ depclean: clean
 	@echo "  LEX " $@
 	@$(LEX) -o$@ $<
 
-%.o: %.c
-	@echo "  CC  " $@
-	@$(COMPILE.c) $< -o $@
+include layer0/Rules.mk
+include layer1/Rules.mk
+include layer2p/Rules.mk
+include layer2v/Rules.mk
+include reflect/Rules.mk
+
+clean:
+	$(RM) $(shell find . -name "*.o")
+
+depclean: clean
+	$(RM) $(shell find . -name "*.d")
+
+codegen: ast.codegen.stamp
+codegen: pt.codegen.stamp
+
+%.codegen.stamp: generate/astgen/generate generate/data/%.ast
+	$(MKDIR_P) layer1/include/$*/gen
+	$(MKDIR_P) layer1/src/$*/gen
+	$(MKDIR_P) layer2v/src/visitor/$*/gen
+	@./$+
 
 -include prepare
-prepare: parsing/parser.c
-prepare: parsing/lexer.c
-
-include parsing/parser.mk
--include $(shell find parsing src -name "*.d")
+prepare: $(SOURCES)
+	$(MKDIR_P) bin

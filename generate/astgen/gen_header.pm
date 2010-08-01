@@ -11,7 +11,7 @@ sub gen_header {
       }
    }
 
-   my $fh = maybe_open ("include/${dataname}/gen/$file.h")
+   my $fh = maybe_open ("layer1/include/${dataname}/gen/$file.h")
       or return;
 
    print $fh "/*\n * ";
