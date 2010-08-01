@@ -19,7 +19,7 @@
 
 #include "gen/tokens.y"
 %%
-#include "gen/grammar.y"
+#include "gen/rules.y"
 
 empty
 	: /* empty */
