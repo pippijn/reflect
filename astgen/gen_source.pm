@@ -11,6 +11,7 @@ use astgen::source::self_type;
 use astgen::source::vtbl;
 use astgen::source::virtual::destruct;
 use astgen::source::virtual::print;
+use astgen::source::virtual::store;
 
 sub generate {
    my ($file, $dataname, $name, $members) = @_;
@@ -25,6 +26,7 @@ sub generate {
    gen_accessors $fh, $dataname, $name, $members;
    gen_destruct $fh, $dataname, $name, $members;
    gen_print $fh, $dataname, $name, $members;
+   gen_store $fh, $dataname, $name, $members;
 }
 
 

@@ -1,7 +1,7 @@
 # vim:ft=perl
 
 $main::dataname = "pt";
-@main::vfuns = qw/destruct print/;
+@main::vfuns = qw/destruct print store/;
 
 {
    fmt1 => [

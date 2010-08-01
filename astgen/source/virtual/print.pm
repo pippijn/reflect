@@ -14,8 +14,8 @@ ${dataname}_${name}_print (${dataname}_node const *object, FILE *fh)
 {
   CONST_SELF ();
 
+  fprintf (fh, "<$name>\\n");
 EOF
-   print $fh "  fprintf (fh, \"<$name>\\n\");\n";
    for my $member (@$members) {
       if (ref $member eq "ARRAY") {
          for my $mem (@$member) {
