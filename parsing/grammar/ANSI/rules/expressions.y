@@ -18,7 +18,7 @@ postfix_expression
 	| postfix_expression '[' expression ']'
 	  { $$ = pt_array_access_new ($1, $2, $3, $4); }
 	| postfix_expression '(' ')'
-	  { $$ = pt_function_call_new ($1, $2, NULL, $4); }
+	  { $$ = pt_function_call_new ($1, $2, NULL, $3); }
 	| postfix_expression '(' argument_expression_list ')'
 	  { $$ = pt_function_call_new ($1, $2, $3, $4); }
 	| postfix_expression '.' IDENTIFIER
