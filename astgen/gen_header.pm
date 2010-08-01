@@ -1,7 +1,8 @@
 sub gen_header {
    my ($file, $dataname, $name, $members) = @_;
 
-   my ($longest) = sort map length, all $members;
+   my ($longest) = reverse sort map length, all $members;
+   print "$longest\n";
 
    my $fh = maybe_open ("include/${dataname}/gen/$file.h")
       or return;
