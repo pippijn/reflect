@@ -1,0 +1,28 @@
+%{
+// vim:noexpandtab
+##include "yy/parse_interf.h"
+##define scanner parse_context_scanner (context)
+%}
+
+%define api.pure
+%locations
+%debug
+%error-verbose
+%expect 3
+%glr-parser
+%token-table
+
+%parse-param { parse_context* context }
+%lex-param { void* scanner }
+
+%destructor { pt_node_unref ($$); } <>
+
+#include "gen/tokens.y"
+%%
+#include "gen/grammar.y"
+
+empty
+	: /* empty */
+	  { $$ = pt_token_new (@$, "<empty>", 7, EOF); }
+	;
+%%

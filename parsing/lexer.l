@@ -11,7 +11,7 @@
 
 #define RETURN(TOK)                                             \
   {                                                             \
-    *yylval = ast_token_new (yylloc, yytext, yyleng, TOK);      \
+    *yylval = pt_token_new (yylloc, yytext, yyleng, TOK);       \
     return TOK;                                                 \
   }
 %}
@@ -69,20 +69,21 @@ IS			(u|U|l|L)*
 
 {L}({L}|{D})*		{ RETURN (IDENTIFIER); }
 
-0[xX]{H}+{IS}?		{ RETURN (CONSTANT); }
-0{D}+{IS}?		{ RETURN (CONSTANT); }
-{D}+{IS}?		{ RETURN (CONSTANT); }
-L?'(\\.|[^\\'])+'	{ RETURN (CONSTANT); }
+0[xX]{H}+{IS}?		{ RETURN (HEX_CONSTANT); }
+0{D}+{IS}?		{ RETURN (OCTAL_CONSTANT); }
+{D}+{IS}?		{ RETURN (INTEGER_CONSTANT); }
+'(\\.|[^\\'])+'	        { RETURN (CHAR_CONSTANT); }
+L'(\\.|[^\\'])+'	{ RETURN (WCHAR_CONSTANT); }
 
-{D}+{E}{FS}?		{ RETURN (CONSTANT); }
-{D}*"."{D}+({E})?{FS}?	{ RETURN (CONSTANT); }
-{D}+"."{D}*({E})?{FS}?	{ RETURN (CONSTANT); }
+{D}+{E}{FS}?		{ RETURN (FLOATING_CONSTANT); }
+{D}*"."{D}+({E})?{FS}?	{ RETURN (FLOATING_CONSTANT); }
+{D}+"."{D}*({E})?{FS}?	{ RETURN (FLOATING_CONSTANT); }
 
 L?\"(\\.|[^\\"])*\"	{ RETURN (STRING_LITERAL); }
 
 "..."			{ RETURN (ELLIPSIS); }
-">>="			{ RETURN (RIGHT_ASSIGN); }
-"<<="			{ RETURN (LEFT_ASSIGN); }
+">>="			{ RETURN (RSH_ASSIGN); }
+"<<="			{ RETURN (LSH_ASSIGN); }
 "+="			{ RETURN (ADD_ASSIGN); }
 "-="			{ RETURN (SUB_ASSIGN); }
 "*="			{ RETURN (MUL_ASSIGN); }
@@ -91,8 +92,8 @@ L?\"(\\.|[^\\"])*\"	{ RETURN (STRING_LITERAL); }
 "&="			{ RETURN (AND_ASSIGN); }
 "^="			{ RETURN (XOR_ASSIGN); }
 "|="			{ RETURN (OR_ASSIGN); }
-">>"			{ RETURN (RIGHT_OP); }
-"<<"			{ RETURN (LEFT_OP); }
+">>"			{ RETURN (RSH_OP); }
+"<<"			{ RETURN (LSH_OP); }
 "++"			{ RETURN (INC_OP); }
 "--"			{ RETURN (DEC_OP); }
 "->"			{ RETURN (PTR_OP); }

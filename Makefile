@@ -3,7 +3,7 @@ YACC		= bison
 MKDIR_P		= mkdir -p
 
 CPPFLAGS	= -Iinclude -Iparsing -include stdinc.h
-CFLAGS		= -Wall -ggdb3 -O3
+CFLAGS		= -Wall -Wextra -ggdb3 -O3
 CFLAGS		+= -Wredundant-decls			\
 		   -Wmissing-prototypes			\
 		   -Wnested-externs			\
@@ -11,6 +11,7 @@ CFLAGS		+= -Wredundant-decls			\
 		   -Wbad-function-cast			\
 		   -Wdeclaration-after-statement	\
 		   -Wstrict-prototypes			\
+		   -Wconversion				\
 
 SOURCES =			\
 	parsing/parser.y	\
@@ -23,9 +24,11 @@ reflect: $(OBJECTS)
 	@echo "  CCLD" $@
 	@$(LINK.c) $(OBJECTS) -o $@
 
-codegen: astgen data/pt.ast
-	$(MKDIR_P) include/ast/gen
-	$(MKDIR_P) src/ast/gen
+codegen: ast.codegen.stamp pt.codegen.stamp
+
+%.codegen.stamp: astgen data/%.ast
+	$(MKDIR_P) include/$*/gen
+	$(MKDIR_P) src/$*/gen
 	@./$+
 
 clean:
@@ -37,6 +40,8 @@ clean:
 	$(RM) parsing/lexer.h
 	$(RM) include/ast/gen/*
 	$(RM) src/ast/gen/*
+	$(RM) include/pt/gen/*
+	$(RM) src/pt/gen/*
 
 %.c: %.y
 	@echo " YACC " $@
@@ -46,10 +51,12 @@ clean:
 	@echo "  LEX " $@
 	@$(LEX) -o$@ $<
 
-%.o: %.c $(shell find . -name "*.h")
+%.o: %.c #$(shell find . -name "*.h")
 	@echo "  CC  " $@
 	@$(COMPILE.c) $< -o $@
 
 -include prepare
 prepare: parsing/parser.c
 prepare: parsing/lexer.c
+
+include parsing/parser.mk

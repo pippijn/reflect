@@ -1,0 +1,124 @@
+#include "_error.h"
+
+/* vtable */
+
+vtbl_type const L (node_vtbl) = {
+  {
+    NULL,
+    "node",
+    U (NODE),
+    sizeof (node_type),
+  },
+  L (node_destruct),
+  (fn_print *)L (pure_virtual),
+};
+
+
+/*
+ * public
+ */
+
+/* destructor */
+
+static void
+L (node_delete) (node_type *self)
+{
+  assert (self != NULL);
+  assert (self->vtbl != NULL);
+
+  self->vtbl->destruct (self);
+
+  sever (self, self->vtbl->ti.size);
+}
+
+
+/* accessors */
+
+struct location const *
+L (node_location) (node_type const *self)
+{
+  assert (self != NULL);
+  return &self->location;
+}
+
+
+/* methods */
+
+void
+L (node_print) (node_type const *self, FILE *fh)
+{
+  assert (self != NULL);
+  assert (self->vtbl != NULL);
+
+  self->vtbl->print (self, fh);
+}
+
+
+/*
+ * protected
+ */
+
+void
+L (node_construct) (node_type *self, vtbl_type const *vtbl, struct location const *loc)
+{
+  node_type node = { vtbl, *loc, 1 };
+  assert (self != NULL);
+  assert (vtbl != NULL);
+  assert (loc != NULL);
+
+#if 0
+  printf ("constructing %s: %p\n", vtbl->ti.name, self);
+#endif
+
+  memcpy (self, &node, sizeof node);
+}
+
+void
+L (node_destruct) (node_type *self)
+{
+  assert (self != NULL);
+  assert (self->vtbl != NULL);
+}
+
+node_type *
+L (node_ref) (node_type *self)
+{
+  assert (self != NULL);
+  return L (node_ref_ornull) (self);
+}
+
+node_type *
+L (node_ref_ornull) (node_type *self)
+{
+  if (self != NULL)
+    {
+#if 0
+      printf ("++ref (%s) => %d\n", self->vtbl->ti.name, self->refcnt + 1);
+#endif
+
+      ++self->refcnt;
+    }
+
+  return self;
+}
+
+void
+L (node_unref) (node_type *self)
+{
+  assert (self != NULL);
+  L (node_unref_ornull) (self);
+}
+
+void
+L (node_unref_ornull) (node_type *self)
+{
+  if (self != NULL)
+    {
+#if 0
+      printf ("--ref (%s) => %d\n", self->vtbl->ti.name, self->refcnt - 1);
+#endif
+
+      if (--self->refcnt == 0)
+        L (node_delete) (self);
+    }
+}

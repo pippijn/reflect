@@ -1,0 +1,163 @@
+#define strlen my_strlen
+static size_t
+my_strlen (char const* str)
+{
+  size_t sz = 0;
+  while (*str++)
+    ++sz;
+  return sz;
+}
+
+/* type of *self */
+
+typedef struct L (node_token) self_type;
+
+
+/* vtable */
+
+static fn_destruct L (token_destruct);
+static fn_print L (token_print);
+
+
+static vtbl_type const* const vtbl = &L (token_vtbl);
+vtbl_type const L (token_vtbl) = {
+  {
+    &L (node_vtbl),
+    "token",
+    U (TOKEN),
+    sizeof (self_type),
+  },
+  L (token_destruct),
+  L (token_print),
+};
+
+
+/* internal */
+
+void
+L (token_construct) (self_type* self, struct location const* loc, char const* text, size_t length, int token)
+{
+  assert (loc != NULL);
+  assert (text != NULL);
+  assert (*text != '\0');
+  assert (length > 0);
+
+  /* base constructor */
+  BASE_CTOR (node, loc);
+
+  /* initialise our own data */
+  self->text = strndup (text, length);
+  self->token = token;
+
+  assert (self->text != NULL);
+  assert (self->text[length] == '\0');
+  assert (strlen (self->text) == length);
+}
+
+
+/* public */
+
+node_type*
+L (token_new) (struct location const* loc, char const* text, size_t length, int token)
+{
+  return NEW (token, loc, text, length, token);
+}
+
+
+/* accessors */
+
+#if 0
+/* return values don't match */
+ACCESSOR (token, text);
+ACCESSOR (token, token);
+#endif
+
+char const*
+L (token_text) (node_type const* object)
+{
+  CONST_SELF ();
+
+  return self->text;
+}
+
+int
+L (token_token) (node_type const* object)
+{
+  CONST_SELF ();
+
+  return self->token;
+}
+
+
+/* virtual */
+
+static void
+L (token_destruct) (node_type* object)
+{
+  SELF ();
+
+  assert (self->text);
+
+  /* destroy our own data */
+  sever (self->text, strlen (self->text));
+
+  /* base destructor */
+  BASE_DTOR ();
+}
+
+
+static char const *
+xml_escape (char const *it, char const* et)
+{
+  static char buf[1024];
+  char *ptr = buf;
+
+  for (; it != et; it++)
+    switch (*it)
+      {
+      case '>':
+        assert (ptr - buf < sizeof buf - 4);
+        *ptr++ = '&';
+        *ptr++ = 'g';
+        *ptr++ = 't';
+        *ptr++ = ';';
+        break;
+      case '<':
+        assert (ptr - buf < sizeof buf - 4);
+        *ptr++ = '&';
+        *ptr++ = 'l';
+        *ptr++ = 't';
+        *ptr++ = ';';
+        break;
+      case '&':
+        assert (ptr - buf < sizeof buf - 5);
+        *ptr++ = '&';
+        *ptr++ = 'a';
+        *ptr++ = 'm';
+        *ptr++ = 'p';
+        *ptr++ = ';';
+        break;
+      default:
+        assert (ptr - buf < sizeof buf);
+        *ptr++ = *it;
+        break;
+      }
+
+  *ptr = '\0';
+
+  return buf;
+}
+
+static void
+L (token_print) (node_type const* object, FILE* fh)
+{
+  CONST_SELF ();
+  struct location const *loc = L (node_location) (object);
+
+  fprintf ( fh
+          , "<token left=\"%d:%d\" right=\"%d:%d\">%s</token>\n"
+          , loc->first_line, loc->first_column
+          , loc->last_line, loc->last_column
+          , xml_escape (self->text, self->text + strlen (self->text))
+          );
+}

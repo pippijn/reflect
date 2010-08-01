@@ -7,7 +7,7 @@
 struct parse_context
 {
   void *scanner;
-  ast_node *unit;
+  pt_node *unit;
 };
 
 
@@ -32,7 +32,7 @@ void
 parse_context_delete (parse_context *self)
 {
   yylex_destroy (self->scanner);
-  ast_node_unref_ornull (self->unit);
+  pt_node_unref_ornull (self->unit);
 
   sever (self, sizeof *self);
 }
@@ -48,16 +48,16 @@ parse_context_scanner (parse_context const *self)
 }
 
 
-ast_node *
+pt_node *
 parse_context_unit (parse_context const *self)
 {
   return self->unit;
 }
 
 void
-parse_context_unit_set (parse_context *self, ast_node *unit)
+parse_context_unit_set (parse_context *self, pt_node *unit)
 {
-  ast_node_unref_ornull (self->unit);
+  pt_node_unref_ornull (self->unit);
   self->unit = unit;
-  ast_node_ref_ornull (self->unit);
+  pt_node_ref_ornull (self->unit);
 }

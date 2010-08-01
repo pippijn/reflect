@@ -1,0 +1,52 @@
+/*
+ * type checking
+ */
+
+void
+L (pure_virtual) (void)
+{
+  fputs ("pure virtual function called\n", stderr);
+  abort ();
+}
+
+
+bool
+L (kind_is) (node_type const *object, kind_type kind)
+{
+  if (object == NULL)
+    return false;
+  assert (object->vtbl != NULL);
+  return object->vtbl->ti.kind == kind;
+}
+
+bool
+L (kind_derived) (node_type const *object, kind_type kind)
+{
+  vtbl_type const *vtbl = NULL;
+
+  if (object == NULL)
+    return false;
+
+  assert (object->vtbl != NULL);
+
+  for (vtbl = object->vtbl; vtbl; vtbl = vtbl->ti.base)
+    if (vtbl->ti.kind == kind)
+      return true;
+
+  return false;
+}
+
+
+node_type *
+L (cast_mutable) (node_type *object, kind_type kind)
+{
+  assert (L (kind_derived) (object, kind));
+  return L (kind_derived) (object, kind) ? object : NULL;
+}
+
+node_type const *
+L (cast_const) (node_type const *object, kind_type kind)
+{
+  assert (L (kind_derived) (object, kind));
+  return L (kind_derived) (object, kind) ? object : NULL;
+}

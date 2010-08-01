@@ -4,6 +4,8 @@ use common::sense;
 
 use constant USAGE => "Usage: astgen <rule-file>";
 
+our $dataname;
+
 my @vfuns = qw/destruct print/;
 
 my $rules = do {
@@ -11,6 +13,8 @@ my $rules = do {
       or die USAGE;
    require $file
 };
+
+my $DATANAME = uc $dataname;
 
 sub maybe_open {
    my ($name) = @_;
@@ -39,31 +43,31 @@ sub required {
 sub gen_header_internal {
    my ($file, $name, $members) = @_;
 
-   my $fh = maybe_open "src/ast/gen/$file.h"
+   my $fh = maybe_open "src/$dataname/gen/$file.h"
       or return;
 
    print $fh <<EOF;
-struct ast_node_$name
+struct ${dataname}_node_$name
 {
-  ast_node base;
+  ${dataname}_node base;
 
 EOF
 
-   print $fh "  ast_node *$_;\n"
+   print $fh "  ${dataname}_node *$_;\n"
       for all $members;
     
-   my $ctor = "void ast_${name}_construct ";
+   my $ctor = "void ${dataname}_${name}_construct ";
    print $fh <<EOF;
 };
 
 
-extern struct ast_vtbl const ast_${name}_vtbl;
+extern struct ${dataname}_vtbl const ${dataname}_${name}_vtbl;
 
 
-$ctor( struct ast_node_${name} *self
+$ctor( struct ${dataname}_node_${name} *self
 EOF
 
-   print $fh ' ' x (length $ctor) . ", ast_node *$_\n"
+   print $fh ' ' x (length $ctor) . ", ${dataname}_node *$_\n"
       for all $members;
    print $fh ' ' x (length $ctor) . ");\n";
 }
@@ -72,7 +76,7 @@ EOF
 sub gen_header {
    my ($file, $name, $members) = @_;
 
-   my $fh = maybe_open "include/ast/gen/$file.h"
+   my $fh = maybe_open "include/${dataname}/gen/$file.h"
       or return;
 
    print $fh "/*\n * ";
@@ -80,17 +84,17 @@ sub gen_header {
    print $fh "\n */\n\n";
 
    print $fh "/* constructor */\n";
-   my $new = "ast_node *ast_${name}_new ";
+   my $new = "${dataname}_node *${dataname}_${name}_new ";
    if ($#$members) {
       print $fh "$new( ";
-      print $fh join ' ' x (length $new) . ", ", map { "ast_node *$_\n" } all $members;
+      print $fh join ' ' x (length $new) . ", ", map { "${dataname}_node *$_\n" } all $members;
       print $fh ' ' x (length $new) . ");\n\n";
    } else {
-      print $fh "$new(ast_node *$members->[0]);\n\n";
+      print $fh "$new(${dataname}_node *$members->[0]);\n\n";
    }
 
    print $fh "/* accessors */\n";
-   print $fh "ast_node *ast_${name}_$_ (ast_node const *self);\n"
+   print $fh "${dataname}_node *${dataname}_${name}_$_ (${dataname}_node const *self);\n"
       for all $members;
 }
 
@@ -98,43 +102,42 @@ sub gen_header {
 sub gen_source {
    my ($file, $name, $members) = @_;
 
-   my $fh = maybe_open "src/ast/gen/$file.c"
+   my $fh = maybe_open "src/${dataname}/gen/$file.c"
       or return;
 
-   my $NAME = $name;
-   $NAME =~ tr/a-z/A-Z/;
+   my $NAME = uc $name;
 
    print $fh <<EOF;
 #include "../internal.h"
 
 /* type of *self */
 
-typedef struct ast_node_${name} self_type;
+typedef struct ${dataname}_node_${name} self_type;
 
 
 /* vtable */
 
 EOF
 
-   print $fh "static fn_$_ ast_${name}_$_;\n"
+   print $fh "static fn_$_ ${dataname}_${name}_$_;\n"
       for @vfuns;
 
    print $fh <<EOF;
 
-static struct ast_vtbl const* const vtbl = &ast_${name}_vtbl;
-struct ast_vtbl const ast_${name}_vtbl = {
+static struct ${dataname}_vtbl const* const vtbl = &${dataname}_${name}_vtbl;
+struct ${dataname}_vtbl const ${dataname}_${name}_vtbl = {
   {
-    &ast_node_vtbl,
+    &${dataname}_node_vtbl,
     "$name",
-    AST_$NAME,
-    sizeof (struct ast_node_$name),
+    ${DATANAME}_$NAME,
+    sizeof (self_type),
   },
 EOF
-   print $fh "  ast_${name}_$_,\n"
+   print $fh "  ${dataname}_${name}_$_,\n"
       for @vfuns;
    print $fh "};\n";
 
-   my $ctor = "ast_${name}_construct ";
+   my $ctor = "${dataname}_${name}_construct ";
    print $fh <<EOF;
 
 
@@ -143,13 +146,13 @@ EOF
 void
 $ctor( self_type *self
 EOF
-   print $fh ' ' x (length $ctor) . ", ast_node *$_\n"
+   print $fh ' ' x (length $ctor) . ", ${dataname}_node *$_\n"
       for all $members;
    print $fh ' ' x (length $ctor) . ")\n";
    print $fh "{";
    print $fh "\n  struct location loc;";
-   print $fh "\n  ast_node* fst = NULL;";
-   print $fh "\n  ast_node* lst = NULL;";
+   print $fh "\n  ${dataname}_node* fst = NULL;";
+   print $fh "\n  ${dataname}_node* lst = NULL;";
    print $fh "\n\n";
 
    print $fh "  assert ($_ != NULL);\n"
@@ -167,27 +170,27 @@ EOF
    }
    print $fh "\n  COMPUTE_LOC (fst, lst);";
    print $fh "\n  BASE_CTOR (node, &loc);\n";
-   #print $fh "\n  self->$_ = ast_node_ref_ornull ($_);"
+   #print $fh "\n  self->$_ = ${dataname}_node_ref_ornull ($_);"
    print $fh "\n  self->$_ = $_;"
       for all $members;
    print $fh "\n}\n";
 
 
-   my $new = "ast_${name}_new ";
+   my $new = "${dataname}_${name}_new ";
    print $fh <<EOF;
 
 
 /* public */
 
-ast_node *
+${dataname}_node *
 EOF
-   my $new = "ast_${name}_new ";
+   my $new = "${dataname}_${name}_new ";
    if ($#$members) {
       print $fh "$new( ";
-      print $fh join ' ' x (length $new) . ", ", map { "ast_node *$_\n" } all $members;
+      print $fh join ' ' x (length $new) . ", ", map { "${dataname}_node *$_\n" } all $members;
       print $fh ' ' x (length $new) . ")\n";
    } else {
-      print $fh "$new(ast_node *$members->[0])\n";
+      print $fh "$new(${dataname}_node *$members->[0])\n";
    }
    print $fh "{\n  return NEW ($name, " . (join ", ", all $members) . ");\n}\n";
 
@@ -203,13 +206,13 @@ EOF
 /* virtual */
 
 void
-ast_${name}_destruct (ast_node *object)
+${dataname}_${name}_destruct (${dataname}_node *object)
 {
   SELF ();
 
 EOF
 
-   print $fh "  ast_node_unref_ornull (self->$_); self->$_ = NULL;\n"
+   print $fh "  ${dataname}_node_unref_ornull (self->$_); self->$_ = NULL;\n"
       for all $members;
 
    print $fh <<EOF;
@@ -222,7 +225,7 @@ EOF
    print $fh <<EOF;
 
 void
-ast_${name}_print (ast_node const *object, FILE *fh)
+${dataname}_${name}_print (${dataname}_node const *object, FILE *fh)
 {
   CONST_SELF ();
 
@@ -234,13 +237,13 @@ EOF
             print $fh "  if (self->$mem != NULL)\n";
             print $fh "    {\n";
             print $fh "      fprintf (fh, \"<$mem>\\n\");\n";
-            print $fh "      ast_node_print (self->$mem, fh);\n";
+            print $fh "      ${dataname}_node_print (self->$mem, fh);\n";
             print $fh "      fprintf (fh, \"</$mem>\\n\");\n";
             print $fh "    }\n";
          }
       } else {
          print $fh "  fprintf (fh, \"<$member>\\n\");\n";
-         print $fh "  ast_node_print (self->$member, fh);\n";
+         print $fh "  ${dataname}_node_print (self->$member, fh);\n";
          print $fh "  fprintf (fh, \"</$member>\\n\");\n";
       }
    }
@@ -249,19 +252,19 @@ EOF
 }
 
 
-open my $nodes_h, ">", "include/ast/gen/nodes.h"
+open my $nodes_h, ">", "include/${dataname}/gen/nodes.h"
    or die $!;
-open my $internal_nodes_h, ">", "src/ast/gen/nodes.h"
+open my $internal_nodes_h, ">", "src/${dataname}/gen/nodes.h"
    or die $!;
-open my $internal_kinds_h, ">", "src/ast/gen/kinds.h"
+open my $internal_kinds_h, ">", "src/${dataname}/gen/kinds.h"
    or die $!;
 
 print "  ASTGEN  $ARGV[0]\n";
 
 for my $file (sort keys %$rules) {
-   print $nodes_h "#include <ast/gen/$file.h>\n";
+   print $nodes_h "#include <${dataname}/gen/$file.h>\n";
    print $internal_nodes_h "#include \"$file.h\"\n";
-   print $internal_kinds_h "  AST_" . (uc $rules->{$file}[0]) . ",\n";
+   print $internal_kinds_h "  ${DATANAME}_" . (uc $rules->{$file}[0]) . ",\n";
    gen_header_internal $file, @{ $rules->{$file} };
    gen_header          $file, @{ $rules->{$file} };
    gen_source          $file, @{ $rules->{$file} };

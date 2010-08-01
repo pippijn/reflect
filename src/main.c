@@ -16,7 +16,7 @@ main (void)
   pctx = parse_context_new ();
   yydebug = 0;
   yyparse (pctx);
-  ast_node_print (parse_context_unit (pctx), stdout);
+  pt_node_print (parse_context_unit (pctx), stdout);
   parse_context_delete (pctx);
 
   return 0;

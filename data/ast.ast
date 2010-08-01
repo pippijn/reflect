@@ -1,0 +1,309 @@
+# vim:ft=perl
+
+$main::dataname = "ast";
+
+{
+   for => [
+      for_statement => ["for_tok", "lbrack", "initializer", "condition", ["increment"], "rbrack", "body"]
+   ],
+   while => [
+      while_statement => ["while_tok", "lbrack", "condition", "rbrack", "body"]
+   ],
+   do => [
+      do_statement => ["do_tok", "body", "while_tok", "lbrack", "condition", "rbrack", "semicolon"]
+   ],
+   switch => [
+      switch_statement => ["switch_tok", "lbrack", "expr", "rbrack", "body"]
+   ],
+   if => [
+      if_statement => ["if_tok", "lbrack", "condition", "rbrack", "if_body", ["else_tok", "else_body"]]
+   ],
+   goto => [
+      goto_statement => ["goto_tok", "label", "semicolon"]
+   ],
+   continue => [
+      continue_statement => ["continue_tok", "semicolon"]
+   ],
+   break => [
+      break_statement => ["break_tok", "semicolon"]
+   ],
+   return => [
+      return_statement => ["return_tok", ["expr"], "semicolon"]
+   ],
+   enumerator => [
+      enumerator => ["identifier", ["equals", "expr"]]
+   ],
+   label => [
+      label_statement => ["label", "colon", "statement"]
+   ],
+   case => [
+      case_label_statement => ["case_tok", "expr", "colon", "statement"]
+   ],
+   default => [
+      default_label_statement => ["default_tok", "colon", "statement"]
+   ],
+   const => [
+      const_type_qualifier => ["const_tok"]
+   ],
+   volatile => [
+      volatile_type_qualifier => ["volatile_tok"]
+   ],
+   typedef => [
+      typedef_str_class_spec => ["typedef_tok"]
+   ],
+   extern => [
+      extern_str_class_spec => ["extern_tok"]
+   ],
+   static => [
+      static_str_class_spec => ["static_tok"]
+   ],
+   auto => [
+      auto_str_class_spec => ["auto_tok"]
+   ],
+   register => [
+      register_str_class_spec => ["register_tok"]
+   ],
+   void => [
+      void_type_spec => ["void_tok"]
+   ],
+   char => [
+      char_type_spec => ["char_tok"]
+   ],
+   short => [
+      short_type_spec => ["short_tok"]
+   ],
+   int => [
+      int_type_spec => ["int_tok"]
+   ],
+   long => [
+      long_type_spec => ["long_tok"]
+   ],
+   float => [
+      float_type_spec => ["float_tok"]
+   ],
+   double => [
+      double_type_spec => ["double_tok"]
+   ],
+   signed => [
+      signed_type_spec => ["signed_tok"]
+   ],
+   unsigned => [
+      unsigned_type_spec => ["unsigned_tok"]
+   ],
+   statement => [
+      expression_statement => [["expr"], "semicolon"]
+   ],
+   preinc => [
+      pre_increment => ["op", "expr"]
+   ],
+   predec => [
+      pre_decrement => ["op", "expr"]
+   ],
+   addrof => [
+      address_of => ["op", "expr"]
+   ],
+   ptrderef => [
+      pointer_dereference => ["op", "expr"]
+   ],
+   positive => [
+      positive => ["op", "expr"]
+   ],
+   negate => [
+      negate => ["op", "expr"]
+   ],
+   bitwise_neg => [
+      bitwise_negate => ["op", "expr"]
+   ],
+   logical_not => [
+      logical_not => ["op", "expr"]
+   ],
+   sizeof_var => [
+      sizeof_var => ["op", "expr"]
+   ],
+   sizeof_type => [
+      sizeof_type => ["op", "lbrack", "expr", "rbrack"]
+   ],
+   array_access => [
+      array_access => ["expr", "lsqbrack", "idx", "rsqbrack"]
+   ],
+   funcall => [
+      function_call => ["expr", "lbrack", ["arglist"], "rbrack"]
+   ],
+   struct_access => [
+      struct_access => ["expr", "op", "identifier"]
+   ],
+   pointer_access => [
+      pointer_access => ["expr", "op", "identifier"]
+   ],
+   post_inc => [
+      post_increment => ["expr", "op"]
+   ],
+   post_dec => [
+      post_decrement => ["expr", "op"]
+   ],
+   variable => [
+      variable => ["identifier"]
+   ],
+   constant => [
+      constant => ["constant"]
+   ],
+   string => [
+      string_literal => ["string"]
+   ],
+   brack_expr => [
+      bracket_expression => ["lbrack", "expr", "rbrack"]
+   ],
+   type_cast => [
+      type_cast => ["lbrack", "type", "rbrack", "expr"]
+   ],
+   multiply => [
+      multiply => ["factor1", "op", "factor2"]
+   ],
+   divide => [
+      divide => ["dividend", "op", "divisor"]
+   ],
+   modulo => [
+      modulo => ["dividend", "op", "divisor"]
+   ],
+   add => [
+      add => ["summand1", "op", "summand2"]
+   ],
+   subtract => [
+      subtract => ["minuend", "op", "subtrahend"]
+   ],
+   left_shift => [
+      left_shift => ["expr", "op", "amount"]
+   ],
+   right_shift => [
+      right_shift => ["expr", "op", "amount"]
+   ],
+   less => [
+      less_than => ["expr1", "op", "expr2"]
+   ],
+   greater => [
+      greater_than => ["expr1", "op", "expr2"]
+   ],
+   less_eq => [
+      less_than_equals => ["expr1", "op", "expr2"]
+   ],
+   greater_eq => [
+      greater_than_equals => ["expr1", "op", "expr2"]
+   ],
+   eq => [
+      equals => ["expr1", "op", "expr2"]
+   ],
+   not_eq => [
+      not_equals => ["expr1", "op", "expr2"]
+   ],
+   bit_and => [
+      bitwise_and => ["expr1", "op", "expr2"]
+   ],
+   bit_xor => [
+      bitwise_xor => ["expr1", "op", "expr2"]
+   ],
+   bit_or => [
+      bitwise_or => ["expr1", "op", "expr2"]
+   ],
+   log_and => [
+      logical_and => ["expr1", "op", "expr2"]
+   ],
+   log_or => [
+      logical_or => ["expr1", "op", "expr2"]
+   ],
+   ternary => [
+      ternary_op => ["condition", "op_quest", "then_expr", "op_colon", "else_expr"]
+   ],
+   assign => [
+      assign => ["lvalue", "op", "expr"]
+   ],
+   assign_mult => [
+      multiply_assign => ["lvalue", "op", "expr"]
+   ],
+   assign_div => [
+      divide_assign => ["lvalue", "op", "expr"]
+   ],
+   assign_mod => [
+      modulo_assign => ["lvalue", "op", "expr"]
+   ],
+   assign_add => [
+      add_assign => ["lvalue", "op", "expr"]
+   ],
+   assign_sub => [
+      subtract_assign => ["lvalue", "op", "expr"]
+   ],
+   assign_lshift => [
+      left_shift_assign => ["lvalue", "op", "expr"]
+   ],
+   assign_rshift => [
+      right_shift_assign => ["lvalue", "op", "expr"]
+   ],
+   assign_and => [
+      and_assign => ["lvalue", "op", "expr"]
+   ],
+   assign_xor => [
+      xor_assign => ["lvalue", "op", "expr"]
+   ],
+   assign_or => [
+      or_assign => ["lvalue", "op", "expr"]
+   ],
+   comma => [
+      comma => ["expr1", "op", "expr2"]
+   ],
+   struct => [
+      struct => ["struct_tok"]
+   ],
+   union => [
+      union => ["union_tok"]
+   ],
+   enum_def => [
+      defined_enum_spec => ["enum_tok", ["identifier"], "lbrace", "enum_list", "rbrace"]
+   ],
+   enum_ref => [
+      referenced_enum_spec => ["enum_tok", "identifier"]
+   ],
+   struct_def => [
+      struct_definition_spec => ["struct_tok", ["identifier"], ["lbrace", "struct_list", "rbrace"]]
+   ],
+   declarator => [
+      declarator => [["pointer"], "direct_decl"]
+   ],
+   declaration => [
+      declaration => ["decl_specifier", ["init_list"], "semicolon"]
+   ],
+   storage => [
+      storage_decl_spec => ["storage_class_spec", ["decl_spec"]]
+   ],
+   type_spec => [
+      type_spec_decl_spec => ["type_spec", ["decl_spec"]]
+   ],
+   type_qual => [
+      type_qual_decl_spec => ["type_qual", ["decl_spec"]]
+   ],
+   init_dec => [
+      init_declr => ["decl", ["op", "init"]]
+   ],
+   struct_decl => [
+      struct_declaration => ["spec_qual_list", "struct_decl_list"]
+   ],
+   pointer => [
+      pointer => ["op", ["type_qual_list"], ["pointer"]]
+   ],
+   bitfield_dec => [
+      bitfield_declarator => [["decl"], ["colon", "const_expr"]]
+   ],
+   function_def => [
+      function_definition => [["return_type"], "name", ["arg_list"], "body"]
+   ],
+   compound => [
+      compound_statement => ["lbrace", ["declarations"], ["body"], "rbrace"]
+   ],
+   abstract_dec => [
+      abstract_declarator => [["pointer"], ["direct_abstr_decl"]]
+   ],
+   type_name => [
+      type_name => ["spec_qual_list", ["abstr_decl"]]
+   ],
+   param_type_l => [
+      parameter_type_list => ["param_list", ["comma", "ellipsis"]]
+   ],
+}
