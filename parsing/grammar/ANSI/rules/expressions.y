@@ -59,17 +59,17 @@ unary_expression
 
 unary_operator
 	: '&'
-	  { $$ = pt_fmt198_new ($1); }
+	  { $$ = pt_address_of_new ($1); }
 	| '*'
-	  { $$ = pt_fmt199_new ($1); }
+	  { $$ = pt_pointer_dereference_new ($1); }
 	| '+'
-	  { $$ = pt_fmt200_new ($1); }
+	  { $$ = pt_positive_new ($1); }
 	| '-'
-	  { $$ = pt_fmt201_new ($1); }
+	  { $$ = pt_negate_new ($1); }
 	| '~'
-	  { $$ = pt_fmt202_new ($1); }
+	  { $$ = pt_bitwise_negate_new ($1); }
 	| '!'
-	  { $$ = pt_fmt203_new ($1); }
+	  { $$ = pt_logical_not_new ($1); }
 	;
 
 cast_expression

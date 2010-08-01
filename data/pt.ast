@@ -591,23 +591,23 @@ $main::dataname = "pt";
    fmt197 => [
       fmt197 => ["n1", "n2", "n3", "n4"]
    ],
-   fmt198 => [
-      fmt198 => ["n1"]
+   address_of => [
+      address_of => ["n1"]
    ],
-   fmt199 => [
-      fmt199 => ["n1"]
+   pointer_dereference => [
+      pointer_dereference => ["n1"]
    ],
-   fmt200 => [
-      fmt200 => ["n1"]
+   positive => [
+      positive => ["n1"]
    ],
-   fmt201 => [
-      fmt201 => ["n1"]
+   negate => [
+      negate => ["n1"]
    ],
-   fmt202 => [
-      fmt202 => ["n1"]
+   bitwise_negate => [
+      bitwise_negate => ["n1"]
    ],
-   fmt203 => [
-      fmt203 => ["n1"]
+   logical_not => [
+      logical_not => ["n1"]
    ],
    fmt204 => [
       fmt204 => ["n1"]
