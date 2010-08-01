@@ -10,7 +10,7 @@ use astgen::gen_header;
 use astgen::gen_source;
 
 our $dataname;
-our @vfuns = qw/destruct print/;
+our @vfuns = qw/destruct print store/;
 
 my $rules = do {
    my $file = $ARGV[0]
