@@ -1,5 +1,13 @@
 %{
 #include "yy/lex_interf.h"
+
+static size_t
+sz (int length)
+{
+  assert (length > 0);
+  return (size_t)length;
+}
+
 #define YY_USER_ACTION                                          \
   {                                                             \
     lexer_update_lloc (yylloc, yylineno, yycolumn, yyleng);     \
@@ -11,7 +19,7 @@
 
 #define RETURN(TOK)                                             \
   {                                                             \
-    *yylval = pt_token_new (yylloc, yytext, yyleng, TOK);       \
+    *yylval = pt_token_new (yylloc, yytext, sz (yyleng), TOK);  \
     return TOK;                                                 \
   }
 %}
