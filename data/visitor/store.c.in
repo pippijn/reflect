@@ -82,6 +82,8 @@ sexpr_escape (char const *text)
   char const* et = text + strlen (text);
   char *p = buf;
 
+  *p++ = '"';
+
   for (; it != et; it++)
     {
       if (*it == '"')
@@ -89,23 +91,26 @@ sexpr_escape (char const *text)
       *p++ = *it;
     }
 
+  *p++ = '"';
   *p = '\0';
 
   return buf;
 }
 
 static void
-${dataname}_store_visitor_visit_token (visitor_type *object, node_type const *node, int indent)
+${dataname}_store_visitor_visit_token (visitor_type *object, node_type const *node)
 {
   SELF ();
   struct location const *loc = ${dataname}_node_location (node);
 
   INDENT (self->fh, self->indent);
   fprintf ( self->fh
-          , "(%d:%d %d:%d \"%s\")\n"
+          , "(%d:%d %d:%d %s)\n"
 	  , loc->first_line, loc->first_column
 	  , loc->last_line,  loc->last_column
-	  , sexpr_escape (${dataname}_token_text (node))
+	  , strcmp ("<empty>", ${dataname}_token_text (node)) == 0
+	    ? "NIL"
+	    : sexpr_escape (${dataname}_token_text (node))
 	  );
 }
 
