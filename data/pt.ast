@@ -528,17 +528,17 @@ $main::dataname = "pt";
    fmt175 => [
       fmt175 => ["n1"]
    ],
-   fmt176 => [
-      fmt176 => ["n1"]
+   variable => [
+      variable => ["n1"]
    ],
-   fmt177 => [
-      fmt177 => ["n1"]
+   constant => [
+      constant => ["n1"]
    ],
-   fmt178 => [
-      fmt178 => ["n1"]
+   string_literal => [
+      string_literal => ["n1"]
    ],
-   fmt179 => [
-      fmt179 => ["n1", "n2", "n3"]
+   bracket_expression => [
+      bracket_expression => ["n1", "n2", "n3"]
    ],
    fmt180 => [
       fmt180 => ["n1"]

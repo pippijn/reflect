@@ -3,13 +3,13 @@
 
 primary_expression
 	: IDENTIFIER
-	  { $$ = pt_fmt176_new ($1); }
+	  { $$ = ast_variable_new ($1); }
 	| constant
-	  { $$ = pt_fmt177_new ($1); }
+	  { $$ = pt_constant_new ($1); }
 	| string_literal_list
-	  { $$ = pt_fmt178_new ($1); }
+	  { $$ = pt_string_literal_new ($1); }
 	| '(' expression ')'
-	  { $$ = pt_fmt179_new ($1, $2, $3); }
+	  { $$ = pt_bracket_expression_new ($1, $2, $3); }
 	;
 
 postfix_expression
