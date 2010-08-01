@@ -1,9 +1,11 @@
-package DataGen::source;
+package astgen::source;
 
-use DataGen::util;
+use common::sense;
+
+use astgen::util;
 
 sub gen_ctor {
-   my ($fh, $name, $members) = @_;
+   my ($fh, $dataname, $name, $members) = @_;
 
    my $ctor = "${dataname}_${name}_construct ";
    print $fh <<EOF;

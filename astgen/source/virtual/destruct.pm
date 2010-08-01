@@ -1,9 +1,11 @@
-package DataGen::source;
+package astgen::source;
 
-use DataGen::util;
+use common::sense;
+
+use astgen::util;
 
 sub gen_destruct {
-   my ($fh, $name, $members) = @_;
+   my ($fh, $dataname, $name, $members) = @_;
 
    print $fh <<EOF;
 

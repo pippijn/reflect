@@ -1,9 +1,11 @@
-package DataGen::source;
+package astgen::source;
 
-use DataGen::util;
+use common::sense;
+
+use astgen::util;
 
 sub gen_new {
-   my ($fh, $name, $members) = @_;
+   my ($fh, $dataname, $name, $members) = @_;
 
    my $new = "${dataname}_${name}_new ";
    print $fh <<EOF;

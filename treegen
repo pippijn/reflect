@@ -4,14 +4,13 @@ use common::sense;
 
 use constant USAGE => "Usage: astgen <rule-file>";
 
-use DataGen::util;
-use DataGen::gen_header_internal;
-use DataGen::gen_header;
-use DataGen::gen_source;
+use astgen::util;
+use astgen::gen_header_internal;
+use astgen::gen_header;
+use astgen::gen_source;
 
 our $dataname;
-
-my @vfuns = qw/destruct print/;
+our @vfuns;
 
 my $rules = do {
    my $file = $ARGV[0]
@@ -34,7 +33,7 @@ for my $file (sort keys %$rules) {
    print $nodes_h "#include <${dataname}/gen/$file.h>\n";
    print $internal_nodes_h "#include \"$file.h\"\n";
    print $internal_kinds_h "  ${DATANAME}_" . (uc $rules->{$file}[0]) . ",\n";
-   gen_header_internal $file, @{ $rules->{$file} };
-   gen_header          $file, @{ $rules->{$file} };
-   DataGen::source::generate  $file, @{ $rules->{$file} };
+   gen_header_internal $file, $dataname, @{ $rules->{$file} };
+   gen_header          $file, $dataname, @{ $rules->{$file} };
+   astgen::source::generate  $file, $dataname, @{ $rules->{$file} };
 }

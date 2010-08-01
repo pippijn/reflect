@@ -1,9 +1,11 @@
-package DataGen::source;
+package astgen::source;
 
-use DataGen::util;
+use common::sense;
+
+use astgen::util;
 
 sub gen_accessors {
-   my ($fh, $name, $members) = @_;
+   my ($fh, $dataname, $name, $members) = @_;
 
    print $fh "\n\n/* accessors */\n\n";
    print $fh "ACCESSOR ($name, $_)\n"

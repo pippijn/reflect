@@ -1,14 +1,17 @@
-package DataGen::source;
+package astgen::source;
 
-use DataGen::util;
+use common::sense;
+
+use astgen::util;
 
 sub gen_vtbl {
-   my ($fh, $name, $members) = @_;
+   my ($fh, $dataname, $name, $members) = @_;
 
    my $NAME = uc $name;
+   my $DATANAME = uc $dataname;
 
    print $fh "static fn_$_ ${dataname}_${name}_$_;\n"
-      for @vfuns;
+      for @main::vfuns;
 
    print $fh <<EOF;
 
@@ -22,7 +25,7 @@ struct ${dataname}_vtbl const ${dataname}_${name}_vtbl = {
   },
 EOF
    print $fh "  ${dataname}_${name}_$_,\n"
-      for @vfuns;
+      for @main::vfuns;
    print $fh "};\n";
 }
 

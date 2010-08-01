@@ -1,4 +1,4 @@
-package DataGen::util;
+package astgen::util;
 
 use base 'Exporter';
 

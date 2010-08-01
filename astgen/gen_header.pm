@@ -1,5 +1,5 @@
 sub gen_header {
-   my ($file, $name, $members) = @_;
+   my ($file, $dataname, $name, $members) = @_;
 
    my $fh = maybe_open ("include/${dataname}/gen/$file.h")
       or return;

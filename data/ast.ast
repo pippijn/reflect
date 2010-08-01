@@ -1,6 +1,7 @@
 # vim:ft=perl
 
 $main::dataname = "ast";
+@main::vfuns = qw/destruct print/;
 
 {
    for => [
