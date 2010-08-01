@@ -17,7 +17,7 @@ sub generate {
    my $fh = maybe_open "src/${dataname}/gen/$file.c"
       or return;
 
-   gen_self_type $fh, $dataname, $name, $members;
+   gen_self_type $file, $fh, $dataname, $name, $members;
    gen_vtbl $fh, $dataname, $name, $members;
    gen_ctor $fh, $dataname, $name, $members;
    gen_new $fh, $dataname, $name, $members;
