@@ -23,7 +23,7 @@ main (void)
     pt_print_visitor_delete (printer);
   }
   {
-    pt_visitor *printer = pt_store_visitor_new (stdout);
+    pt_visitor *printer = pt_store_visitor_new (stdout, 0);
     pt_node_accept (parse_context_unit (pctx), printer);
     pt_store_visitor_delete (printer);
   }

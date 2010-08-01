@@ -1,6 +1,8 @@
 #include <$dataname/visitors.h>
 #include <$dataname/visitor/impl.h>
 
+#include "../../internal.h"
+
 typedef struct ${dataname}_store_visitor self_type;
 
 struct ${dataname}_store_visitor
@@ -8,6 +10,7 @@ struct ${dataname}_store_visitor
   ${dataname}_visitor base;
 
   FILE *fh;
+  int indent;
 };
 
 [% FOREACH rule = rules %]
@@ -19,6 +22,8 @@ ${dataname}_store_visitor_visit_$name (visitor_type *object, ${dataname}_node co
 {
   SELF ();
 
+  INDENT (self->fh, self->indent);
+  self->indent++;
   fprintf (self->fh, "(${name}\n");
 
   [% FOREACH member = members %]
@@ -27,21 +32,31 @@ ${dataname}_store_visitor_visit_$name (visitor_type *object, ${dataname}_node co
 
   if (${dataname}_${name}_${mem} (node) != NULL)
     {
+      INDENT (self->fh, self->indent);
+      self->indent++;
       fprintf (self->fh, "('$mem\n");
       ${dataname}_node_accept (${dataname}_${name}_${mem} (node), &self->base);
+      self->indent--;
+      INDENT (self->fh, self->indent);
       fprintf (self->fh, ")\n");
     }
 
       [% END %]
     [% ELSE %]
 
+  INDENT (self->fh, self->indent);
+  self->indent++;
   fprintf (self->fh, "('$member\n");
   ${dataname}_node_accept (${dataname}_${name}_${member} (node), &self->base);
+  self->indent--;
+  INDENT (self->fh, self->indent);
   fprintf (self->fh, ")\n");
 
     [% END %]
   [% END %]
 
+  self->indent--;
+  INDENT (self->fh, self->indent);
   fprintf (self->fh, ")\n");
 }
 
@@ -67,6 +82,8 @@ sexpr_escape (char const *text)
   char const* et = text + strlen (text);
   char *p = buf;
 
+  *p++ = '"';
+
   for (; it != et; it++)
     {
       if (*it == '"')
@@ -74,6 +91,7 @@ sexpr_escape (char const *text)
       *p++ = *it;
     }
 
+  *p++ = '"';
   *p = '\0';
 
   return buf;
@@ -85,11 +103,14 @@ ${dataname}_store_visitor_visit_token (visitor_type *object, node_type const *no
   SELF ();
   struct location const *loc = ${dataname}_node_location (node);
 
+  INDENT (self->fh, self->indent);
   fprintf ( self->fh
-          , "(%d:%d %d:%d \"%s\")\n"
+          , "(%d:%d %d:%d %s)\n"
 	  , loc->first_line, loc->first_column
 	  , loc->last_line,  loc->last_column
-	  , sexpr_escape (${dataname}_token_text (node))
+	  , strcmp ("<empty>", ${dataname}_token_text (node)) == 0
+	    ? "NIL"
+	    : sexpr_escape (${dataname}_token_text (node))
 	  );
 }
 
@@ -109,22 +130,24 @@ static struct ${dataname}_visitor_vtbl ${dataname}_store_visitor_vtbl = {
 };
 
 static void
-${dataname}_store_visitor_construct (self_type *self, FILE *fh)
+${dataname}_store_visitor_construct (self_type *self, FILE *fh, int indent)
 {
   assert (self != NULL);
   assert (fh != NULL);
+  assert (indent >= 0);
 
   ${dataname}_visitor_construct (&self->base, &${dataname}_store_visitor_vtbl);
 
-  self->fh = fh;
+  self->fh     = fh;
+  self->indent = indent;
 }
 
 visitor_type *
-${dataname}_store_visitor_new (FILE *fh)
+${dataname}_store_visitor_new (FILE *fh, int indent)
 {
   self_type *self = alloc (sizeof *self);
 
-  ${dataname}_store_visitor_construct (self, fh);
+  ${dataname}_store_visitor_construct (self, fh, indent);
 
   return &self->base;
 }
