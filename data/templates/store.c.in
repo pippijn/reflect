@@ -1,9 +1,10 @@
 void
-${dataname}_${name}_store (${dataname}_node const *object, FILE *fh)
+${dataname}_${name}_store (${dataname}_node const *object, FILE *fh, int indent)
 {
   CONST_SELF ();
 
-  fprintf (fh, "(name\n");
+  INDENT(fh, indent);
+  fprintf (fh, "(${name}\n");
 
   [% FOREACH member = members %]
     [% IF member.optional %]
@@ -11,21 +12,26 @@ ${dataname}_${name}_store (${dataname}_node const *object, FILE *fh)
 
   if (self->$mem != NULL)
     {
-      fprintf (fh, "($mem ");
-      ${dataname}_node_store (self->$mem, fh);
+      INDENT(fh, indent + 1);
+      fprintf (fh, "('$mem\n");
+      ${dataname}_node_store (self->$mem, fh, indent + 2);
+      INDENT(fh, indent + 1);
       fprintf (fh, ")\n");
     }
 
       [% END %]
     [% ELSE %]
 
-  fprintf (fh, "($member ");
-  ${dataname}_node_store (self->$member, fh);
+  INDENT(fh, indent + 1);
+  fprintf (fh, "('$member\n");
+  ${dataname}_node_store (self->$member, fh, indent + 2);
+  INDENT(fh, indent + 1);
   fprintf (fh, ")\n");
 
     [% END %]
   [% END %]
 
-  fprintf (fh, ")");
+  INDENT(fh, indent);
+  fprintf (fh, ")\n");
 }
 

@@ -1,0 +1,13 @@
+/*
+ * token
+ */
+
+/* constructor */
+L (node)               *L (token_new)           ( struct location const *loc
+                                                , char const *text
+                                                , size_t length
+                                                , int token);
+
+/* accessors */
+char const             *L (token_text)          (L (node) const *self);
+int                     L (token_token)         (L (node) const *self);

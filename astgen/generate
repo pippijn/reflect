@@ -20,7 +20,7 @@ my $rules = do {
 
 my $DATANAME = uc $dataname;
 
-open my $nodes_h, ">", "include/${dataname}/gen/nodes.h"
+open my $nodes_h, ">", "include/${dataname}/nodes.h"
    or die $!;
 open my $internal_nodes_h, ">", "src/${dataname}/gen/nodes.h"
    or die $!;
@@ -30,7 +30,7 @@ open my $internal_kinds_h, ">", "src/${dataname}/gen/kinds.h"
 print "  ASTGEN  $ARGV[0]\n";
 
 for my $file (sort keys %$rules) {
-   print $nodes_h "#include <${dataname}/gen/$file.h>\n";
+   print $nodes_h "#include <${dataname}/$file.h>\n";
    print $internal_nodes_h "#include \"$file.h\"\n";
    print $internal_kinds_h "  ${DATANAME}_" . (uc $rules->{$file}[0]) . ",\n";
    gen_header_internal $file, $dataname, @{ $rules->{$file} };

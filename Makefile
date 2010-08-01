@@ -27,7 +27,7 @@ reflect: $(OBJECTS)
 codegen: ast.codegen.stamp pt.codegen.stamp
 
 %.codegen.stamp: astgen/generate data/%.ast
-	$(MKDIR_P) include/$*/gen
+	$(MKDIR_P) include/$*
 	$(MKDIR_P) src/$*/gen
 	@./$+
 
@@ -38,9 +38,9 @@ clean:
 	$(RM) parsing/parser.h
 	$(RM) parsing/lexer.c
 	$(RM) parsing/lexer.h
-	$(RM) include/ast/gen/*
+	$(RM) include/ast/*
 	$(RM) src/ast/gen/*
-	$(RM) include/pt/gen/*
+	$(RM) include/pt/*
 	$(RM) src/pt/gen/*
 
 depclean: clean

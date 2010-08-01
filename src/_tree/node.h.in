@@ -1,13 +1,10 @@
-#define L(tok) PASTE (L_TREE, PASTE (_, tok))
-#define U(tok) PASTE (U_TREE, PASTE (_, tok))
-
 typedef struct L (node) node_type;
 typedef struct L (vtbl) vtbl_type;
 typedef enum L (kind) kind_type;
 
 typedef void fn_destruct (node_type *node);
 typedef void fn_print (node_type const *node, FILE *fh);
-typedef void fn_store (node_type const *node, FILE *fh);
+typedef void fn_store (node_type const *node, FILE *fh, int indent);
 
 enum L (kind)
 {
@@ -77,6 +74,13 @@ L (base##_##elem) (node_type const *object)     \
     loc.last_column = end->last_column;         \
   } while (0)
 
+#define INDENT(fh, n)                           \
+  do {                                          \
+    int i;                                      \
+                                                \
+    for (i = 0; i < n; i++)                     \
+      fputc(' ', fh);                           \
+  } while (0)
 
 extern vtbl_type const L (node_vtbl);
 

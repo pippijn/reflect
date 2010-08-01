@@ -152,6 +152,24 @@ xml_escape (char const *it, char const* et)
   return buf;
 }
 
+static char const *
+sexpr_escape (char const *it, char const* et)
+{
+  static char buf[1024];
+  char *p = buf;
+
+  for (; it != et; it++)
+    {
+      if (*it == '"')
+        *p++ = '\\';
+      *p++ = *it;
+    }
+
+  *p = '\0';
+
+  return buf;
+}
+
 static void
 L (token_print) (node_type const* object, FILE* fh)
 {
@@ -167,10 +185,16 @@ L (token_print) (node_type const* object, FILE* fh)
 }
 
 static void
-L (token_store) (node_type const* object, FILE* fh)
+L (token_store) (node_type const* object, FILE* fh, int indent)
 {
   CONST_SELF ();
   struct location const *loc = L (node_location) (object);
 
-  assert (!"TODO");
+  INDENT (fh, indent);
+  fprintf ( fh
+          , "(%d:%d %d:%d \"%s\")\n"
+	  , loc->first_line, loc->first_column
+	  , loc->last_line,  loc->last_column
+	  , sexpr_escape (self->text, self->text + strlen (self->text))
+	  );
 }
