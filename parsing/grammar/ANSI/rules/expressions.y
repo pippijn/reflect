@@ -132,47 +132,47 @@ equality_expression
 	  { $$ = pt_fmt224_new ($1, $2, $3); }
 	;
 
-AND_expression
+and_expression
 	: equality_expression
 	  { $$ = pt_fmt225_new ($1); }
-	| AND_expression '&' equality_expression
+	| and_expression '&' equality_expression
 	  { $$ = pt_fmt226_new ($1, $2, $3); }
 	;
 
-exclusive_OR_expression
-	: AND_expression
+exclusive_or_expression
+	: and_expression
 	  { $$ = pt_fmt227_new ($1); }
-	| exclusive_OR_expression '^' AND_expression
+	| exclusive_or_expression '^' and_expression
 	  { $$ = pt_fmt228_new ($1, $2, $3); }
 	;
 
-inclusive_OR_expression
-	: exclusive_OR_expression
+inclusive_or_expression
+	: exclusive_or_expression
 	  { $$ = pt_fmt229_new ($1); }
-	| inclusive_OR_expression '|' exclusive_OR_expression
+	| inclusive_or_expression '|' exclusive_or_expression
 	  { $$ = pt_fmt230_new ($1, $2, $3); }
 	;
 
-logical_AND_expression
-	: inclusive_OR_expression
+logical_and_expression
+	: inclusive_or_expression
 	  { $$ = pt_fmt231_new ($1); }
-	| logical_AND_expression AND_OP inclusive_OR_expression
+	| logical_and_expression AND_OP inclusive_or_expression
 	  { $$ = pt_fmt232_new ($1, $2, $3); }
 	;
 
-logical_OR_expression
-	: logical_AND_expression
+logical_or_expression
+	: logical_and_expression
 	  { $$ = pt_fmt233_new ($1); }
-	| logical_OR_expression OR_OP logical_AND_expression
+	| logical_or_expression OR_OP logical_and_expression
 	  { $$ = pt_fmt234_new ($1, $2, $3); }
 	;
 
 conditional_expression
-	: logical_OR_expression
+	: logical_or_expression
 	  { $$ = pt_fmt235_new ($1); }
-	| logical_OR_expression '?' expression ':' conditional_expression
+	| logical_or_expression '?' expression ':' conditional_expression
 	  { $$ = pt_fmt236_new ($1, $2, $3, $4, $5); }
-	| logical_OR_expression '?' ':' conditional_expression
+	| logical_or_expression '?' ':' conditional_expression
 	  { $$ = pt_fmt237_new ($1, $2, $3, $4); }
 	;
 
