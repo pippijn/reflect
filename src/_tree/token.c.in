@@ -158,6 +158,8 @@ sexpr_escape (char const *it, char const* et)
   static char buf[1024];
   char *p = buf;
 
+  *p++ = '"';
+
   for (; it != et; it++)
     {
       if (*it == '"')
@@ -165,6 +167,7 @@ sexpr_escape (char const *it, char const* et)
       *p++ = *it;
     }
 
+  *p++ = '"';
   *p = '\0';
 
   return buf;
@@ -192,9 +195,11 @@ L (token_store) (node_type const* object, FILE* fh, int indent)
 
   INDENT (fh, indent);
   fprintf ( fh
-          , "(%d:%d %d:%d \"%s\")\n"
+          , "(%d:%d %d:%d %s)\n"
 	  , loc->first_line, loc->first_column
 	  , loc->last_line,  loc->last_column
-	  , sexpr_escape (self->text, self->text + strlen (self->text))
+          , strcmp (self->text, "\"<empty>\"")
+	    ? "NIL"
+	    : sexpr_escape (self->text, self->text + strlen (self->text))
 	  );
 }
