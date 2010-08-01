@@ -21,7 +21,7 @@ sub generate {
    my ($dataname, $rules) = @_;
 
    for my $visitor (@main::visitors) {
-      my $fh = maybe_open "src/visitor/$dataname/$visitor.c"
+      my $fh = maybe_open "src/visitor/$dataname/gen/$visitor.c"
          or next;
 
       process $template "data/visitor/$visitor.c.in", {

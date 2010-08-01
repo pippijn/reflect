@@ -29,6 +29,7 @@ codegen: ast.codegen.stamp pt.codegen.stamp
 %.codegen.stamp: astgen/generate data/%.ast
 	$(MKDIR_P) include/$*/gen
 	$(MKDIR_P) src/$*/gen
+	$(MKDIR_P) src/visitor/$*/gen
 	@./$+
 
 clean:
@@ -42,8 +43,8 @@ clean:
 	$(RM) src/ast/gen/*
 	$(RM) include/pt/gen/*
 	$(RM) src/pt/gen/*
-	$(RM) src/visitor/ast/*
-	$(RM) src/visitor/pt/*
+	$(RM) src/visitor/ast/gen/*
+	$(RM) src/visitor/pt/gen/*
 
 depclean: clean
 	$(RM) $(shell find . -name "*.d")
