@@ -10,7 +10,7 @@ sub gen_vtbl {
    my $NAME = uc $name;
    my $DATANAME = uc $dataname;
 
-   print $fh "static fn_$_ ${dataname}_${name}_$_;\n"
+   print $fh "static ${_}_fn ${dataname}_${name}_$_;\n"
       for @main::vfuns;
 
    print $fh <<EOF;
