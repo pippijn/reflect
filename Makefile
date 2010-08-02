@@ -10,7 +10,6 @@ CFLAGS		= -Wall -Wextra -ggdb3 -O3 -fPIC
 CFLAGS		+= -Wredundant-decls			\
 		   -Wmissing-prototypes			\
 		   -Wnested-externs			\
-		   -Wmissing-parameter-type		\
 		   -Wbad-function-cast			\
 		   -Wdeclaration-after-statement	\
 		   -Wstrict-prototypes			\

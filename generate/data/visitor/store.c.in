@@ -145,11 +145,7 @@ ${dataname}_store_visitor_construct (self_type *self, FILE *fh, int indent)
 visitor_type *
 ${dataname}_store_visitor_new (FILE *fh, int indent)
 {
-  self_type *self = alloc (sizeof *self);
-
-  ${dataname}_store_visitor_construct (self, fh, indent);
-
-  return &self->base;
+  return NEW (store_visitor, fh, indent);
 }
 
 void

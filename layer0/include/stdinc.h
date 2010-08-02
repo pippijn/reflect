@@ -10,3 +10,5 @@
 #define PASTE(a, b) PAST_(a, b)
 #define PAST_(a, b) PAS__(a, b)
 #define PAS__(a, b) a##b
+
+#define NEW(class, ...)         ({ self_type *self = alloc (sizeof *self); L (class##_construct) (self, __VA_ARGS__); &self->base; })

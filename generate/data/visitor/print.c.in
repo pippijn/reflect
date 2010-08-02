@@ -110,11 +110,7 @@ ${dataname}_print_visitor_construct (self_type *self, FILE *fh)
 visitor_type *
 ${dataname}_print_visitor_new (FILE *fh)
 {
-  self_type *self = alloc (sizeof *self);
-
-  ${dataname}_print_visitor_construct (self, fh);
-
-  return &self->base;
+  return NEW (print_visitor, fh);
 }
 
 void

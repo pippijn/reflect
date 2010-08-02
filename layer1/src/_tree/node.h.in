@@ -51,7 +51,6 @@ node_type const *L (cast_const) (node_type const *object, kind_type kind);
 #define SELF()                  self_type       *self = (self_type       *)L (cast_mutable) (object, vtbl->ti.kind)
 #define CONST_SELF()            self_type const *self = (self_type const *)L (cast_const)   (object, vtbl->ti.kind)
 
-#define NEW(class, ...)         ({ self_type *self = alloc (sizeof *self); L (class##_construct) (self, __VA_ARGS__); &self->base; })
 #define BASE_CTOR(BASE, ...)    L (BASE##_construct) (&self->base, vtbl, __VA_ARGS__)
 #define BASE_DTOR()             self->base.vtbl->ti.base->destruct (&self->base)
 
