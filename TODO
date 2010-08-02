@@ -7,6 +7,9 @@ General:
 - After all PT nodes are finished, move to GLR and remove TYPEDEF_NAME
 - Optional: XDR serialisation/deserialisation
 - Optional: Some custom binary format (just because we can)
+- Generate XML schema definitions from tree definition
+- Call constructors by name given as string:
+    node_type *node_new (char const *type, node_type **args);
 
 
 Remaining ast nodes:
