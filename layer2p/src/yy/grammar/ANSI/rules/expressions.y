@@ -171,27 +171,27 @@ assignment_expression
 	: conditional_expression
 	  { new (fmt238) ($1); }
 	| cast_expression '=' assignment_expression
-	  { new (fmt240) ($1, $2, $3); }
+	  { new (assign) ($1, $2, $3); }
 	| cast_expression MUL_ASSIGN assignment_expression
-	  { new (fmt241) ($1, $2, $3); }
+	  { new (multiply_assign) ($1, $2, $3); }
 	| cast_expression DIV_ASSIGN assignment_expression
-	  { new (fmt242) ($1, $2, $3); }
+	  { new (divide_assign) ($1, $2, $3); }
 	| cast_expression MOD_ASSIGN assignment_expression
-	  { new (fmt243) ($1, $2, $3); }
+	  { new (modulo_assign) ($1, $2, $3); }
 	| cast_expression ADD_ASSIGN assignment_expression
-	  { new (fmt244) ($1, $2, $3); }
+	  { new (add_assign) ($1, $2, $3); }
 	| cast_expression SUB_ASSIGN assignment_expression
-	  { new (fmt245) ($1, $2, $3); }
+	  { new (subtract_assign) ($1, $2, $3); }
 	| cast_expression LSH_ASSIGN assignment_expression
-	  { new (fmt246) ($1, $2, $3); }
+	  { new (left_shift_assign) ($1, $2, $3); }
 	| cast_expression RSH_ASSIGN assignment_expression
-	  { new (fmt247) ($1, $2, $3); }
+	  { new (right_shift_assign) ($1, $2, $3); }
 	| cast_expression AND_ASSIGN assignment_expression
-	  { new (fmt248) ($1, $2, $3); }
+	  { new (and_assign) ($1, $2, $3); }
 	| cast_expression XOR_ASSIGN assignment_expression
-	  { new (fmt249) ($1, $2, $3); }
+	  { new (xor_assign) ($1, $2, $3); }
 	| cast_expression OR_ASSIGN assignment_expression
-	  { new (fmt250) ($1, $2, $3); }
+	  { new (or_assign) ($1, $2, $3); }
 	;
 
 expression
@@ -207,6 +207,8 @@ constant_expression
 	;
 
 expression_opt
-	: expression
+	: empty
+	  { new (fmt250) ($1); }
+	| expression
 	  { new (fmt254) ($1); }
 	;
