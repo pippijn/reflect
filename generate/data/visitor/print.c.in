@@ -1,12 +1,16 @@
 #include <$dataname/visitors.h>
 #include <$dataname/visitor/impl.h>
 
+#include <libxml/tree.h>
+
 typedef struct ${dataname}_print_visitor self_type;
 
 struct ${dataname}_print_visitor
 {
   ${dataname}_visitor base;
 
+  xmlDocPtr doc;
+  xmlNodePtr cur;
   FILE *fh;
 };
 
@@ -18,8 +22,9 @@ static void
 ${dataname}_print_visitor_visit_${name} (visitor_type *object, node_type const *node)
 {
   SELF ();
+  xmlNodePtr const last = self->cur;
 
-  fprintf (self->fh, "<$name>\n");
+  self->cur = xmlNewChild (self->cur, NULL, BAD_CAST "$name", NULL);
 
   [% FOREACH member = members %]
     [% IF member.optional %]
@@ -27,80 +32,38 @@ ${dataname}_print_visitor_visit_${name} (visitor_type *object, node_type const *
 
   if (${dataname}_${name}_${mem} (node) != NULL)
     {
-      fprintf (self->fh, "<$mem>\n");
+      xmlNodePtr const last = self->cur;
+      self->cur = xmlNewChild (self->cur, NULL, BAD_CAST "$mem", NULL);
       ${dataname}_node_accept (${dataname}_${name}_${mem} (node), &self->base);
-      fprintf (self->fh, "</$mem>\n");
+      self->cur = last;
     }
 
       [% END %]
     [% ELSE %]
 
-  fprintf (self->fh, "<$member>\n");
-  ${dataname}_node_accept (${dataname}_${name}_${member} (node), &self->base);
-  fprintf (self->fh, "</$member>\n");
+  {
+    xmlNodePtr const last = self->cur;
+    self->cur = xmlNewChild (self->cur, NULL, BAD_CAST "$member", NULL);
+    ${dataname}_node_accept (${dataname}_${name}_${member} (node), &self->base);
+    self->cur = last;
+  }
 
     [% END %]
   [% END %]
 
-  fprintf (self->fh, "</$name>\n");
+  self->cur = last;
 }
 
 [% END %]
 
 
-#define strlen my_strlen
-static size_t
-my_strlen (char const *str)
+static xmlChar const *
+xml_loc (int line, int column)
 {
-  size_t sz = 0;
+  static char buf[64];
 
-  while (*str++)
-    ++sz;
-  return sz;
-}
-
-static char const *
-xml_escape (char const *text)
-{
-  static char buf[1024];
-  char const* it = text;
-  char const* et = text + strlen (text);
-  char *ptr = buf;
-
-  for (; it != et; it++)
-    switch (*it)
-      {
-      case '>':
-        assert (ptr - buf < sizeof buf - 4);
-        *ptr++ = '&';
-        *ptr++ = 'g';
-        *ptr++ = 't';
-        *ptr++ = ';';
-        break;
-      case '<':
-        assert (ptr - buf < sizeof buf - 4);
-        *ptr++ = '&';
-        *ptr++ = 'l';
-        *ptr++ = 't';
-        *ptr++ = ';';
-        break;
-      case '&':
-        assert (ptr - buf < sizeof buf - 5);
-        *ptr++ = '&';
-        *ptr++ = 'a';
-        *ptr++ = 'm';
-        *ptr++ = 'p';
-        *ptr++ = ';';
-        break;
-      default:
-        assert (ptr - buf < sizeof buf);
-        *ptr++ = *it;
-        break;
-      }
-
-  *ptr = '\0';
-
-  return buf;
+  snprintf (buf, sizeof buf, "%d:%d", line, column);
+  return BAD_CAST buf;
 }
 
 static void
@@ -109,12 +72,9 @@ ${dataname}_print_visitor_visit_token (visitor_type *object, node_type const *no
   SELF ();
   struct location const *loc = ${dataname}_node_location (node);
 
-  fprintf ( self->fh
-          , "<token left=\"%d:%d\" right=\"%d:%d\">%s</token>\n"
-          , loc->first_line, loc->first_column
-          , loc->last_line, loc->last_column
-          , xml_escape (${dataname}_token_text (node))
-          );
+  xmlNodePtr xmltok = xmlNewChild (self->cur, NULL, BAD_CAST "token", BAD_CAST ${dataname}_token_text (node));
+  xmlNewProp (xmltok, BAD_CAST "left",  xml_loc (loc->first_line, loc->first_column));
+  xmlNewProp (xmltok, BAD_CAST "right", xml_loc (loc->last_line , loc->last_column ));
 }
 
 
@@ -140,7 +100,11 @@ ${dataname}_print_visitor_construct (self_type *self, FILE *fh)
 
   ${dataname}_visitor_construct (&self->base, &${dataname}_print_visitor_vtbl);
 
+  self->doc = xmlNewDoc (BAD_CAST "1.0");
+  self->cur = xmlNewNode (NULL, BAD_CAST "$dataname");
   self->fh = fh;
+
+  xmlDocSetRootElement (self->doc, self->cur);
 }
 
 visitor_type *
@@ -157,6 +121,10 @@ void
 ${dataname}_print_visitor_delete (visitor_type *object)
 {
   SELF ();
+
+  /* TODO: give client code the option to get the document as string */
+  xmlDocDump (self->fh, self->doc);
+  xmlFreeDoc (self->doc);
 
   sever (self, self->base.vtbl->ti.size);
 }
