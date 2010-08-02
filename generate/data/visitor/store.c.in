@@ -13,66 +13,7 @@ struct ${dataname}_store_visitor
   int indent;
 };
 
-[% FOREACH rule = rules %]
-[% name = rule.value.0 %]
-[% members = rule.value.1 %]
-
-static void
-${dataname}_store_visitor_visit_$name (visitor_type *object, ${dataname}_node const *node)
-{
-  SELF ();
-
-  INDENT (self->fh, self->indent);
-  self->indent++;
-  fprintf (self->fh, "(${name}\n");
-
-  [% FOREACH member = members %]
-    [% IF member.optional %]
-      [% FOREACH mem = member %]
-
-  if (${dataname}_${name}_${mem} (node) != NULL)
-    {
-      INDENT (self->fh, self->indent);
-      self->indent++;
-      fprintf (self->fh, "('$mem\n");
-      ${dataname}_node_accept (${dataname}_${name}_${mem} (node), &self->base);
-      self->indent--;
-      INDENT (self->fh, self->indent);
-      fprintf (self->fh, ")\n");
-    }
-
-      [% END %]
-    [% ELSE %]
-
-  INDENT (self->fh, self->indent);
-  self->indent++;
-  fprintf (self->fh, "('$member\n");
-  ${dataname}_node_accept (${dataname}_${name}_${member} (node), &self->base);
-  self->indent--;
-  INDENT (self->fh, self->indent);
-  fprintf (self->fh, ")\n");
-
-    [% END %]
-  [% END %]
-
-  self->indent--;
-  INDENT (self->fh, self->indent);
-  fprintf (self->fh, ")\n");
-}
-
-[% END %]
-
-
-#define strlen my_strlen
-static size_t
-my_strlen (char const *str)
-{
-  size_t sz = 0;
-
-  while (*str++)
-    ++sz;
-  return sz;
-}
+[% INCLUDE store/nodes.c.in %]
 
 static char const *
 sexpr_escape (char const *text)
@@ -115,19 +56,7 @@ ${dataname}_store_visitor_visit_token (visitor_type *object, node_type const *no
 }
 
 
-static struct ${dataname}_visitor_vtbl ${dataname}_store_visitor_vtbl = {
-  {
-    "${dataname}_visitor",
-    sizeof (self_type),
-  },
-  ${dataname}_store_visitor_visit_token,
-
-[% FOREACH rule = rules %]
-[% name = rule.value.0 %]
-  ${dataname}_store_visitor_visit_${name},
-
-[% END %]
-};
+[% INCLUDE store/vtbl.c.in %]
 
 static void
 ${dataname}_store_visitor_construct (self_type *self, FILE *fh, int indent)

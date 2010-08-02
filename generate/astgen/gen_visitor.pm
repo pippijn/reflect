@@ -12,9 +12,10 @@ $Template::Stash::LIST_OPS->{optional}    = sub { 1 };
 $Template::Stash::LIST_OPS->{all}         = \&all;
 
 my $template = new Template {
-   INTERPOLATE => 1,
-   PRE_CHOMP => 1,
-   POST_CHOMP => 1,
+   INTERPOLATE    => 1,
+   PRE_CHOMP      => 1,
+   POST_CHOMP     => 1,
+   INCLUDE_PATH   => 'generate/data/visitor',
 };
 
 sub generate {
@@ -24,7 +25,7 @@ sub generate {
       my $fh = maybe_open "layer2v/src/visitor/$dataname/gen/$visitor.c"
          or next;
 
-      process $template "generate/data/visitor/$visitor.c.in", {
+      process $template "$visitor.c.in", {
          dataname => $dataname,
          rules    => $rules,
       }, $fh

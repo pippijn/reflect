@@ -12,7 +12,7 @@ use astgen::gen_source;
 use astgen::gen_visitor;
 
 our $dataname;
-our @vfuns = qw/destruct print store accept/;
+our @vfuns = qw/destruct accept/;
 our @visitors = qw/print store/;
 
 my $rules = do {

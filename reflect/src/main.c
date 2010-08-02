@@ -45,10 +45,6 @@ main (void)
     fclose (fh);
   }
 
-#if 0
-  pt_node_print (parse_context_unit (pctx), stdout);
-  pt_node_store (parse_context_unit (pctx), stdout, 0);
-#endif
   parse_context_delete (pctx);
 
   return 0;

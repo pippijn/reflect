@@ -12,9 +12,10 @@ $Template::Stash::LIST_OPS->{optional}    = sub { 1 };
 $Template::Stash::LIST_OPS->{all}         = \&all;
 
 my $template = new Template {
-   INTERPOLATE => 1,
-   PRE_CHOMP => 1,
-   POST_CHOMP => 1,
+   INTERPOLATE    => 1,
+   PRE_CHOMP      => 1,
+   POST_CHOMP     => 1,
+   INCLUDE_PATH   => 'generate/data/virtual',
 };
 
 sub gen_functions {
@@ -22,7 +23,7 @@ sub gen_functions {
 
    print $fh "\n\n/* virtual */\n\n";
 
-   (process $template "generate/data/virtual/$_.c.in", {
+   (process $template "$_.c.in", {
       dataname => $dataname,
       name     => $name,
       members  => $members,

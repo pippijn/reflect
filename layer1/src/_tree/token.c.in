@@ -18,8 +18,6 @@ typedef struct L (node_token) self_type;
 /* vtable */
 
 static fn_destruct L (token_destruct);
-static fn_print L (token_print);
-static fn_store L (token_store);
 static fn_accept L (token_accept);
 
 
@@ -32,8 +30,6 @@ vtbl_type const L (token_vtbl) = {
     sizeof (self_type),
   },
   L (token_destruct),
-  L (token_print),
-  L (token_store),
   L (token_accept),
 };
 
@@ -109,101 +105,6 @@ L (token_destruct) (node_type* object)
 
   /* base destructor */
   BASE_DTOR ();
-}
-
-
-static char const *
-xml_escape (char const *it, char const* et)
-{
-  static char buf[1024];
-  char *ptr = buf;
-
-  for (; it != et; it++)
-    switch (*it)
-      {
-      case '>':
-        assert (ptr - buf < sizeof buf - 4);
-        *ptr++ = '&';
-        *ptr++ = 'g';
-        *ptr++ = 't';
-        *ptr++ = ';';
-        break;
-      case '<':
-        assert (ptr - buf < sizeof buf - 4);
-        *ptr++ = '&';
-        *ptr++ = 'l';
-        *ptr++ = 't';
-        *ptr++ = ';';
-        break;
-      case '&':
-        assert (ptr - buf < sizeof buf - 5);
-        *ptr++ = '&';
-        *ptr++ = 'a';
-        *ptr++ = 'm';
-        *ptr++ = 'p';
-        *ptr++ = ';';
-        break;
-      default:
-        assert (ptr - buf < sizeof buf);
-        *ptr++ = *it;
-        break;
-      }
-
-  *ptr = '\0';
-
-  return buf;
-}
-
-static char const *
-sexpr_escape (char const *it, char const* et)
-{
-  static char buf[1024];
-  char *p = buf;
-
-  *p++ = '"';
-
-  for (; it != et; it++)
-    {
-      if (*it == '"')
-        *p++ = '\\';
-      *p++ = *it;
-    }
-
-  *p++ = '"';
-  *p = '\0';
-
-  return buf;
-}
-
-static void
-L (token_print) (node_type const* object, FILE* fh)
-{
-  CONST_SELF ();
-  struct location const *loc = L (node_location) (object);
-
-  fprintf ( fh
-          , "<token left=\"%d:%d\" right=\"%d:%d\">%s</token>\n"
-          , loc->first_line, loc->first_column
-          , loc->last_line, loc->last_column
-          , xml_escape (self->text, self->text + strlen (self->text))
-          );
-}
-
-static void
-L (token_store) (node_type const* object, FILE* fh, int indent)
-{
-  CONST_SELF ();
-  struct location const *loc = L (node_location) (object);
-
-  INDENT (fh, indent);
-  fprintf ( fh
-          , "(%d:%d %d:%d %s)\n"
-	  , loc->first_line, loc->first_column
-	  , loc->last_line,  loc->last_column
-          , strcmp (self->text, "<empty>") == 0
-	    ? "NIL"
-	    : sexpr_escape (self->text, self->text + strlen (self->text))
-	  );
 }
 
 static void

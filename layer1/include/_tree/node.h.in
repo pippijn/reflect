@@ -20,6 +20,4 @@ void                    L (node_unref_ornull)   (L (node) *self);
 struct location const  *L (node_location)       (L (node) const *self);
 
 /* methods */
-void                    L (node_print)          (L (node) const *self, FILE *fh);
-void                    L (node_store)          (L (node) const *self, FILE *fh, int indent);
 void                    L (node_accept)         (L (node) const *self, L (visitor) *visitor);

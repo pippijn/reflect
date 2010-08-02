@@ -4,8 +4,6 @@ typedef struct L (vtbl) vtbl_type;
 typedef enum L (kind) kind_type;
 
 typedef void fn_destruct (node_type *node);
-typedef void fn_print (node_type const *node, FILE *fh);
-typedef void fn_store (node_type const *node, FILE *fh, int indent);
 typedef void fn_accept (node_type const *node, visitor_type *visitor);
 
 enum L (kind)
@@ -28,8 +26,6 @@ struct L (vtbl)
     size_t size;
   } ti;
   fn_destruct *destruct;
-  fn_print *print;
-  fn_store *store;
   fn_accept *accept;
 };
 

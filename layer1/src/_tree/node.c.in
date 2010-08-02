@@ -10,8 +10,6 @@ vtbl_type const L (node_vtbl) = {
     sizeof (node_type),
   },
   L (node_destruct),
-  (fn_print *)L (pure_virtual),
-  (fn_store *)L (pure_virtual),
   (fn_accept *)L (pure_virtual),
 };
 
@@ -30,8 +28,7 @@ vtbl_verify (vtbl_type const *vtbl)
   type_info_verify (&vtbl->ti);
 #define VFN_VERIFY(fn) assert (vtbl->fn != NULL && vtbl->fn != (fn_##fn*)L (pure_virtual))
   VFN_VERIFY (destruct);
-  VFN_VERIFY (print);
-  VFN_VERIFY (store);
+  VFN_VERIFY (accept);
 #undef VFN_VERIFY
 }
 
@@ -65,24 +62,6 @@ L (node_location) (node_type const *self)
 
 
 /* methods */
-
-void
-L (node_print) (node_type const *self, FILE *fh)
-{
-  assert (self != NULL);
-  assert (self->vtbl != NULL);
-
-  self->vtbl->print (self, fh);
-}
-
-void
-L (node_store) (node_type const *self, FILE *fh, int indent)
-{
-  assert (self != NULL);
-  assert (self->vtbl != NULL);
-
-  self->vtbl->store (self, fh, indent);
-}
 
 void
 L (node_accept) (node_type const *self, visitor_type *visitor)
