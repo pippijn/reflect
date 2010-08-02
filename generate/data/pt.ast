@@ -561,12 +561,6 @@ $main::dataname = "pt";
    post_decrement => [
       post_decrement => ["n1", "n2"]
    ],
-   fmt188 => [
-      fmt188 => ["n1", "n2", "n3"]
-   ],
-   fmt189 => [
-      fmt189 => ["n1", "n2", "n3"]
-   ],
    fmt190 => [
       fmt190 => ["n1"]
    ],
@@ -576,20 +570,20 @@ $main::dataname = "pt";
    fmt192 => [
       fmt192 => ["n1"]
    ],
-   fmt193 => [
-      fmt193 => ["n1", "n2"]
+   pre_increment => [
+      pre_increment => ["n1", "n2"]
    ],
-   fmt194 => [
-      fmt194 => ["n1", "n2"]
+   pre_decrement => [
+      pre_decrement => ["n1", "n2"]
    ],
    fmt195 => [
       fmt195 => ["n1", "n2"]
    ],
-   fmt196 => [
-      fmt196 => ["n1", "n2"]
+   sizeof_var => [
+      sizeof_var => ["n1", "n2"]
    ],
-   fmt197 => [
-      fmt197 => ["n1", "n2", "n3", "n4"]
+   sizeof_type => [
+      sizeof_type => ["n1", "n2", "n3", "n4"]
    ],
    address_of => [
       address_of => ["n1"]
@@ -612,8 +606,8 @@ $main::dataname = "pt";
    fmt204 => [
       fmt204 => ["n1"]
    ],
-   fmt205 => [
-      fmt205 => ["n1", "n2", "n3", "n4"]
+   compound_literal => [
+      compound_literal => ["n1", "n2", "n3", "n4"]
    ],
    type_cast => [
       type_cast => ["n1", "n2", "n3", "n4"]
@@ -651,17 +645,17 @@ $main::dataname = "pt";
    fmt217 => [
       fmt217 => ["n1"]
    ],
-   fmt218 => [
-      fmt218 => ["n1", "n2", "n3"]
+   less_than => [
+      less_than => ["n1", "n2", "n3"]
    ],
-   fmt219 => [
-      fmt219 => ["n1", "n2", "n3"]
+   greater_than => [
+      greater_than => ["n1", "n2", "n3"]
    ],
-   fmt220 => [
-      fmt220 => ["n1", "n2", "n3"]
+   less_than_equals => [
+      less_than_equals => ["n1", "n2", "n3"]
    ],
-   fmt221 => [
-      fmt221 => ["n1", "n2", "n3"]
+   greater_than_equals => [
+      greater_than_equals => ["n1", "n2", "n3"]
    ],
    fmt222 => [
       fmt222 => ["n1"]

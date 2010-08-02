@@ -13,7 +13,9 @@ CFLAGS		+= -Wredundant-decls			\
 		   -Wbad-function-cast			\
 		   -Wdeclaration-after-statement	\
 		   -Wstrict-prototypes			\
+		   #-Werror				\
 		   -Wconversion				\
+		   -Wno-error=conversion		\
 
 %.c: %.y
 	@echo " YACC " $@

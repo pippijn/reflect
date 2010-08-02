@@ -3,224 +3,220 @@
 
 primary_expression
 	: IDENTIFIER
-	  { $$ = pt_variable_new ($1); }
+	  { new (variable) ($1); }
 	| constant
-	  { $$ = pt_constant_new ($1); }
+	  { new (constant) ($1); }
 	| string_literal_list
-	  { $$ = pt_string_literal_new ($1); }
+	  { new (string_literal) ($1); }
 	| '(' expression ')'
-	  { $$ = pt_bracket_expression_new ($1, $2, $3); }
+	  { new (bracket_expression) ($1, $2, $3); }
 	;
 
 postfix_expression
 	: primary_expression
-	  { $$ = pt_fmt180_new ($1); }
+	  { new (fmt180) ($1); }
 	| postfix_expression '[' expression ']'
-	  { $$ = pt_array_access_new ($1, $2, $3, $4); }
+	  { new (array_access) ($1, $2, $3, $4); }
 	| postfix_expression '(' ')'
-	  { $$ = pt_function_call_new ($1, $2, NULL, $3); }
+	  { new (function_call) ($1, $2, NULL, $3); }
 	| postfix_expression '(' argument_expression_list ')'
-	  { $$ = pt_function_call_new ($1, $2, $3, $4); }
-	| postfix_expression '.' IDENTIFIER
-	  { $$ = pt_struct_access_new ($1, $2, $3); }
-	| postfix_expression PTR_OP IDENTIFIER
-	  { $$ = pt_pointer_access_new ($1, $2, $3); }
+	  { new (function_call) ($1, $2, $3, $4); }
+	| postfix_expression '.' identifier_or_typedef_name
+	  { new (struct_access) ($1, $2, $3); }
+	| postfix_expression PTR_OP identifier_or_typedef_name
+	  { new (pointer_access) ($1, $2, $3); }
 	| postfix_expression INC_OP
-	  { $$ = pt_post_increment_new ($1, $2); }
+	  { new (post_increment) ($1, $2); }
 	| postfix_expression DEC_OP
-	  { $$ = pt_post_decrement_new ($1, $2); }
-	| postfix_expression '.' TYPEDEF_NAME
-	  { $$ = pt_fmt188_new ($1, $2, $3); }
-	| postfix_expression PTR_OP TYPEDEF_NAME
-	  { $$ = pt_fmt189_new ($1, $2, $3); }
+	  { new (post_decrement) ($1, $2); }
 	;
 
 argument_expression_list
 	: assignment_expression
-	  { $$ = pt_fmt190_new ($1); }
+	  { new (fmt190) ($1); }
 	| argument_expression_list ',' assignment_expression
-	  { $$ = pt_fmt191_new ($1, $2, $3); }
+	  { new (fmt191) ($1, $2, $3); }
 	;
 
 unary_expression
 	: postfix_expression
-	  { $$ = pt_fmt192_new ($1); }
+	  { new (fmt192) ($1); }
 	| INC_OP unary_expression
-	  { $$ = pt_fmt193_new ($1, $2); }
+	  { new (pre_increment) ($1, $2); }
 	| DEC_OP unary_expression
-	  { $$ = pt_fmt194_new ($1, $2); }
+	  { new (pre_decrement) ($1, $2); }
 	| unary_operator cast_expression
-	  { $$ = pt_fmt195_new ($1, $2); }
+	  { new (fmt195) ($1, $2); }
 	| SIZEOF unary_expression
-	  { $$ = pt_fmt196_new ($1, $2); }
+	  { new (sizeof_var) ($1, $2); }
 	| SIZEOF '(' type_name ')'
-	  { $$ = pt_fmt197_new ($1, $2, $3, $4); }
+	  { new (sizeof_type) ($1, $2, $3, $4); }
 	;
 
 unary_operator
 	: '&'
-	  { $$ = pt_address_of_new ($1); }
+	  { new (address_of) ($1); }
 	| '*'
-	  { $$ = pt_pointer_dereference_new ($1); }
+	  { new (pointer_dereference) ($1); }
 	| '+'
-	  { $$ = pt_positive_new ($1); }
+	  { new (positive) ($1); }
 	| '-'
-	  { $$ = pt_negate_new ($1); }
+	  { new (negate) ($1); }
 	| '~'
-	  { $$ = pt_bitwise_negate_new ($1); }
+	  { new (bitwise_negate) ($1); }
 	| '!'
-	  { $$ = pt_logical_not_new ($1); }
+	  { new (logical_not) ($1); }
 	;
 
 cast_expression
 	: unary_expression
-	  { $$ = pt_fmt204_new ($1); }
+	  { new (fmt204) ($1); }
 	| '(' type_name ')' bracketed_initialiser_list
-	  { $$ = pt_fmt205_new ($1, $2, $3, $4); }
+	  { new (compound_literal) ($1, $2, $3, $4); }
 	| '(' type_name ')' cast_expression
-	  { $$ = pt_type_cast_new ($1, $2, $3, $4); }
+	  { new (type_cast) ($1, $2, $3, $4); }
 	;
 
 multiplicative_expression
 	: cast_expression
-	  { $$ = pt_fmt207_new ($1); }
+	  { new (fmt207) ($1); }
 	| multiplicative_expression '*' cast_expression
-	  { $$ = pt_multiply_new ($1, $2, $3); }
+	  { new (multiply) ($1, $2, $3); }
 	| multiplicative_expression '/' cast_expression
-	  { $$ = pt_divide_new ($1, $2, $3); }
+	  { new (divide) ($1, $2, $3); }
 	| multiplicative_expression '%' cast_expression
-	  { $$ = pt_modulo_new ($1, $2, $3); }
+	  { new (modulo) ($1, $2, $3); }
 	;
 
 additive_expression
 	: multiplicative_expression
-	  { $$ = pt_fmt211_new ($1); }
+	  { new (fmt211) ($1); }
 	| additive_expression '+' multiplicative_expression
-	  { $$ = pt_add_new ($1, $2, $3); }
+	  { new (add) ($1, $2, $3); }
 	| additive_expression '-' multiplicative_expression
-	  { $$ = pt_subtract_new ($1, $2, $3); }
+	  { new (subtract) ($1, $2, $3); }
 	;
 
 shift_expression
 	: additive_expression
-	  { $$ = pt_fmt214_new ($1); }
+	  { new (fmt214) ($1); }
 	| shift_expression LSH_OP additive_expression
-	  { $$ = pt_shift_left_new ($1, $2, $3); }
+	  { new (shift_left) ($1, $2, $3); }
 	| shift_expression RSH_OP additive_expression
-	  { $$ = pt_shift_right_new ($1, $2, $3); }
+	  { new (shift_right) ($1, $2, $3); }
 	;
 
 relational_expression
 	: shift_expression
-	  { $$ = pt_fmt217_new ($1); }
+	  { new (fmt217) ($1); }
 	| relational_expression '<' shift_expression
-	  { $$ = pt_fmt218_new ($1, $2, $3); }
+	  { new (less_than) ($1, $2, $3); }
 	| relational_expression '>' shift_expression
-	  { $$ = pt_fmt219_new ($1, $2, $3); }
+	  { new (greater_than) ($1, $2, $3); }
 	| relational_expression LE_OP shift_expression
-	  { $$ = pt_fmt220_new ($1, $2, $3); }
+	  { new (less_than_equals) ($1, $2, $3); }
 	| relational_expression GE_OP shift_expression
-	  { $$ = pt_fmt221_new ($1, $2, $3); }
+	  { new (greater_than_equals) ($1, $2, $3); }
 	;
 
 equality_expression
 	: relational_expression
-	  { $$ = pt_fmt222_new ($1); }
+	  { new (fmt222) ($1); }
 	| equality_expression EQ_OP relational_expression
-	  { $$ = pt_fmt223_new ($1, $2, $3); }
+	  { new (fmt223) ($1, $2, $3); }
 	| equality_expression NE_OP relational_expression
-	  { $$ = pt_fmt224_new ($1, $2, $3); }
+	  { new (fmt224) ($1, $2, $3); }
 	;
 
 and_expression
 	: equality_expression
-	  { $$ = pt_fmt225_new ($1); }
+	  { new (fmt225) ($1); }
 	| and_expression '&' equality_expression
-	  { $$ = pt_fmt226_new ($1, $2, $3); }
+	  { new (fmt226) ($1, $2, $3); }
 	;
 
 exclusive_or_expression
 	: and_expression
-	  { $$ = pt_fmt227_new ($1); }
+	  { new (fmt227) ($1); }
 	| exclusive_or_expression '^' and_expression
-	  { $$ = pt_fmt228_new ($1, $2, $3); }
+	  { new (fmt228) ($1, $2, $3); }
 	;
 
 inclusive_or_expression
 	: exclusive_or_expression
-	  { $$ = pt_fmt229_new ($1); }
+	  { new (fmt229) ($1); }
 	| inclusive_or_expression '|' exclusive_or_expression
-	  { $$ = pt_fmt230_new ($1, $2, $3); }
+	  { new (fmt230) ($1, $2, $3); }
 	;
 
 logical_and_expression
 	: inclusive_or_expression
-	  { $$ = pt_fmt231_new ($1); }
+	  { new (fmt231) ($1); }
 	| logical_and_expression AND_OP inclusive_or_expression
-	  { $$ = pt_fmt232_new ($1, $2, $3); }
+	  { new (fmt232) ($1, $2, $3); }
 	;
 
 logical_or_expression
 	: logical_and_expression
-	  { $$ = pt_fmt233_new ($1); }
+	  { new (fmt233) ($1); }
 	| logical_or_expression OR_OP logical_and_expression
-	  { $$ = pt_fmt234_new ($1, $2, $3); }
+	  { new (fmt234) ($1, $2, $3); }
 	;
 
 conditional_expression
 	: logical_or_expression
-	  { $$ = pt_fmt235_new ($1); }
+	  { new (fmt235) ($1); }
 	| logical_or_expression '?' expression ':' conditional_expression
-	  { $$ = pt_fmt236_new ($1, $2, $3, $4, $5); }
+	  { new (fmt236) ($1, $2, $3, $4, $5); }
 	| logical_or_expression '?' ':' conditional_expression
-	  { $$ = pt_fmt237_new ($1, $2, $3, $4); }
+	  { new (fmt237) ($1, $2, $3, $4); }
 	;
 
 assignment_expression
 	: conditional_expression
-	  { $$ = pt_fmt238_new ($1); }
+	  { new (fmt238) ($1); }
 	| cast_expression assignment_operator assignment_expression
-	  { $$ = pt_fmt239_new ($1, $2, $3); }
+	  { new (fmt239) ($1, $2, $3); }
 	;
 
 assignment_operator
 	: '='
-	  { $$ = pt_fmt240_new ($1); }
+	  { new (fmt240) ($1); }
 	| MUL_ASSIGN
-	  { $$ = pt_fmt241_new ($1); }
+	  { new (fmt241) ($1); }
 	| DIV_ASSIGN
-	  { $$ = pt_fmt242_new ($1); }
+	  { new (fmt242) ($1); }
 	| MOD_ASSIGN
-	  { $$ = pt_fmt243_new ($1); }
+	  { new (fmt243) ($1); }
 	| ADD_ASSIGN
-	  { $$ = pt_fmt244_new ($1); }
+	  { new (fmt244) ($1); }
 	| SUB_ASSIGN
-	  { $$ = pt_fmt245_new ($1); }
+	  { new (fmt245) ($1); }
 	| LSH_ASSIGN
-	  { $$ = pt_fmt246_new ($1); }
+	  { new (fmt246) ($1); }
 	| RSH_ASSIGN
-	  { $$ = pt_fmt247_new ($1); }
+	  { new (fmt247) ($1); }
 	| AND_ASSIGN
-	  { $$ = pt_fmt248_new ($1); }
+	  { new (fmt248) ($1); }
 	| XOR_ASSIGN
-	  { $$ = pt_fmt249_new ($1); }
+	  { new (fmt249) ($1); }
 	| OR_ASSIGN
-	  { $$ = pt_fmt250_new ($1); }
+	  { new (fmt250) ($1); }
 	;
 
 expression
 	: assignment_expression
-	  { $$ = pt_fmt251_new ($1); }
+	  { new (fmt251) ($1); }
 	| expression ',' assignment_expression
-	  { $$ = pt_fmt252_new ($1, $2, $3); }
+	  { new (fmt252) ($1, $2, $3); }
 	;
 
 constant_expression
 	: conditional_expression
-	  { $$ = pt_fmt253_new ($1); }
+	  { new (fmt253) ($1); }
 	;
 
 expression_opt
 	: expression
-	  { $$ = pt_fmt254_new ($1); }
+	  { new (fmt254) ($1); }
 	;
