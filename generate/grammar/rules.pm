@@ -5,18 +5,16 @@ sub locate_args {
    my ($rules) = @_;
 
    my %inv;
-   for (@$rules) {
-      push @{ $inv{$_->{node}} }, $_->{rhs};
-   }
+   push @{ $inv{$_->{node}} }, $_->{rhs}
+      for @$rules;
 
    my %nodes;
    while (my ($node, $rule) = each %inv) {
       for my $rhs (@$rule) {
          my $i = 1;
          for my $arg (@$rhs) {
-            if ($nodes{$node}{$arg->{name}} < $i) {
-               $nodes{$node}{$arg->{name}} = $i
-            }
+            $nodes{$node}{$arg->{name}} = $i
+               if $nodes{$node}{$arg->{name}} < $i;
             ++$i;
          }
       }
@@ -37,21 +35,18 @@ sub assemble {
       my $node = $rule->{node};
       my $idx  = $nodes->{$node}{$arg};
 
-      for ($i + 1 .. $idx - 1) {
-         push @args, undef;
-      }
+      push @args, undef
+         for $i + 1 .. $idx - 1;
 
       push @args, $arg;
    }
-   for (@args + 1 .. keys %{ $nodes->{$rule->{node}} }) {
-      push @args, undef;
-   }
+   push @args, undef
+      for @args + 1 .. keys %{ $nodes->{$rule->{node}} };
 
    my $count = 1;
    $code .= join ", ", map { $_ ? '$' . $count++ : "NULL" } @args;
-   $code .= "); }";
 
-   $rhs . $code
+   $rhs . $code . "); }"
 }
 
 sub gen_rules {
