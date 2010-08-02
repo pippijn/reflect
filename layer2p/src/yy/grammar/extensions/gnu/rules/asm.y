@@ -2,57 +2,57 @@
 %%
 
 statement
-	: asm_statement
-	  { new (fmt350) ($1); }
+	: n1:asm_statement
+	  { fmt350 }
 	;
 
 asm_statement
-	: ASM '(' string_literal_list ')' ';'
-	  { new (fmt351) ($1, $2, $3, $4, $5); }
-	| ASM '(' string_literal_list ':' asm_argument_list_opt ')' ';'
-	  { new (fmt352) ($1, $2, $3, $4, $5, $6, $7); }
-	| ASM '(' string_literal_list ':' asm_argument_list_opt ':' asm_argument_list_opt ')' ';'
-	  { new (fmt353) ($1, $2, $3, $4, $5, $6, $7, $8, $9); }
-	| ASM '(' string_literal_list ':' asm_argument_list_opt ':' asm_argument_list_opt ':' asm_clobbered_list ')' ';'
-	  { new (fmt354) ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11); }
-	| ASM type_qualifier '(' string_literal_list ')' ';'
-	  { new (fmt355) ($1, $2, $3, $4, $5, $6); }
-	| ASM type_qualifier '(' string_literal_list ':' asm_argument_list_opt ')' ';'
-	  { new (fmt356) ($1, $2, $3, $4, $5, $6, $7, $8); }
-	| ASM type_qualifier '(' string_literal_list ':' asm_argument_list_opt ':' asm_argument_list_opt ')' ';'
-	  { new (fmt357) ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10); }
-	| ASM type_qualifier '(' string_literal_list ':' asm_argument_list_opt ':' asm_argument_list_opt ':' asm_clobbered_list ')' ';'
-	  { new (fmt358) ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12); }
+	: n1:ASM n2:'(' n3:string_literal_list n4:')' n5:';'
+	  { fmt351 }
+	| n1:ASM n2:'(' n3:string_literal_list n4:':' n5:asm_argument_list_opt n6:')' n7:';'
+	  { fmt352 }
+	| n1:ASM n2:'(' n3:string_literal_list n4:':' n5:asm_argument_list_opt n6:':' n7:asm_argument_list_opt n8:')' n9:';'
+	  { fmt353 }
+	| n1:ASM n2:'(' n3:string_literal_list n4:':' n5:asm_argument_list_opt n6:':' n7:asm_argument_list_opt n8:':' n9:asm_clobbered_list n10:')' n11:';'
+	  { fmt354 }
+	| n1:ASM n2:type_qualifier n3:'(' n4:string_literal_list n5:')' n6:';'
+	  { fmt355 }
+	| n1:ASM n2:type_qualifier n3:'(' n4:string_literal_list n5:':' n6:asm_argument_list_opt n7:')' n8:';'
+	  { fmt356 }
+	| n1:ASM n2:type_qualifier n3:'(' n4:string_literal_list n5:':' n6:asm_argument_list_opt n7:':' n8:asm_argument_list_opt n9:')' n10:';'
+	  { fmt357 }
+	| n1:ASM n2:type_qualifier n3:'(' n4:string_literal_list n5:':' n6:asm_argument_list_opt n7:':' n8:asm_argument_list_opt n9:':' n10:asm_clobbered_list n11:')' n12:';'
+	  { fmt358 }
 	;
 
 asm_opt
-	: empty
-	  { new (fmt359) ($1); }
-	| asm
-	  { new (fmt360) ($1); }
+	: n1:empty
+	  { fmt359 }
+	| n1:asm
+	  { fmt360 }
 	;
 asm
-	: ASM '(' string_literal_list ')'
-	  { new (fmt361) ($1, $2, $3, $4); }
+	: n1:ASM n2:'(' n3:string_literal_list n4:')'
+	  { fmt361 }
 	;
 
 asm_argument_list_opt
-	: asm_argument_list
-	  { new (fmt362) ($1); }
+	: n1:asm_argument_list
+	  { fmt362 }
 	;
 asm_argument_list
-	: asm_argument
-	  { new (fmt363) ($1); }
-	| asm_argument_list ',' asm_argument
-	  { new (fmt364) ($1, $2, $3); }
+	: n1:asm_argument
+	  { fmt363 }
+	| n1:asm_argument_list n2:',' n3:asm_argument
+	  { fmt364 }
 	;
 asm_argument
-	: string_literal_list '(' assignment_expression ')'
-	  { new (fmt365) ($1, $2, $3, $4); }
+	: n1:string_literal_list n2:'(' n3:assignment_expression n4:')'
+	  { fmt365 }
 	;
 asm_clobbered_list
-	: string_literal_list
-	  { new (fmt366) ($1); }
-	| asm_clobbered_list ',' string_literal_list
-	  { new (fmt367) ($1, $2, $3); }
+	: n1:string_literal_list
+	  { fmt366 }
+	| n1:asm_clobbered_list n2:',' n3:string_literal_list
+	  { fmt367 }
 	;

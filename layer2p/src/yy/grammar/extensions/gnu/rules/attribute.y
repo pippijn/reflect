@@ -2,40 +2,40 @@
 %%
 
 attributes_opt
-	: empty
-	  { new (fmt368) ($1); }
-	| attributes
-	  { new (fmt369) ($1); }
+	: n1:empty
+	  { fmt368 }
+	| n1:attributes
+	  { fmt369 }
 	;
 
 attributes
-	: attribute
-	  { new (fmt370) ($1); }
-	| attributes attribute
-	  { new (fmt371) ($1, $2); }
+	: n1:attribute
+	  { fmt370 }
+	| n1:attributes n2:attribute
+	  { fmt371 }
 	;
 
 attribute
-	: ATTRIBUTE '(' '(' attribute_list ')' ')'
-	  { new (fmt372) ($1, $2, $3, $4, $5, $6); }
+	: n1:ATTRIBUTE n2:'(' n3:'(' n4:attribute_list n5:')' n6:')'
+	  { fmt372 }
 	;
 
 attribute_list
-	: attrib
-	  { new (fmt373) ($1); }
-	| attribute_list ',' attrib
-	  { new (fmt374) ($1, $2, $3); }
+	: n1:attrib
+	  { fmt373 }
+	| n1:attribute_list n2:',' n3:attrib
+	  { fmt374 }
 	;
 
 attrib
-	: empty
-	  { new (fmt375) ($1); }
-	| any_word
-	  { new (fmt376) ($1); }
-	| any_word '(' IDENTIFIER ')'
-	  { new (fmt377) ($1, $2, $3, $4); }
-	| any_word '(' IDENTIFIER ',' nonnull_expression_list ')'
-	  { new (fmt378) ($1, $2, $3, $4, $5, $6); }
-	| any_word '(' nonnull_expression_list ')'
-	  { new (fmt379) ($1, $2, $3, $4); }
+	: n1:empty
+	  { fmt375 }
+	| n1:any_word
+	  { fmt376 }
+	| n1:any_word n2:'(' n3:IDENTIFIER n4:')'
+	  { fmt377 }
+	| n1:any_word n2:'(' n3:IDENTIFIER n4:',' n5:nonnull_expression_list n6:')'
+	  { fmt378 }
+	| n1:any_word n2:'(' n3:nonnull_expression_list n4:')'
+	  { fmt379 }
 	;

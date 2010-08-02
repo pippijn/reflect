@@ -2,11 +2,11 @@
 %%
 
 unary_expression
-	: VA_ARG '(' assignment_expression ',' type_name ')'
-	  { new (fmt393) ($1, $2, $3, $4, $5, $6); }
+	: n1:VA_ARG n2:'(' n3:assignment_expression n4:',' n5:type_name n6:')'
+	  { fmt393 }
 	;
 
 basic_type_name
-	: VA_LIST
-	  { new (fmt394) ($1); }
+	: n1:VA_LIST
+	  { fmt394 }
 	;

@@ -2,8 +2,8 @@
 %%
 
 unary_expression
-	: ALIGNOF unary_expression
-	  { new (fmt348) ($1, $2); }
-	| ALIGNOF '(' type_name ')'
-	  { new (fmt349) ($1, $2, $3, $4); }
+	: n1:ALIGNOF n2:unary_expression
+	  { fmt348 }
+	| n1:ALIGNOF n2:'(' n3:type_name n4:')'
+	  { fmt349 }
 	;

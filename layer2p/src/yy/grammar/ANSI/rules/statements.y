@@ -2,86 +2,86 @@
 %%
 
 statement
-	: labeled_statement
-	  { new (fmt282) ($1); }
-	| compound_statement
-	  { new (fmt283) ($1); }
-	| expression_statement
-	  { new (fmt284) ($1); }
-	| selection_statement
-	  { new (fmt285) ($1); }
-	| iteration_statement
-	  { new (fmt286) ($1); }
-	| jump_statement
-	  { new (fmt287) ($1); }
+	: n1:labeled_statement
+	  { fmt282 }
+	| n1:compound_statement
+	  { fmt283 }
+	| n1:expression_statement
+	  { fmt284 }
+	| n1:selection_statement
+	  { fmt285 }
+	| n1:iteration_statement
+	  { fmt286 }
+	| n1:jump_statement
+	  { fmt287 }
 	;
 
 labeled_statement
-	: identifier_or_typedef_name ':'
-	  { new (label_statement) ($1, $2); }
-	| CASE constant_expression ':'
-	  { new (case_label_statement) ($1, $2, $3); }
-	| DEFAULT ':'
-	  { new (default_label_statement) ($1, $2); }
+	: n1:identifier_or_typedef_name n2:':'
+	  { label_statement }
+	| n1:CASE n2:constant_expression n3:':'
+	  { case_label_statement }
+	| n1:DEFAULT n2:':'
+	  { default_label_statement }
 	;
 
 compound_statement
-	: '{' '}'
-	  { new (fmt292) ($1, $2); }
-	| '{' declaration_list '}'
-	  { new (fmt293) ($1, $2, $3); }
-	| '{' statement_list '}'
-	  { new (fmt294) ($1, $2, $3); }
-	| '{' declaration_list statement_list '}'
-	  { new (fmt295) ($1, $2, $3, $4); }
+	: n1:'{' n2:'}'
+	  { fmt292 }
+	| n1:'{' n2:declaration_list n3:'}'
+	  { fmt293 }
+	| n1:'{' n2:statement_list n3:'}'
+	  { fmt294 }
+	| n1:'{' n2:declaration_list n3:statement_list n4:'}'
+	  { fmt295 }
 	;
 
 
 
 declaration_list
-	: declaration
-	  { new (fmt296) ($1); }
-	| declaration_list declaration
-	  { new (fmt297) ($1, $2); }
+	: n1:declaration
+	  { fmt296 }
+	| n1:declaration_list n2:declaration
+	  { fmt297 }
 	;
 
 statement_list
-	: statement
-	  { new (fmt298) ($1); }
-	| statement_list statement
-	  { new (fmt299) ($1, $2); }
+	: n1:statement
+	  { fmt298 }
+	| n1:statement_list n2:statement
+	  { fmt299 }
 	;
 
 expression_statement
-	: expression_opt ';'
-	  { new (fmt300) ($1, $2); }
+	: n1:expression_opt n2:';'
+	  { fmt300 }
 	;
 
 selection_statement
-	: IF '(' expression ')' statement
-	  { new (fmt301) ($1, $2, $3, $4, $5); }
-	| IF '(' expression ')' statement ELSE statement
-	  { new (fmt302) ($1, $2, $3, $4, $5, $6, $7); }
-	| SWITCH '(' expression ')' statement
-	  { new (fmt303) ($1, $2, $3, $4, $5); }
+	: n1:IF n2:'(' n3:expression n4:')' n5:statement
+	  { fmt301 }
+	| n1:IF n2:'(' n3:expression n4:')' n5:statement n6:ELSE n7:statement
+	  { fmt302 }
+	| n1:SWITCH n2:'(' n3:expression n4:')' n5:statement
+	  { fmt303 }
 	;
 
 iteration_statement
-	: WHILE '(' expression ')' statement
-	  { new (fmt304) ($1, $2, $3, $4, $5); }
-	| DO statement WHILE '(' expression ')' ';'
-	  { new (fmt305) ($1, $2, $3, $4, $5, $6, $7); }
-	| FOR '(' expression_opt ';' expression_opt ';' expression_opt ')' statement
-	  { new (fmt306) ($1, $2, $3, $4, $5, $6, $7, $8, $9); }
+	: n1:WHILE n2:'(' n3:expression n4:')' n5:statement
+	  { fmt304 }
+	| n1:DO n2:statement n3:WHILE n4:'(' n5:expression n6:')' n7:';'
+	  { fmt305 }
+	| n1:FOR n2:'(' n3:expression_opt n4:';' n5:expression_opt n6:';' n7:expression_opt n8:')' n9:statement
+	  { fmt306 }
 	;
 
 jump_statement
-	: GOTO identifier_or_typedef_name ';'
-	  { new (fmt307) ($1, $2, $3); }
-	| CONTINUE ';'
-	  { new (fmt308) ($1, $2); }
-	| BREAK ';'
-	  { new (fmt309) ($1, $2); }
-	| RETURN expression_opt ';'
-	  { new (fmt310) ($1, $2, $3); }
+	: n1:GOTO n2:identifier_or_typedef_name n3:';'
+	  { fmt307 }
+	| n1:CONTINUE n2:';'
+	  { fmt308 }
+	| n1:BREAK n2:';'
+	  { fmt309 }
+	| n1:RETURN n2:expression_opt n3:';'
+	  { fmt310 }
 	;

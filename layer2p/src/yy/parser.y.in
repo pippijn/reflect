@@ -2,6 +2,7 @@
 // vim:noexpandtab
 ##include "yy/parse_interf.h"
 ##define scanner parse_context_scanner (context)
+#define new(rule) $$ = pt_##rule##_new
 %}
 
 %define api.pure
@@ -19,10 +20,17 @@
 
 #include "gen/tokens.y"
 %%
-#include "gen/rules.y"
+#include "gen/rules-pp.y"
 
 empty
 	: /* empty */
-	  { $$ = pt_token_new (&@$, "<empty>", 7, EOF); }
+	  { new (token) (&@$, "<empty>", 7, EOF); }
+	;
+
+translation_unit
+	: external_definition
+	  { new (fmt159) ($1); parse_context_unit_set (context, $$); }
+	| translation_unit external_definition
+	  { new (fmt160) ($1, $2); parse_context_unit_set (context, $$); }
 	;
 %%

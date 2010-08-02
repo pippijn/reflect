@@ -1,49 +1,42 @@
 %%
 %%
 
-translation_unit
-	: external_definition
-	  { new (fmt159) ($1); parse_context_unit_set (context, $$); }
-	| translation_unit external_definition
-	  { new (fmt160) ($1, $2); parse_context_unit_set (context, $$); }
-	;
-
 external_definition
-	: declaration
-	  { new (fmt161) ($1); }
-	| function_definition
-	  { new (fmt162) ($1); }
-	| empty ';'
-	  { new (fmt163) ($1, $2); }
+	: n1:declaration
+	  { fmt161 }
+	| n1:function_definition
+	  { fmt162 }
+	| n1:empty n2:';'
+	  { fmt163 }
 	;
 
 function_definition
-	: identifier_declarator compound_statement
-	  { new (fmt164) ($1, $2); }
-	| declaration_qualifier_list identifier_declarator compound_statement type_qualifier_list identifier_declarator compound_statement
-	  { new (fmt165) ($1, $2, $3, $4, $5, $6); }
-	| old_function_declarator compound_statement
-	  { new (fmt166) ($1, $2); }
-	| declaration_specifier old_function_declarator compound_statement
-	  { new (fmt167) ($1, $2, $3); }
-	| type_specifier old_function_declarator compound_statement
-	  { new (fmt168) ($1, $2, $3); }
-	| declaration_qualifier_list old_function_declarator compound_statement type_qualifier_list old_function_declarator compound_statement
-	  { new (fmt169) ($1, $2, $3, $4, $5, $6); }
-	| old_function_declarator old_function_declaration_list compound_statement
-	  { new (fmt170) ($1, $2, $3); }
-	| declaration_specifier old_function_declarator old_function_declaration_list compound_statement
-	  { new (fmt171) ($1, $2, $3, $4); }
-	| type_specifier old_function_declarator old_function_declaration_list compound_statement
-	  { new (fmt172) ($1, $2, $3, $4); }
-	| declaration_qualifier_list old_function_declarator old_function_declaration_list compound_statement
-	  { new (fmt173) ($1, $2, $3, $4); }
-	| type_qualifier_list old_function_declarator old_function_declaration_list compound_statement
-	  { new (fmt174) ($1, $2, $3, $4); }
+	: n1:identifier_declarator n2:compound_statement
+	  { fmt164 }
+	| n1:declaration_qualifier_list n2:identifier_declarator n3:compound_statement n4:type_qualifier_list n5:identifier_declarator n6:compound_statement
+	  { fmt165 }
+	| n1:old_function_declarator n2:compound_statement
+	  { fmt166 }
+	| n1:declaration_specifier n2:old_function_declarator n3:compound_statement
+	  { fmt167 }
+	| n1:type_specifier n2:old_function_declarator n3:compound_statement
+	  { fmt168 }
+	| n1:declaration_qualifier_list n2:old_function_declarator n3:compound_statement n4:type_qualifier_list n5:old_function_declarator n6:compound_statement
+	  { fmt169 }
+	| n1:old_function_declarator n2:old_function_declaration_list n3:compound_statement
+	  { fmt170 }
+	| n1:declaration_specifier n2:old_function_declarator n3:old_function_declaration_list n4:compound_statement
+	  { fmt171 }
+	| n1:type_specifier n2:old_function_declarator n3:old_function_declaration_list n4:compound_statement
+	  { fmt172 }
+	| n1:declaration_qualifier_list n2:old_function_declarator n3:old_function_declaration_list n4:compound_statement
+	  { fmt173 }
+	| n1:type_qualifier_list n2:old_function_declarator n3:old_function_declaration_list n4:compound_statement
+	  { fmt174 }
 	;
 
 
 old_function_declaration_list
-	: declaration_list
-	  { new (fmt175) ($1); }
+	: n1:declaration_list
+	  { fmt175 }
 	;

@@ -2,26 +2,26 @@
 %%
 
 struct_declaration
-	: gcc_extension struct_declaration
-	  { new (fmt382) ($1, $2); }
+	: n1:gcc_extension n2:struct_declaration
+	  { fmt382 }
 	;
 
 unary_expression
-	: gcc_extension cast_expression
-	  { new (fmt383) ($1, $2); }
+	: n1:gcc_extension n2:cast_expression
+	  { fmt383 }
 	;
 
 declarator
-	: gcc_extension declarator
-	  { new (fmt384) ($1, $2); }
+	: n1:gcc_extension n2:declarator
+	  { fmt384 }
 	;
 
 external_definition
-	: gcc_extension external_definition
-	  { new (fmt385) ($1, $2); }
+	: n1:gcc_extension n2:external_definition
+	  { fmt385 }
 	;
 
 gcc_extension
-	: EXTENSION
-	  { new (fmt386) ($1); }
+	: n1:EXTENSION
+	  { fmt386 }
 	;

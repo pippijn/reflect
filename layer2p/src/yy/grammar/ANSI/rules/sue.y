@@ -2,104 +2,104 @@
 %%
 
 struct_or_union_specifier
-	: struct_or_union '{' struct_declaration_list '}'
-	  { new (fmt312) ($1, $2, $3, $4); }
-	| struct_or_union identifier_or_typedef_name '{' struct_declaration_list '}'
-	  { new (fmt313) ($1, $2, $3, $4, $5); }
-	| struct_or_union identifier_or_typedef_name
-	  { new (fmt314) ($1, $2); }
-	| struct_or_union '{' '}'
-	  { new (fmt315) ($1, $2, $3); }
-	| struct_or_union identifier_or_typedef_name '{' '}'
-	  { new (fmt316) ($1, $2, $3, $4); }
+	: n1:struct_or_union n2:'{' n3:struct_declaration_list n4:'}'
+	  { fmt312 }
+	| n1:struct_or_union n2:identifier_or_typedef_name n3:'{' n4:struct_declaration_list n5:'}'
+	  { fmt313 }
+	| n1:struct_or_union n2:identifier_or_typedef_name
+	  { fmt314 }
+	| n1:struct_or_union n2:'{' n3:'}'
+	  { fmt315 }
+	| n1:struct_or_union n2:identifier_or_typedef_name n3:'{' n4:'}'
+	  { fmt316 }
 	;
 
 struct_or_union
-	: STRUCT
-	  { new (fmt317) ($1); }
-	| UNION
-	  { new (fmt318) ($1); }
+	: n1:STRUCT
+	  { fmt317 }
+	| n1:UNION
+	  { fmt318 }
 	;
 
 struct_declaration_list
-	: attributes_opt struct_declaration
-	  { new (fmt319) ($1, $2); }
-	| struct_declaration_list attributes_opt struct_declaration
-	  { new (fmt320) ($1, $2, $3); }
+	: n1:attributes_opt n2:struct_declaration
+	  { fmt319 }
+	| n1:struct_declaration_list n2:attributes_opt n3:struct_declaration
+	  { fmt320 }
 	;
 
 struct_declaration
-	: struct_declaring_list ';'
-	  { new (fmt321) ($1, $2); }
-	| struct_default_declaring_list ';'
-	  { new (fmt322) ($1, $2); }
+	: n1:struct_declaring_list n2:';'
+	  { fmt321 }
+	| n1:struct_default_declaring_list n2:';'
+	  { fmt322 }
 	;
 
 struct_default_declaring_list
-	: type_qualifier_list struct_identifier_declarator
-	  { new (fmt323) ($1, $2); }
-	| struct_default_declaring_list ',' struct_identifier_declarator
-	  { new (fmt324) ($1, $2, $3); }
+	: n1:type_qualifier_list n2:struct_identifier_declarator
+	  { fmt323 }
+	| n1:struct_default_declaring_list n2:',' n3:struct_identifier_declarator
+	  { fmt324 }
 	;
 
 struct_declaring_list
-	: type_specifier struct_declarator
-	  { new (fmt325) ($1, $2); }
-	| type_specifier_nosue attributes struct_declarator
-	  { new (fmt326) ($1, $2, $3); }
-	| struct_declaring_list ',' struct_declarator
-	  { new (fmt327) ($1, $2, $3); }
+	: n1:type_specifier n2:struct_declarator
+	  { fmt325 }
+	| n1:type_specifier_nosue n2:attributes n3:struct_declarator
+	  { fmt326 }
+	| n1:struct_declaring_list n2:',' n3:struct_declarator
+	  { fmt327 }
 	;
 
 
 struct_declarator
-	: declarator bit_field_size_opt attributes_opt
-	  { new (fmt328) ($1, $2, $3); }
+	: n1:declarator n2:bit_field_size_opt n3:attributes_opt
+	  { fmt328 }
 	;
 
 struct_identifier_declarator
-	: identifier_declarator bit_field_size_opt attributes_opt
-	  { new (fmt329) ($1, $2, $3); }
+	: n1:identifier_declarator n2:bit_field_size_opt n3:attributes_opt
+	  { fmt329 }
 	;
 
 bit_field_size_opt
-	: empty
-	  { new (fmt330) ($1); }
-	| bit_field_size
-	  { new (fmt331) ($1); }
+	: n1:empty
+	  { fmt330 }
+	| n1:bit_field_size
+	  { fmt331 }
 	;
 
 bit_field_size
-	: ':' constant_expression
-	  { new (fmt332) ($1, $2); }
+	: n1:':' n2:constant_expression
+	  { fmt332 }
 	;
 
 enum_specifier
-	: ENUM '{' enumerator_list comma_opt '}'
-	  { new (fmt333) ($1, $2, $3, $4, $5); }
-	| ENUM identifier_or_typedef_name '{' enumerator_list comma_opt '}'
-	  { new (fmt334) ($1, $2, $3, $4, $5, $6); }
-	| ENUM identifier_or_typedef_name
-	  { new (fmt335) ($1, $2); }
+	: n1:ENUM n2:'{' n3:enumerator_list n4:comma_opt n5:'}'
+	  { fmt333 }
+	| n1:ENUM n2:identifier_or_typedef_name n3:'{' n4:enumerator_list n5:comma_opt n6:'}'
+	  { fmt334 }
+	| n1:ENUM n2:identifier_or_typedef_name
+	  { fmt335 }
 	;
 
 enumerator_list
-	: identifier_or_typedef_name enumerator_value_opt
-	  { new (fmt336) ($1, $2); }
-	| enumerator_list ',' identifier_or_typedef_name enumerator_value_opt
-	  { new (fmt337) ($1, $2, $3, $4); }
+	: n1:identifier_or_typedef_name n2:enumerator_value_opt
+	  { fmt336 }
+	| n1:enumerator_list n2:',' n3:identifier_or_typedef_name n4:enumerator_value_opt
+	  { fmt337 }
 	;
 
 enumerator_value_opt
-	: empty
-	  { new (fmt338) ($1); }
-	| '=' constant_expression
-	  { new (fmt339) ($1, $2); }
+	: n1:empty
+	  { fmt338 }
+	| n1:'=' n2:constant_expression
+	  { fmt339 }
 	;
 
 comma_opt
-	: empty
-	  { new (fmt340) ($1); }
-	| ','
-	  { new (fmt341) ($1); }
+	: n1:empty
+	  { fmt340 }
+	| n1:','
+	  { fmt341 }
 	;

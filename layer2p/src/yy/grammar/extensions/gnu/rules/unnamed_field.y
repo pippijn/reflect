@@ -2,6 +2,6 @@
 %%
 
 struct_declaring_list
-	: struct_or_union '{' struct_declaration_list '}'
-	  { new (fmt392) ($1, $2, $3, $4); }
+	: n1:struct_or_union n2:'{' n3:struct_declaration_list n4:'}'
+	  { fmt392 }
 	;

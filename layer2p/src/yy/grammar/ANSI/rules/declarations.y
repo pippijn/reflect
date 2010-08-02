@@ -2,446 +2,446 @@
 %%
 
 declaration
-	: declaring_list ';'
-	  { new (fmt1) ($1, $2); }
-	| default_declaring_list ';'
-	  { new (fmt2) ($1, $2); }
-	| sue_declaration_specifier ';'
-	  { new (fmt3) ($1, $2); }
-	| sue_type_specifier ';'
-	  { new (fmt4) ($1, $2); }
-	| declaration_specifier identifier_declarator compound_statement
-	  { new (fmt5) ($1, $2, $3); }
-	| declaration_specifier_nosue attributes identifier_declarator compound_statement
-	  { new (fmt6) ($1, $2, $3, $4); }
-	| type_specifier identifier_declarator compound_statement
-	  { new (fmt7) ($1, $2, $3); }
-	| type_specifier_nosue attributes identifier_declarator compound_statement
-	  { new (fmt8) ($1, $2, $3, $4); }
+	: n1:declaring_list n2:';'
+	  { fmt1 }
+	| n1:default_declaring_list n2:';'
+	  { fmt2 }
+	| n1:sue_declaration_specifier n2:';'
+	  { fmt3 }
+	| n1:sue_type_specifier n2:';'
+	  { fmt4 }
+	| n1:declaration_specifier n2:identifier_declarator n3:compound_statement
+	  { fmt5 }
+	| n1:declaration_specifier_nosue n2:attributes n3:identifier_declarator n4:compound_statement
+	  { fmt6 }
+	| n1:type_specifier n2:identifier_declarator n3:compound_statement
+	  { fmt7 }
+	| n1:type_specifier_nosue n2:attributes n3:identifier_declarator n4:compound_statement
+	  { fmt8 }
 	;
 
 
 declaring_list
-	: declaration_specifier declarator asm_opt attributes_opt initialiser_opt
-	  { new (fmt9) ($1, $2, $3, $4, $5); }
-	| declaration_specifier_nosue attributes declarator asm_opt attributes_opt initialiser_opt
-	  { new (fmt10) ($1, $2, $3, $4, $5, $6); }
-	| type_specifier declarator asm_opt attributes_opt initialiser_opt
-	  { new (fmt11) ($1, $2, $3, $4, $5); }
-	| type_specifier_nosue attributes declarator asm_opt attributes_opt initialiser_opt
-	  { new (fmt12) ($1, $2, $3, $4, $5, $6); }
-	| declaring_list ',' declarator asm_opt attributes_opt initialiser_opt
-	  { new (fmt13) ($1, $2, $3, $4, $5, $6); }
+	: n1:declaration_specifier n2:declarator n3:asm_opt n4:attributes_opt n5:initialiser_opt
+	  { fmt9 }
+	| n1:declaration_specifier_nosue n2:attributes n3:declarator n4:asm_opt n5:attributes_opt n6:initialiser_opt
+	  { fmt10 }
+	| n1:type_specifier n2:declarator n3:asm_opt n4:attributes_opt n5:initialiser_opt
+	  { fmt11 }
+	| n1:type_specifier_nosue n2:attributes n3:declarator n4:asm_opt n5:attributes_opt n6:initialiser_opt
+	  { fmt12 }
+	| n1:declaring_list n2:',' n3:declarator n4:asm_opt n5:attributes_opt n6:initialiser_opt
+	  { fmt13 }
 	;
 
 default_declaring_list
-	: declaration_qualifier_list identifier_declarator attributes_opt initialiser_opt
-	  { new (fmt14) ($1, $2, $3, $4); }
-	| type_qualifier_list identifier_declarator attributes_opt initialiser_opt
-	  { new (fmt15) ($1, $2, $3, $4); }
-	| default_declaring_list ',' identifier_declarator attributes_opt initialiser_opt
-	  { new (fmt16) ($1, $2, $3, $4, $5); }
+	: n1:declaration_qualifier_list n2:identifier_declarator n3:attributes_opt n4:initialiser_opt
+	  { fmt14 }
+	| n1:type_qualifier_list n2:identifier_declarator n3:attributes_opt n4:initialiser_opt
+	  { fmt15 }
+	| n1:default_declaring_list n2:',' n3:identifier_declarator n4:attributes_opt n5:initialiser_opt
+	  { fmt16 }
 	;
 
 declaration_specifier
-	: declaration_specifier_nosue
-	  { new (fmt17) ($1); }
-	| sue_declaration_specifier
-	  { new (fmt18) ($1); }
+	: n1:declaration_specifier_nosue
+	  { fmt17 }
+	| n1:sue_declaration_specifier
+	  { fmt18 }
 	;
 
 declaration_specifier_nosue
-	: basic_declaration_specifier
-	  { new (fmt19) ($1); }
-	| typedef_declaration_specifier
-	  { new (fmt20) ($1); }
+	: n1:basic_declaration_specifier
+	  { fmt19 }
+	| n1:typedef_declaration_specifier
+	  { fmt20 }
 	;
 
 basic_declaration_specifier
-	: basic_type_specifier storage_class
-	  { new (fmt21) ($1, $2); }
-	| declaration_qualifier_list basic_type_name
-	  { new (fmt22) ($1, $2); }
-	| basic_declaration_specifier declaration_qualifier
-	  { new (fmt23) ($1, $2); }
-	| basic_declaration_specifier basic_type_name
-	  { new (fmt24) ($1, $2); }
+	: n1:basic_type_specifier n2:storage_class
+	  { fmt21 }
+	| n1:declaration_qualifier_list n2:basic_type_name
+	  { fmt22 }
+	| n1:basic_declaration_specifier n2:declaration_qualifier
+	  { fmt23 }
+	| n1:basic_declaration_specifier n2:basic_type_name
+	  { fmt24 }
 	;
 
 sue_declaration_specifier
-	: sue_type_specifier storage_class
-	  { new (fmt25) ($1, $2); }
-	| declaration_qualifier_list elaborated_type_name attributes_opt
-	  { new (fmt26) ($1, $2, $3); }
-	| sue_declaration_specifier declaration_qualifier
-	  { new (fmt27) ($1, $2); }
+	: n1:sue_type_specifier n2:storage_class
+	  { fmt25 }
+	| n1:declaration_qualifier_list n2:elaborated_type_name n3:attributes_opt
+	  { fmt26 }
+	| n1:sue_declaration_specifier n2:declaration_qualifier
+	  { fmt27 }
 	;
 
 typedef_declaration_specifier
-	: typedef_type_specifier storage_class
-	  { new (fmt28) ($1, $2); }
-	| declaration_qualifier_list TYPEDEF_NAME
-	  { new (fmt29) ($1, $2); }
-	| typedef_declaration_specifier declaration_qualifier
-	  { new (fmt30) ($1, $2); }
+	: n1:typedef_type_specifier n2:storage_class
+	  { fmt28 }
+	| n1:declaration_qualifier_list n2:TYPEDEF_NAME
+	  { fmt29 }
+	| n1:typedef_declaration_specifier n2:declaration_qualifier
+	  { fmt30 }
 	;
 
 declaration_qualifier_list
-	: storage_class attributes_opt
-	  { new (fmt31) ($1, $2); }
-	| type_qualifier_list attributes_opt storage_class attributes_opt
-	  { new (fmt32) ($1, $2, $3, $4); }
-	| declaration_qualifier_list declaration_qualifier
-	  { new (fmt33) ($1, $2); }
+	: n1:storage_class n2:attributes_opt
+	  { fmt31 }
+	| n1:type_qualifier_list n2:attributes_opt n3:storage_class n4:attributes_opt
+	  { fmt32 }
+	| n1:declaration_qualifier_list n2:declaration_qualifier
+	  { fmt33 }
 	;
 
 declaration_qualifier
-	: type_qualifier
-	  { new (fmt34) ($1); }
-	| storage_class
-	  { new (fmt35) ($1); }
+	: n1:type_qualifier
+	  { fmt34 }
+	| n1:storage_class
+	  { fmt35 }
 	;
 
 type_specifier
-	: type_specifier_nosue
-	  { new (fmt36) ($1); }
-	| sue_type_specifier
-	  { new (fmt37) ($1); }
+	: n1:type_specifier_nosue
+	  { fmt36 }
+	| n1:sue_type_specifier
+	  { fmt37 }
 	;
 
 type_specifier_nosue
-	: basic_type_specifier
-	  { new (fmt38) ($1); }
-	| typedef_type_specifier
-	  { new (fmt39) ($1); }
+	: n1:basic_type_specifier
+	  { fmt38 }
+	| n1:typedef_type_specifier
+	  { fmt39 }
 	;
 
 basic_type_specifier
-	: basic_type_name
-	  { new (fmt40) ($1); }
-	| type_qualifier_list basic_type_name
-	  { new (fmt41) ($1, $2); }
-	| basic_type_specifier type_qualifier
-	  { new (fmt42) ($1, $2); }
-	| basic_type_specifier basic_type_name
-	  { new (fmt43) ($1, $2); }
+	: n1:basic_type_name
+	  { fmt40 }
+	| n1:type_qualifier_list n2:basic_type_name
+	  { fmt41 }
+	| n1:basic_type_specifier n2:type_qualifier
+	  { fmt42 }
+	| n1:basic_type_specifier n2:basic_type_name
+	  { fmt43 }
 	;
 
 sue_type_specifier
-	: elaborated_type_name
-	  { new (fmt44) ($1); }
-	| type_qualifier_list elaborated_type_name
-	  { new (fmt45) ($1, $2); }
-	| sue_type_specifier type_qualifier
-	  { new (fmt46) ($1, $2); }
+	: n1:elaborated_type_name
+	  { fmt44 }
+	| n1:type_qualifier_list n2:elaborated_type_name
+	  { fmt45 }
+	| n1:sue_type_specifier n2:type_qualifier
+	  { fmt46 }
 	;
 
 typedef_type_specifier
-	: TYPEDEF_NAME
-	  { new (fmt47) ($1); }
-	| type_qualifier_list TYPEDEF_NAME
-	  { new (fmt48) ($1, $2); }
-	| typedef_type_specifier type_qualifier
-	  { new (fmt49) ($1, $2); }
+	: n1:TYPEDEF_NAME
+	  { fmt47 }
+	| n1:type_qualifier_list n2:TYPEDEF_NAME
+	  { fmt48 }
+	| n1:typedef_type_specifier n2:type_qualifier
+	  { fmt49 }
 	;
 
 type_qualifier_list
-	: type_qualifier
-	  { new (fmt50) ($1); }
-	| type_qualifier_list type_qualifier
-	  { new (fmt51) ($1, $2); }
+	: n1:type_qualifier
+	  { fmt50 }
+	| n1:type_qualifier_list n2:type_qualifier
+	  { fmt51 }
 	;
 
 pointer_type_qualifier_list
-	: pointer_type_qualifier
-	  { new (fmt52) ($1); }
-	| pointer_type_qualifier_list pointer_type_qualifier
-	  { new (fmt53) ($1, $2); }
+	: n1:pointer_type_qualifier
+	  { fmt52 }
+	| n1:pointer_type_qualifier_list n2:pointer_type_qualifier
+	  { fmt53 }
 	;
 
 elaborated_type_name
-	: struct_or_union_specifier
-	  { new (fmt54) ($1); }
-	| enum_specifier
-	  { new (fmt55) ($1); }
+	: n1:struct_or_union_specifier
+	  { fmt54 }
+	| n1:enum_specifier
+	  { fmt55 }
 	;
 
 declarator
-	: paren_typedef_declarator
-	  { new (fmt56) ($1); }
-	| parameter_typedef_declarator
-	  { new (fmt57) ($1); }
-	| identifier_declarator
-	  { new (fmt58) ($1); }
-	| old_function_declarator
-	  { new (fmt59) ($1); }
+	: n1:paren_typedef_declarator
+	  { fmt56 }
+	| n1:parameter_typedef_declarator
+	  { fmt57 }
+	| n1:identifier_declarator
+	  { fmt58 }
+	| n1:old_function_declarator
+	  { fmt59 }
 	;
 
 paren_typedef_declarator
-	: paren_postfix_typedef_declarator
-	  { new (fmt60) ($1); }
-	| '*' attributes_opt paren_typedef_declarator
-	  { new (fmt61) ($1, $2, $3); }
-	| '*' attributes_opt '(' simple_paren_typedef_declarator ')'
-	  { new (fmt62) ($1, $2, $3, $4, $5); }
-	| '*' attributes_opt pointer_type_qualifier_list '(' simple_paren_typedef_declarator ')'
-	  { new (fmt63) ($1, $2, $3, $4, $5, $6); }
-	| '*' attributes_opt pointer_type_qualifier_list paren_typedef_declarator
-	  { new (fmt64) ($1, $2, $3, $4); }
+	: n1:paren_postfix_typedef_declarator
+	  { fmt60 }
+	| n1:'*' n2:attributes_opt n3:paren_typedef_declarator
+	  { fmt61 }
+	| n1:'*' n2:attributes_opt n3:'(' n4:simple_paren_typedef_declarator n5:')'
+	  { fmt62 }
+	| n1:'*' n2:attributes_opt n3:pointer_type_qualifier_list n4:'(' n5:simple_paren_typedef_declarator n6:')'
+	  { fmt63 }
+	| n1:'*' n2:attributes_opt n3:pointer_type_qualifier_list n4:paren_typedef_declarator
+	  { fmt64 }
 	;
 
 paren_postfix_typedef_declarator
-	: '(' paren_typedef_declarator ')'
-	  { new (fmt65) ($1, $2, $3); }
-	| '(' simple_paren_typedef_declarator postfixing_abstract_declarator ')'
-	  { new (fmt66) ($1, $2, $3, $4); }
-	| '(' paren_typedef_declarator ')' postfixing_abstract_declarator
-	  { new (fmt67) ($1, $2, $3, $4); }
+	: n1:'(' n2:paren_typedef_declarator n3:')'
+	  { fmt65 }
+	| n1:'(' n2:simple_paren_typedef_declarator n3:postfixing_abstract_declarator n4:')'
+	  { fmt66 }
+	| n1:'(' n2:paren_typedef_declarator n3:')' n4:postfixing_abstract_declarator
+	  { fmt67 }
 	;
 
 simple_paren_typedef_declarator
-	: TYPEDEF_NAME
-	  { new (fmt68) ($1); }
-	| '(' simple_paren_typedef_declarator ')'
-	  { new (fmt69) ($1, $2, $3); }
+	: n1:TYPEDEF_NAME
+	  { fmt68 }
+	| n1:'(' n2:simple_paren_typedef_declarator n3:')'
+	  { fmt69 }
 	;
 
 parameter_typedef_declarator
-	: TYPEDEF_NAME
-	  { new (fmt70) ($1); }
-	| TYPEDEF_NAME postfixing_abstract_declarator
-	  { new (fmt71) ($1, $2); }
-	| clean_typedef_declarator
-	  { new (fmt72) ($1); }
+	: n1:TYPEDEF_NAME
+	  { fmt70 }
+	| n1:TYPEDEF_NAME n2:postfixing_abstract_declarator
+	  { fmt71 }
+	| n1:clean_typedef_declarator
+	  { fmt72 }
 	;
 
 clean_typedef_declarator
-	: clean_postfix_typedef_declarator
-	  { new (fmt73) ($1); }
-	| '*' attributes_opt parameter_typedef_declarator
-	  { new (fmt74) ($1, $2, $3); }
-	| '*' attributes_opt pointer_type_qualifier_list parameter_typedef_declarator
-	  { new (fmt75) ($1, $2, $3, $4); }
+	: n1:clean_postfix_typedef_declarator
+	  { fmt73 }
+	| n1:'*' n2:attributes_opt n3:parameter_typedef_declarator
+	  { fmt74 }
+	| n1:'*' n2:attributes_opt n3:pointer_type_qualifier_list n4:parameter_typedef_declarator
+	  { fmt75 }
 	;
 
 clean_postfix_typedef_declarator
-	: '(' clean_typedef_declarator ')'
-	  { new (fmt76) ($1, $2, $3); }
-	| '(' clean_typedef_declarator ')' postfixing_abstract_declarator
-	  { new (fmt77) ($1, $2, $3, $4); }
+	: n1:'(' n2:clean_typedef_declarator n3:')'
+	  { fmt76 }
+	| n1:'(' n2:clean_typedef_declarator n3:')' n4:postfixing_abstract_declarator
+	  { fmt77 }
 	;
 
 abstract_declarator
-	: unary_abstract_declarator
-	  { new (fmt78) ($1); }
-	| postfix_abstract_declarator
-	  { new (fmt79) ($1); }
-	| postfixing_abstract_declarator
-	  { new (fmt80) ($1); }
+	: n1:unary_abstract_declarator
+	  { fmt78 }
+	| n1:postfix_abstract_declarator
+	  { fmt79 }
+	| n1:postfixing_abstract_declarator
+	  { fmt80 }
 	;
 
 unary_abstract_declarator
-	: '*' attributes_opt
-	  { new (pointer) ($1, $2, NULL, NULL); }
-	| '*' attributes_opt pointer_type_qualifier_list
-	  { new (pointer) ($1, $2, $3, NULL); }
-	| '*' attributes_opt abstract_declarator
-	  { new (pointer) ($1, $2, NULL, $3); }
-	| '*' attributes_opt pointer_type_qualifier_list abstract_declarator
-	  { new (pointer) ($1, $2, $3, $4); }
+	: n1:'*' n2:attributes_opt
+	  { pointer }
+	| n1:'*' n2:attributes_opt n3:pointer_type_qualifier_list
+	  { pointer }
+	| n1:'*' n2:attributes_opt n4:abstract_declarator
+	  { pointer }
+	| n1:'*' n2:attributes_opt n3:pointer_type_qualifier_list n4:abstract_declarator
+	  { pointer }
 	;
 
 postfix_abstract_declarator
-	: '(' unary_abstract_declarator ')'
-	  { new (fmt85) ($1, $2, $3); }
-	| '(' postfix_abstract_declarator ')'
-	  { new (fmt86) ($1, $2, $3); }
-	| '(' postfixing_abstract_declarator ')'
-	  { new (fmt87) ($1, $2, $3); }
-	| '(' unary_abstract_declarator ')' postfixing_abstract_declarator
-	  { new (fmt88) ($1, $2, $3, $4); }
+	: n1:'(' n2:unary_abstract_declarator n3:')'
+	  { fmt85 }
+	| n1:'(' n2:postfix_abstract_declarator n3:')'
+	  { fmt86 }
+	| n1:'(' n2:postfixing_abstract_declarator n3:')'
+	  { fmt87 }
+	| n1:'(' n2:unary_abstract_declarator n3:')' n4:postfixing_abstract_declarator
+	  { fmt88 }
 	;
 
 postfixing_abstract_declarator
-	: array_abstract_declarator
-	  { new (fmt89) ($1); }
-	| '(' ')'
-	  { new (fmt90) ($1, $2); }
-	| '(' parameter_type_list ')'
-	  { new (fmt91) ($1, $2, $3); }
+	: n1:array_abstract_declarator
+	  { fmt89 }
+	| n1:'(' n2:')'
+	  { fmt90 }
+	| n1:'(' n2:parameter_type_list n3:')'
+	  { fmt91 }
 	;
 
 identifier_declarator
-	: unary_identifier_declarator
-	  { new (fmt92) ($1); }
-	| paren_identifier_declarator
-	  { new (fmt93) ($1); }
+	: n1:unary_identifier_declarator
+	  { fmt92 }
+	| n1:paren_identifier_declarator
+	  { fmt93 }
 	;
 
 unary_identifier_declarator
-	: postfix_identifier_declarator
-	  { new (fmt94) ($1); }
-	| '*' attributes_opt identifier_declarator
-	  { new (fmt95) ($1, $2, $3); }
-	| '*' attributes_opt pointer_type_qualifier_list identifier_declarator
-	  { new (fmt96) ($1, $2, $3, $4); }
+	: n1:postfix_identifier_declarator
+	  { fmt94 }
+	| n1:'*' n2:attributes_opt n3:identifier_declarator
+	  { fmt95 }
+	| n1:'*' n2:attributes_opt n3:pointer_type_qualifier_list n4:identifier_declarator
+	  { fmt96 }
 	;
 
 postfix_identifier_declarator
-	: paren_identifier_declarator postfixing_abstract_declarator
-	  { new (fmt97) ($1, $2); }
-	| '(' unary_identifier_declarator ')'
-	  { new (fmt98) ($1, $2, $3); }
-	| '(' unary_identifier_declarator ')' postfixing_abstract_declarator
-	  { new (fmt99) ($1, $2, $3, $4); }
+	: n1:paren_identifier_declarator n2:postfixing_abstract_declarator
+	  { fmt97 }
+	| n1:'(' n2:unary_identifier_declarator n3:')'
+	  { fmt98 }
+	| n1:'(' n2:unary_identifier_declarator n3:')' n4:postfixing_abstract_declarator
+	  { fmt99 }
 	;
 
 paren_identifier_declarator
-	: IDENTIFIER
-	  { new (fmt100) ($1); }
-	| '(' paren_identifier_declarator ')'
-	  { new (fmt101) ($1, $2, $3); }
+	: n1:IDENTIFIER
+	  { fmt100 }
+	| n1:'(' n2:paren_identifier_declarator n3:')'
+	  { fmt101 }
 	 ;
 
 old_function_declarator
-	: postfix_old_function_declarator
-	  { new (fmt102) ($1); }
-	| '*' attributes_opt old_function_declarator
-	  { new (fmt103) ($1, $2, $3); }
-	| '*' attributes_opt pointer_type_qualifier_list old_function_declarator
-	  { new (fmt104) ($1, $2, $3, $4); }
+	: n1:postfix_old_function_declarator
+	  { fmt102 }
+	| n1:'*' n2:attributes_opt n3:old_function_declarator
+	  { fmt103 }
+	| n1:'*' n2:attributes_opt n3:pointer_type_qualifier_list n4:old_function_declarator
+	  { fmt104 }
 	;
 
 postfix_old_function_declarator
-	: paren_identifier_declarator '(' identifier_list ')'
-	  { new (fmt105) ($1, $2, $3, $4); }
-	| '(' old_function_declarator ')'
-	  { new (fmt106) ($1, $2, $3); }
-	| '(' old_function_declarator ')' postfixing_abstract_declarator
-	  { new (fmt107) ($1, $2, $3, $4); }
+	: n1:paren_identifier_declarator n2:'(' n3:identifier_list n4:')'
+	  { fmt105 }
+	| n1:'(' n2:old_function_declarator n3:')'
+	  { fmt106 }
+	| n1:'(' n2:old_function_declarator n3:')' n4:postfixing_abstract_declarator
+	  { fmt107 }
 	;
 
 identifier_list
-	: IDENTIFIER
-	  { new (fmt108) ($1); }
-	| identifier_list ',' IDENTIFIER
-	  { new (fmt109) ($1, $2, $3); }
+	: n1:IDENTIFIER
+	  { fmt108 }
+	| n1:identifier_list n2:',' n3:IDENTIFIER
+	  { fmt109 }
 	;
 
 identifier_or_typedef_name
-	: IDENTIFIER
-	  { new (fmt110) ($1); }
-	| TYPEDEF_NAME
-	  { new (fmt111) ($1); }
+	: n1:IDENTIFIER
+	  { fmt110 }
+	| n1:TYPEDEF_NAME
+	  { fmt111 }
 	;
 
 type_name
-	: type_specifier
-	  { new (fmt112) ($1); }
-	| type_specifier abstract_declarator
-	  { new (fmt113) ($1, $2); }
+	: n1:type_specifier
+	  { fmt112 }
+	| n1:type_specifier n2:abstract_declarator
+	  { fmt113 }
 	;
 
 
 nonnull_expression_list
-	: argument_expression_list
-	  { new (fmt114) ($1); }
+	: n1:argument_expression_list
+	  { fmt114 }
 	;
 
 any_word
-	: IDENTIFIER
-	  { new (fmt115) ($1); }
-	| TYPEDEF_NAME
-	  { new (fmt116) ($1); }
-	| CONST
-	  { new (fmt117) ($1); }
+	: n1:IDENTIFIER
+	  { fmt115 }
+	| n1:TYPEDEF_NAME
+	  { fmt116 }
+	| n1:CONST
+	  { fmt117 }
 	;
 
 initialiser_opt
-	: empty
-	  { new (fmt118) ($1); }
-	| '=' initialiser
-	  { new (fmt119) ($1, $2); }
+	: n1:empty
+	  { fmt118 }
+	| n1:'=' n2:initialiser
+	  { fmt119 }
 	;
 
 initialiser
-	: basic_initialiser
-	  { new (fmt120) ($1); }
-	| identifier_or_typedef_name ':' basic_initialiser
-	  { new (fmt121) ($1, $2, $3); }
-	| '.' identifier_or_typedef_name '=' basic_initialiser
-	  { new (fmt123) ($1, $2, $3, $4); }
-	| '[' assignment_expression ']' basic_initialiser
-	  { new (fmt125) ($1, $2, $3, $4); }
-	| '[' assignment_expression ']' '=' basic_initialiser
-	  { new (fmt126) ($1, $2, $3, $4, $5); }
-	| '[' assignment_expression ELLIPSIS assignment_expression ']' basic_initialiser
-	  { new (fmt127) ($1, $2, $3, $4, $5, $6); }
+	: n1:basic_initialiser
+	  { fmt120 }
+	| n1:identifier_or_typedef_name n2:':' n3:basic_initialiser
+	  { fmt121 }
+	| n1:'.' n2:identifier_or_typedef_name n3:'=' n4:basic_initialiser
+	  { fmt123 }
+	| n1:'[' n2:assignment_expression n3:']' n4:basic_initialiser
+	  { fmt125 }
+	| n1:'[' n2:assignment_expression n3:']' n4:'=' n5:basic_initialiser
+	  { fmt126 }
+	| n1:'[' n2:assignment_expression n3:ELLIPSIS n4:assignment_expression n5:']' n6:basic_initialiser
+	  { fmt127 }
 	;
 
 basic_initialiser
-	: bracketed_initialiser_list
-	  { new (fmt128) ($1); }
-	| assignment_expression
-	  { new (fmt129) ($1); }
+	: n1:bracketed_initialiser_list
+	  { fmt128 }
+	| n1:assignment_expression
+	  { fmt129 }
 	;
 
 bracketed_initialiser_list
-	: '{' '}'
-	  { new (fmt130) ($1, $2); }
-	| '{' initialiser_list '}'
-	  { new (fmt131) ($1, $2, $3); }
-	| '{' initialiser_list ',' '}'
-	  { new (fmt132) ($1, $2, $3, $4); }
+	: n1:'{' n2:'}'
+	  { fmt130 }
+	| n1:'{' n2:initialiser_list n3:'}'
+	  { fmt131 }
+	| n1:'{' n2:initialiser_list n3:',' n4:'}'
+	  { fmt132 }
 	;
 
 initialiser_list
-	: initialiser
-	  { new (fmt133) ($1); }
-	| initialiser_list ',' initialiser
-	  { new (fmt134) ($1, $2, $3); }
+	: n1:initialiser
+	  { fmt133 }
+	| n1:initialiser_list n2:',' n3:initialiser
+	  { fmt134 }
 	;
 
 parameter_type_list
-	: parameter_list
-	  { new (fmt135) ($1); }
-	| parameter_list ',' ELLIPSIS
-	  { new (fmt136) ($1, $2, $3); }
+	: n1:parameter_list
+	  { fmt135 }
+	| n1:parameter_list n2:',' n3:ELLIPSIS
+	  { fmt136 }
 	;
 
 parameter_list
-	: parameter_declaration
-	  { new (fmt137) ($1); }
-	| parameter_list ',' parameter_declaration
-	  { new (fmt138) ($1, $2, $3); }
+	: n1:parameter_declaration
+	  { fmt137 }
+	| n1:parameter_list n2:',' n3:parameter_declaration
+	  { fmt138 }
 	;
 
 parameter_declaration
-	: attributes_opt declaration_specifier
-	  { new (fmt139) ($1, $2); }
-	| attributes_opt declaration_specifier abstract_declarator
-	  { new (fmt140) ($1, $2, $3); }
-	| attributes_opt declaration_specifier identifier_declarator
-	  { new (fmt141) ($1, $2, $3); }
-	| attributes_opt declaration_specifier parameter_typedef_declarator
-	  { new (fmt142) ($1, $2, $3); }
-	| attributes_opt type_specifier
-	  { new (fmt143) ($1, $2); }
-	| attributes_opt type_specifier abstract_declarator
-	  { new (fmt144) ($1, $2, $3); }
-	| attributes_opt type_specifier identifier_declarator attributes_opt
-	  { new (fmt145) ($1, $2, $3, $4); }
-	| attributes_opt type_specifier parameter_typedef_declarator
-	  { new (fmt146) ($1, $2, $3); }
+	: n1:attributes_opt n2:declaration_specifier
+	  { fmt139 }
+	| n1:attributes_opt n2:declaration_specifier n3:abstract_declarator
+	  { fmt140 }
+	| n1:attributes_opt n2:declaration_specifier n3:identifier_declarator
+	  { fmt141 }
+	| n1:attributes_opt n2:declaration_specifier n3:parameter_typedef_declarator
+	  { fmt142 }
+	| n1:attributes_opt n2:type_specifier
+	  { fmt143 }
+	| n1:attributes_opt n2:type_specifier n3:abstract_declarator
+	  { fmt144 }
+	| n1:attributes_opt n2:type_specifier n3:identifier_declarator n4:attributes_opt
+	  { fmt145 }
+	| n1:attributes_opt n2:type_specifier n3:parameter_typedef_declarator
+	  { fmt146 }
 	;
 
 array_abstract_declarator
-	: '[' ']'
-	  { new (fmt147) ($1, $2); }
-	| '[' constant_expression ']'
-	  { new (fmt148) ($1, $2, $3); }
-	| array_abstract_declarator '[' constant_expression ']'
-	  { new (fmt149) ($1, $2, $3, $4); }
-	| array_abstract_declarator '[' ']'
-	  { new (fmt150) ($1, $2, $3); }
+	: n1:'[' n2:']'
+	  { fmt147 }
+	| n1:'[' n2:constant_expression n3:']'
+	  { fmt148 }
+	| n1:array_abstract_declarator n2:'[' n3:constant_expression n4:']'
+	  { fmt149 }
+	| n1:array_abstract_declarator n2:'[' n3:']'
+	  { fmt150 }
 	;

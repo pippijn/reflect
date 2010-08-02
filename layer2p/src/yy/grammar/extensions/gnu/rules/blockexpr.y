@@ -2,8 +2,8 @@
 %%
 
 primary_expression
-	: '(' '{' statement_list '}' ')'
-	  { new (fmt380) ($1, $2, $3, $4, $5); }
-	| '(' '{' declaration_list statement_list '}' ')'
-	  { new (fmt381) ($1, $2, $3, $4, $5, $6); }
+	: n1:'(' n2:'{' n3:statement_list n4:'}' n5:')'
+	  { fmt380 }
+	| n1:'(' n2:'{' n3:declaration_list n4:statement_list n5:'}' n6:')'
+	  { fmt381 }
 	;
