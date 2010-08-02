@@ -60,5 +60,6 @@ generate/data/pt.ast: $(shell find layer2p/src/yy/grammar -wholename "*rules/*.y
 	echo '{' >> $@
 	grep ' new ' $+	\
 		| sed -e 's/^[^:]*:\s*{ new (\(\w\+\)) (\(.*\)); }/  \1 => [\2],/;s/\$$\([0-9]\+\)/"n\1"/g'	\
+		| sort												\
 		>> $@
 	echo '}' >> $@
