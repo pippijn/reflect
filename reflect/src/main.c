@@ -1,5 +1,6 @@
 #include <pt/visitors.h>
-#include "yyinterf.h"
+#include <xml_input.h>
+#include <yyinterf.h>
 
 #include <stdio.h>
 
@@ -17,16 +18,33 @@ main (void)
   pctx = parse_context_new ();
   yydebug = 0;
   yyparse (pctx);
+
   {
-    pt_visitor *printer = pt_print_visitor_new (stdout);
+    pt_visitor *printer;
+    FILE *fh = fopen ("parse.xml", "w");
+    assert (fh != NULL);
+
+    printer = pt_print_visitor_new (fh);
     pt_node_accept (parse_context_unit (pctx), printer);
+
     pt_print_visitor_delete (printer);
+    fclose (fh);
   }
+
+  test_xml_parse ("parse.xml");
+
   {
-    pt_visitor *printer = pt_store_visitor_new (stdout, 0);
+    pt_visitor *printer;
+    FILE *fh = fopen ("parse.lsp", "w");
+    assert (fh != NULL);
+
+    printer = pt_store_visitor_new (fh, 0);
     pt_node_accept (parse_context_unit (pctx), printer);
+
     pt_store_visitor_delete (printer);
+    fclose (fh);
   }
+
 #if 0
   pt_node_print (parse_context_unit (pctx), stdout);
   pt_node_store (parse_context_unit (pctx), stdout, 0);

@@ -29,6 +29,7 @@ include layer0/Rules.mk
 include layer1/Rules.mk
 include layer2p/Rules.mk
 include layer2v/Rules.mk
+include layer2x/Rules.mk
 include reflect/Rules.mk
 
 clean:
