@@ -1,0 +1,19 @@
+#include "../internal.h"
+#include "nodes.h"
+
+node_type *
+${dataname}_new (char const *type, node_type **args)
+{
+  assert (type != NULL);
+  assert (args != NULL);
+
+[% FOREACH rule = rules %]
+
+  if (strcmp (type, "$rule.key"))
+    return ${dataname}_${rule.key}_new (${rule.value.all.args ("args")});
+
+[% END %]
+
+  fprintf (stderr, "No such constructor: %s\n", type);
+  abort ();
+}

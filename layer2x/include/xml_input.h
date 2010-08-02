@@ -1,3 +1,5 @@
 #pragma once
 
-void test_xml_parse (char const *file);
+#include <pt.h>
+
+pt_node *test_xml_parse (char const *file);

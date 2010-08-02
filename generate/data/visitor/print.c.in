@@ -36,6 +36,7 @@ ${dataname}_print_visitor_visit_token (visitor_type *object, node_type const *no
   xmlNodePtr xmltok = xmlNewChild (self->cur, NULL, BAD_CAST "token", BAD_CAST ${dataname}_token_text (node));
   xmlNewProp (xmltok, BAD_CAST "left",  xml_loc (loc->first_line, loc->first_column));
   xmlNewProp (xmltok, BAD_CAST "right", xml_loc (loc->last_line , loc->last_column ));
+  xmlNewProp (xmltok, BAD_CAST "token", itoa (${dataname}_token_token (node)));
 }
 
 

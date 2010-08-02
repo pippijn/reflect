@@ -17,8 +17,8 @@ typedef struct L (node_token) self_type;
 
 /* vtable */
 
-static fn_destruct L (token_destruct);
-static fn_accept L (token_accept);
+static destruct_fn L (token_destruct);
+static accept_fn L (token_accept);
 
 
 static vtbl_type const* const vtbl = &L (token_vtbl);

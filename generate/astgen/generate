@@ -10,10 +10,12 @@ use astgen::gen_header_internal;
 use astgen::gen_header;
 use astgen::gen_source;
 use astgen::gen_visitor;
+use astgen::gen_extra;
 
 our $dataname;
-our @vfuns = qw/destruct accept/;
-our @visitors = qw/print store/;
+our @vfuns     = qw/destruct accept/;
+our @visitors  = qw/print store/;
+our @extra     = qw/string_ctor/;
 
 my $rules = do {
    my $file = $ARGV[0]
@@ -54,6 +56,7 @@ EOF
 print $internal_visitor_c "#include \"../internal.h\"\n";
 
 astgen::visitor::generate $dataname, $rules;
+astgen::extra::generate $dataname, $rules;
 
 for my $name (sort keys %$rules) {
    my $members = $rules->{$name};

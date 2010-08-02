@@ -5,10 +5,14 @@ typedef struct L (node) L (node);
 typedef struct L (visitor) L (visitor);
 
 typedef void L (visit_fn) (L (visitor) *self, L (node) const *node);
+typedef L (node) *L (accessor_fn) (L (node) const *self);
 
 /*
  * node base
  */
+
+/* call constructor named by string */
+L (node)               *L (new)                 (char const *type, L (node) **args);
 
 /* refcounting */
 L (node)               *L (node_ref)            (L (node) *self);

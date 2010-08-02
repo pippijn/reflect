@@ -1,16 +1,6 @@
 sub gen_header {
    my ($dataname, $name, $members) = @_;
 
-   #my (@longest) = reverse sort map length, all $members;
-   #use Data::Dumper;
-   #print Dumper \@longest;
-   my $longest = 0;
-   for (all $members) {
-      if ($longest < length $_) {
-         $longest = length $_;
-      }
-   }
-
    my $fh = maybe_open ("layer1/include/${dataname}/gen/$name.h")
       or return;
 
@@ -29,9 +19,7 @@ sub gen_header {
    }
 
    print $fh "/* accessors */\n";
-   print $fh "${dataname}_node *${dataname}_${name}_$_"
-      . ' ' x ($longest - length $_)
-      . " (${dataname}_node const *self);\n"
+   print $fh "${dataname}_accessor_fn ${dataname}_${name}_$_;\n"
       for all $members;
 }
 
