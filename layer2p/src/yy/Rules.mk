@@ -10,8 +10,8 @@ layer2p/src/yy/gen/%.y: layer2p/src/yy/grammar/%.h $(shell find layer2p/src/yy/g
 	$(CPP) $(YCPPFLAGS) -P -xc $< -o $@
 	sed -i -e 's/^%[%{}]//' $@
 
-%-pp.y: %.y
-	generate/grammar/gpp $< > $@
+%-pp.y: generate/grammar/gpp %.y $(shell find generate/grammar -type f)
+	$< -y $*.y $@
 
 layer2p/src/yy/parser.y:			\
 		layer2p/src/yy/parser.y.in	\
