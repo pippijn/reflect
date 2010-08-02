@@ -1,3 +1,14 @@
+General:
+--------
+- Serialising to sexpr using some sexpr library
+- Deserialising from sexpr and/or from xml
+- Graphviz output visitor
+- Many PT nodes (fmt -> something)
+- After all PT nodes are finished, move to GLR and remove TYPEDEF_NAME
+- Optional: XDR serialisation/deserialisation
+- Optional: Some custom binary format (just because we can)
+
+
 Remaining ast nodes:
 --------------------
 
