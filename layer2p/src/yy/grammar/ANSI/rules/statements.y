@@ -78,7 +78,7 @@ iteration_statement
 	;
 
 jump_statement
-	: GOTO IDENTIFIER ';'
+	: GOTO identifier_or_typedef_name ';'
 	  { new (fmt307) ($1, $2, $3); }
 	| CONTINUE ';'
 	  { new (fmt308) ($1, $2); }
@@ -86,6 +86,4 @@ jump_statement
 	  { new (fmt309) ($1, $2); }
 	| RETURN expression_opt ';'
 	  { new (fmt310) ($1, $2, $3); }
-	| GOTO TYPEDEF_NAME ';'
-	  { new (fmt311) ($1, $2, $3); }
 	;

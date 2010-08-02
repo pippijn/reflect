@@ -367,14 +367,10 @@ initialiser_opt
 initialiser
 	: basic_initialiser
 	  { new (fmt120) ($1); }
-	| IDENTIFIER ':' basic_initialiser
+	| identifier_or_typedef_name ':' basic_initialiser
 	  { new (fmt121) ($1, $2, $3); }
-	| TYPEDEF_NAME ':' basic_initialiser
-	  { new (fmt122) ($1, $2, $3); }
-	| '.' IDENTIFIER '=' basic_initialiser
+	| '.' identifier_or_typedef_name '=' basic_initialiser
 	  { new (fmt123) ($1, $2, $3, $4); }
-	| '.' TYPEDEF_NAME '=' basic_initialiser
-	  { new (fmt124) ($1, $2, $3, $4); }
 	| '[' assignment_expression ']' basic_initialiser
 	  { new (fmt125) ($1, $2, $3, $4); }
 	| '[' assignment_expression ']' '=' basic_initialiser
