@@ -242,13 +242,13 @@ abstract_declarator
 
 unary_abstract_declarator
 	: '*' attributes_opt
-	  { new (fmt81) ($1, $2); }
+	  { new (pointer) ($1, $2, NULL, NULL); }
 	| '*' attributes_opt pointer_type_qualifier_list
-	  { new (fmt82) ($1, $2, $3); }
+	  { new (pointer) ($1, $2, $3, NULL); }
 	| '*' attributes_opt abstract_declarator
-	  { new (fmt83) ($1, $2, $3); }
+	  { new (pointer) ($1, $2, NULL, $3); }
 	| '*' attributes_opt pointer_type_qualifier_list abstract_declarator
-	  { new (fmt84) ($1, $2, $3, $4); }
+	  { new (pointer) ($1, $2, $3, $4); }
 	;
 
 postfix_abstract_declarator

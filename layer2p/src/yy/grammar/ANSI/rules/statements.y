@@ -17,14 +17,12 @@ statement
 	;
 
 labeled_statement
-	: IDENTIFIER ':'
-	  { new (fmt288) ($1, $2); }
+	: identifier_or_typedef_name ':'
+	  { new (label_statement) ($1, $2); }
 	| CASE constant_expression ':'
-	  { new (fmt289) ($1, $2, $3); }
+	  { new (case_label_statement) ($1, $2, $3); }
 	| DEFAULT ':'
-	  { new (fmt290) ($1, $2); }
-	| TYPEDEF_NAME ':'
-	  { new (fmt291) ($1, $2); }
+	  { new (default_label_statement) ($1, $2); }
 	;
 
 compound_statement
