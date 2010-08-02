@@ -12,12 +12,12 @@ use astgen::source::functions;
 use astgen::source::vtbl;
 
 sub generate {
-   my ($file, $dataname, $name, $members) = @_;
+   my ($dataname, $name, $members) = @_;
 
-   my $fh = maybe_open "layer1/src/${dataname}/gen/$file.c"
+   my $fh = maybe_open "layer1/src/${dataname}/gen/$name.c"
       or return;
 
-   gen_self_type $file, $fh, $dataname, $name, $members;
+   gen_self_type $fh, $dataname, $name, $members;
    gen_vtbl $fh, $dataname, $name, $members;
    gen_ctor $fh, $dataname, $name, $members;
    gen_new $fh, $dataname, $name, $members;

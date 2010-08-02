@@ -6,7 +6,7 @@ static struct ${dataname}_visitor_vtbl ${dataname}_store_visitor_vtbl = {
   ${dataname}_store_visitor_visit_token,
 
 [% FOREACH rule = rules %]
-[% name = rule.value.0 %]
+[% name = rule.key %]
   ${dataname}_store_visitor_visit_${name},
 
 [% END %]

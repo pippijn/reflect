@@ -5,11 +5,11 @@ use common::sense;
 use astgen::util;
 
 sub gen_self_type {
-   my ($file, $fh, $dataname, $name, $members) = @_;
+   my ($fh, $dataname, $name, $members) = @_;
 
    print $fh <<EOF;
 #include "../internal.h"
-#include "$file.h"
+#include "$name.h"
 
 /* type of *self */
 

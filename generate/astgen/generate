@@ -55,18 +55,18 @@ print $internal_visitor_c "#include \"../internal.h\"\n";
 
 astgen::visitor::generate $dataname, $rules;
 
-for my $file (sort keys %$rules) {
-   my ($name, $members) = @{ $rules->{$file} };
+for my $name (sort keys %$rules) {
+   my $members = $rules->{$name};
 
-   print $nodes_h "#include <${dataname}/gen/$file.h>\n";
+   print $nodes_h "#include <${dataname}/gen/$name.h>\n";
    print $visitor_vtbl_h "  ${dataname}_visit_fn *visit_$name;\n";
    print $internal_kinds_h "  ${DATANAME}_" . (uc $name) . ",\n";
-   print $internal_nodes_h "#include \"$file.h\"\n";
+   print $internal_nodes_h "#include \"$name.h\"\n";
    print $internal_visitor_h "void ${dataname}_visitor_visit_$name (${dataname}_visitor *self, ${dataname}_node const *node);\n";
 
    gen_visitor_c $internal_visitor_c, $name;
 
-   gen_header_internal $file, $dataname, $name, $members;
-   gen_header          $file, $dataname, $name, $members;
-   astgen::source::generate  $file, $dataname, $name, $members;
+   gen_header_internal $dataname, $name, $members;
+   gen_header          $dataname, $name, $members;
+   astgen::source::generate  $dataname, $name, $members;
 }

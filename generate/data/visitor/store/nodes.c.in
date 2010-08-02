@@ -1,6 +1,6 @@
 [% FOREACH rule = rules %]
-[% name = rule.value.0 %]
-[% members = rule.value.1 %]
+[% name = rule.key %]
+[% members = rule.value %]
 
 static void
 ${dataname}_store_visitor_visit_$name (visitor_type *object, ${dataname}_node const *node)

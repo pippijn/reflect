@@ -1,5 +1,5 @@
 sub gen_header {
-   my ($file, $dataname, $name, $members) = @_;
+   my ($dataname, $name, $members) = @_;
 
    #my (@longest) = reverse sort map length, all $members;
    #use Data::Dumper;
@@ -11,7 +11,7 @@ sub gen_header {
       }
    }
 
-   my $fh = maybe_open ("layer1/include/${dataname}/gen/$file.h")
+   my $fh = maybe_open ("layer1/include/${dataname}/gen/$name.h")
       or return;
 
    print $fh "/*\n * ";

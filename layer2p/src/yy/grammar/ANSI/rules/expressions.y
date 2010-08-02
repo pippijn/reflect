@@ -45,27 +45,22 @@ unary_expression
 	  { new (pre_increment) ($1, $2); }
 	| DEC_OP unary_expression
 	  { new (pre_decrement) ($1, $2); }
-	| unary_operator cast_expression
-	  { new (fmt195) ($1, $2); }
+	| '&' cast_expression
+	  { new (address_of) ($1, $2); }
+	| '*' cast_expression
+	  { new (pointer_dereference) ($1, $2); }
+	| '+' cast_expression
+	  { new (positive) ($1, $2); }
+	| '-' cast_expression
+	  { new (negate) ($1, $2); }
+	| '~' cast_expression
+	  { new (bitwise_negate) ($1, $2); }
+	| '!' cast_expression
+	  { new (logical_not) ($1, $2); }
 	| SIZEOF unary_expression
 	  { new (sizeof_var) ($1, $2); }
 	| SIZEOF '(' type_name ')'
 	  { new (sizeof_type) ($1, $2, $3, $4); }
-	;
-
-unary_operator
-	: '&'
-	  { new (address_of) ($1); }
-	| '*'
-	  { new (pointer_dereference) ($1); }
-	| '+'
-	  { new (positive) ($1); }
-	| '-'
-	  { new (negate) ($1); }
-	| '~'
-	  { new (bitwise_negate) ($1); }
-	| '!'
-	  { new (logical_not) ($1); }
 	;
 
 cast_expression
@@ -123,85 +118,80 @@ equality_expression
 	: relational_expression
 	  { new (fmt222) ($1); }
 	| equality_expression EQ_OP relational_expression
-	  { new (fmt223) ($1, $2, $3); }
+	  { new (equals) ($1, $2, $3); }
 	| equality_expression NE_OP relational_expression
-	  { new (fmt224) ($1, $2, $3); }
+	  { new (not_equals) ($1, $2, $3); }
 	;
 
 and_expression
 	: equality_expression
 	  { new (fmt225) ($1); }
 	| and_expression '&' equality_expression
-	  { new (fmt226) ($1, $2, $3); }
+	  { new (bitwise_and) ($1, $2, $3); }
 	;
 
 exclusive_or_expression
 	: and_expression
 	  { new (fmt227) ($1); }
 	| exclusive_or_expression '^' and_expression
-	  { new (fmt228) ($1, $2, $3); }
+	  { new (bitwise_xor) ($1, $2, $3); }
 	;
 
 inclusive_or_expression
 	: exclusive_or_expression
 	  { new (fmt229) ($1); }
 	| inclusive_or_expression '|' exclusive_or_expression
-	  { new (fmt230) ($1, $2, $3); }
+	  { new (bitwise_or) ($1, $2, $3); }
 	;
 
 logical_and_expression
 	: inclusive_or_expression
 	  { new (fmt231) ($1); }
 	| logical_and_expression AND_OP inclusive_or_expression
-	  { new (fmt232) ($1, $2, $3); }
+	  { new (logical_and) ($1, $2, $3); }
 	;
 
 logical_or_expression
 	: logical_and_expression
 	  { new (fmt233) ($1); }
 	| logical_or_expression OR_OP logical_and_expression
-	  { new (fmt234) ($1, $2, $3); }
+	  { new (logical_or) ($1, $2, $3); }
 	;
 
 conditional_expression
 	: logical_or_expression
 	  { new (fmt235) ($1); }
 	| logical_or_expression '?' expression ':' conditional_expression
-	  { new (fmt236) ($1, $2, $3, $4, $5); }
+	  { new (ternary_op) ($1, $2, $3, $4, $5); }
 	| logical_or_expression '?' ':' conditional_expression
-	  { new (fmt237) ($1, $2, $3, $4); }
+	  { new (ternary_op) ($1, $2, NULL, $3, $4); }
 	;
 
 assignment_expression
 	: conditional_expression
 	  { new (fmt238) ($1); }
-	| cast_expression assignment_operator assignment_expression
-	  { new (fmt239) ($1, $2, $3); }
-	;
-
-assignment_operator
-	: '='
-	  { new (fmt240) ($1); }
-	| MUL_ASSIGN
-	  { new (fmt241) ($1); }
-	| DIV_ASSIGN
-	  { new (fmt242) ($1); }
-	| MOD_ASSIGN
-	  { new (fmt243) ($1); }
-	| ADD_ASSIGN
-	  { new (fmt244) ($1); }
-	| SUB_ASSIGN
-	  { new (fmt245) ($1); }
-	| LSH_ASSIGN
-	  { new (fmt246) ($1); }
-	| RSH_ASSIGN
-	  { new (fmt247) ($1); }
-	| AND_ASSIGN
-	  { new (fmt248) ($1); }
-	| XOR_ASSIGN
-	  { new (fmt249) ($1); }
-	| OR_ASSIGN
-	  { new (fmt250) ($1); }
+	| cast_expression '=' assignment_expression
+	  { new (fmt240) ($1, $2, $3); }
+	| cast_expression MUL_ASSIGN assignment_expression
+	  { new (fmt241) ($1, $2, $3); }
+	| cast_expression DIV_ASSIGN assignment_expression
+	  { new (fmt242) ($1, $2, $3); }
+	| cast_expression MOD_ASSIGN assignment_expression
+	  { new (fmt243) ($1, $2, $3); }
+	| cast_expression ADD_ASSIGN assignment_expression
+	  { new (fmt244) ($1, $2, $3); }
+	| cast_expression SUB_ASSIGN assignment_expression
+	  { new (fmt245) ($1, $2, $3); }
+	| cast_expression LSH_ASSIGN assignment_expression
+	  { new (fmt246) ($1, $2, $3); }
+	| cast_expression RSH_ASSIGN assignment_expression
+	  { new (fmt247) ($1, $2, $3); }
+	| cast_expression AND_ASSIGN assignment_expression
+	  { new (fmt248) ($1, $2, $3); }
+	| cast_expression XOR_ASSIGN assignment_expression
+	  { new (fmt249) ($1, $2, $3); }
+	| cast_expression OR_ASSIGN assignment_expression
+	  { new (fmt250) ($1, $2, $3); }
 	;
 
 expression
