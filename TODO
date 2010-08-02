@@ -1,15 +1,17 @@
 General:
 --------
-- Serialising to sexpr using some sexpr library
-- Deserialising from sexpr and/or from xml
-- Graphviz output visitor
-- Many PT nodes (fmt -> something)
-- After all PT nodes are finished, move to GLR and remove TYPEDEF_NAME
-- Optional: XDR serialisation/deserialisation
-- Optional: Some custom binary format (just because we can)
-- Generate XML schema definitions from tree definition
-- Call constructors by name given as string:
-    node_type *node_new (char const *type, node_type **args);
+- serialising to sexpr using some sexpr library
+- deserialising from sexpr and/or from xml
+  - almost finished
+- graphviz output visitor
+- many PT nodes (fmt -> something)
+- after all PT nodes are finished, move to GLR and remove TYPEDEF_NAME
+  - we are already GLR, but we have some ambiguous rules that abort the parser
+- optional: XDR serialisation/deserialisation
+- optional: Some custom binary format (just because we can)
+- generate XML schema definitions from tree definition
++ call constructors by name given as string:
+  + node_type *node_new (char const *type, node_type **args);
 
 
 Remaining ast nodes:
