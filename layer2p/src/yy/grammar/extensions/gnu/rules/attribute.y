@@ -31,11 +31,11 @@ attrib
 	: n1:empty
 	  { attrib375 }
 	| name:any_word
-	  { attrib }
-	| name:any_word lbrack:'(' id:IDENTIFIER                                        rbrack:')'
-	  { attrib }
+	  { attrib376 }
+	| name:any_word lbrack:'(' id:IDENTIFIER                                        rbrack:')' %dprec 2
+	  { attrib377 }
 	| name:any_word lbrack:'(' id:IDENTIFIER comma:',' expr:nonnull_expression_list rbrack:')'
-	  { attrib }
-	| name:any_word lbrack:'('                         expr:nonnull_expression_list rbrack:')'
-	  { attrib }
+	  { attrib378 }
+	| name:any_word lbrack:'('                         expr:nonnull_expression_list rbrack:')' %dprec 1
+	  { attrib379 }
 	;

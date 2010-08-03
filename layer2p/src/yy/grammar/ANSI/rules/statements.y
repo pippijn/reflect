@@ -47,7 +47,7 @@ statement_list
 	;
 
 expression_statement
-	: n1:expression_opt n2:';'
+	: expr:expression_opt semi:';'
 	  { expression_statement }
 	;
 

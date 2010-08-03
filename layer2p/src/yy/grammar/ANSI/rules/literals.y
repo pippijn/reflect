@@ -2,17 +2,17 @@
 %%
 
 constant
-	: n1:FLOATING_CONSTANT
+	: token:FLOATING_CONSTANT
 	  { floating_constant }
-	| n1:INTEGER_CONSTANT
+	| token:INTEGER_CONSTANT
 	  { integer_constant }
-	| n1:OCTAL_CONSTANT
+	| token:OCTAL_CONSTANT
 	  { octal_constant }
-	| n1:HEX_CONSTANT
+	| token:HEX_CONSTANT
 	  { hex_constant }
-	| n1:CHAR_CONSTANT
+	| token:CHAR_CONSTANT
 	  { char_constant }
-	| n1:WCHAR_CONSTANT
+	| token:WCHAR_CONSTANT
 	  { wchar_constant }
 	;
 
@@ -24,9 +24,9 @@ string_literal_list
 	;
 
 type_qualifier
-	: n1:CONST
+	: const_tok:CONST
 	  { const_type_qualifier }
-	| n1:VOLATILE
+	| volatile_tok:VOLATILE
 	  { volatile_type_qualifier }
 	;
 
@@ -38,46 +38,46 @@ type_qualifier_opt
 	;
 
 pointer_type_qualifier
-	: n1:CONST
-	  { const_pointer_type_qualifier }
-	| n1:VOLATILE
-	  { volatile_pointer_type_qualifier }
+	: const_tok:CONST
+	  { const_type_qualifier }
+	| volatile_tok:VOLATILE
+	  { volatile_type_qualifier }
 	;
 
 storage_class
-	: n1:TYPEDEF
+	: typedef_tok:TYPEDEF
 	  { typedef_str_class_spec }
-	| n1:EXTERN
+	| extern_tok:EXTERN
 	  { extern_str_class_spec }
-	| n1:STATIC
+	| static_tok:STATIC
 	  { static_str_class_spec }
-	| n1:AUTO
+	| auto_tok:AUTO
 	  { auto_str_class_spec }
-	| n1:REGISTER
+	| register_tok:REGISTER
 	  { register_str_class_spec }
 	;
 
 basic_type_name
-	: n1:VOID
+	: void_tok:VOID
 	  { void_type_spec }
-	| n1:CHAR
+	| char_tok:CHAR
 	  { char_type_spec }
-	| n1:WCHAR_T
+	| wchar_tok:WCHAR_T
 	  { wchar_type_spec }
-	| n1:INT
+	| int_tok:INT
 	  { int_type_spec }
-	| n1:FLOAT
+	| float_tok:FLOAT
 	  { float_type_spec }
-	| n1:DOUBLE
+	| double_tok:DOUBLE
 	  { double_type_spec }
 
-	| n1:SIGNED
+	| signed_tok:SIGNED
 	  { signer_type_spec }
-	| n1:UNSIGNED
+	| unsigned_tok:UNSIGNED
 	  { unsigned_type_spec }
 
-	| n1:SHORT
+	| short_tok:SHORT
 	  { short_type_spec }
-	| n1:LONG
+	| long_tok:LONG
 	  { long_type_spec }
 	;

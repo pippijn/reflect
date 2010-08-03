@@ -2,6 +2,7 @@
 // vim:noexpandtab
 ##include "yy/parse_interf.h"
 ##define scanner parse_context_scanner (context)
+##define YYMAXDEPTH (1024 * 1024 * 128)
 #define new(rule) $$ = pt_##rule##_new
 %}
 

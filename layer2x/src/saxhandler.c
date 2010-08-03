@@ -4,16 +4,35 @@
 
 #define ROOT BAD_CAST "pt"
 
+#define DEBUG 0
+
+static char const *
+state_enum_name (enum state num)
+{
+  switch (num)
+    {
+    case TOKEN:  return "TOKEN";
+    case STRUCT: return "STRUCT";
+    case MEMBER: return "MEMBER";
+    default:     return "<unknown>";
+    }
+}
+
 static void
 push_state (struct xml_input_state *state, enum state num)
 {
+  if (DEBUG)
+    printf ("push (%s)\n", state_enum_name (num));
   stack_push (state->state_stack, (void *)num);
 }
 
 static enum state
 pop_state (struct xml_input_state *state)
 {
-  return (enum state)stack_pop (state->state_stack);
+  enum state num = (enum state)stack_pop (state->state_stack);
+  if (DEBUG)
+    printf ("pop (%s)\n", state_enum_name (num));
+  return num;
 }
 
 
@@ -59,7 +78,8 @@ xml_input_startElement ( void *ctx
 
   state->empty_child = 0;
 
-  if (xmlStrcmp (name, BAD_CAST "token") == 0)
+  /* "token" with attributes is a token, without attributes, it's a member */
+  if (xmlStrcmp (name, BAD_CAST "token") == 0 && atts != NULL)
     {
       push_state (state, TOKEN);
 
@@ -109,20 +129,19 @@ xml_input_startElement ( void *ctx
         }
     }
 
-#if 0
-  {
-    xmlChar const **it;
-    printf ("%p->%s (%s, {", state, __func__, name);
-    if (atts)
-      for (it = atts; *it != NULL; it += 2)
-        {
-          printf ("%s: %s", it[0], it[1]);
-          if (it[2] != NULL)
-            printf (", ");
-        }
-    printf ("})\n");
-  }
-#endif
+  if (DEBUG)
+    {
+      xmlChar const **it;
+      printf ("%p->%s (%s, {", state, __func__, name);
+      if (atts)
+        for (it = atts; *it != NULL; it += 2)
+          {
+            printf ("%s: %s", it[0], it[1]);
+            if (it[2] != NULL)
+              printf (", ");
+          }
+      printf ("})\n");
+    }
 }
 
 static void
@@ -134,12 +153,14 @@ xml_input_endElement ( void *ctx
   if (xmlStrcmp (name, ROOT) == 0)
     return;
 
-#if 0
-  printf ("%p->%s (%s)\n", state, __func__, name);
-  printf ( "levels: %zd size: %zd, "
-         , array_stack_levels (state->node_stack)
-         , array_stack_size   (state->node_stack));
-#endif
+  if (DEBUG)
+    {
+      printf ("%p->%s (%s)\n", state, __func__, name);
+      printf ( "levels: %zd size: %zd\n"
+             , array_stack_levels (state->node_stack)
+             , array_stack_size   (state->node_stack));
+    }
+
   switch (pop_state (state))
     {
     case TOKEN:
@@ -155,11 +176,22 @@ xml_input_endElement ( void *ctx
       }
     case STRUCT:
       {
+        size_t i;
         pt_node *node;
         void *const *args = array_stack_last_level (state->node_stack);
         assert (args != NULL);
 
+        if (DEBUG)
+          {
+            printf ("pt_%s_new (", (char const *)name);
+            for (i = 0; i < array_stack_size (state->node_stack) - 1; i++)
+              printf ("%p, ", args[i]);
+            printf ("%p) = ", args[i]);
+          }
         node = pt_new ((char const *)name, (pt_node *const *)args);
+        assert (node != NULL);
+        if (DEBUG)
+          printf ("%p\n", node);
 
         array_stack_pop_level (state->node_stack);
 
@@ -169,7 +201,11 @@ xml_input_endElement ( void *ctx
     case MEMBER:
       {
         if (state->empty_child)
-          array_stack_push (state->node_stack, NULL);
+          {
+            if (DEBUG)
+              puts ("empty member, pushing NULL");
+            array_stack_push (state->node_stack, NULL);
+          }
         break;
       }
     default:

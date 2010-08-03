@@ -1,4 +1,6 @@
 %{
+/* vim:noexpandtab
+ */
 #include "yy/lex_interf.h"
 
 static size_t
@@ -42,6 +44,22 @@ IS			(u|U|l|L)*
 %%
 "/*"			{ BEGIN (COMMENT); }
 
+"__alignof__"		{ RETURN (ALIGNOF); }
+"__asm__"		{ RETURN (ASM); }
+"__attribute__"		{ RETURN (ATTRIBUTE); }
+"__extension__"		{ RETURN (EXTENSION); }
+"__inline__"		{ RETURN (INLINE); }
+"__restrict__"		{ RETURN (RESTRICT); }
+"__typeof__"		{ RETURN (TYPEOF); }
+"complex"		{ RETURN (COMPLEX); }
+"imag"			{ RETURN (IMAG); }
+"real"			{ RETURN (REAL); }
+"va_arg"		{ RETURN (VA_ARG); }
+"va_list"		{ RETURN (VA_LIST); }
+"wchar_t"		{ RETURN (WCHAR_T); }
+
+"@typedef_name@"	{ RETURN (TYPEDEF_NAME); }
+
 "auto"			{ RETURN (AUTO); }
 "break"			{ RETURN (BREAK); }
 "case"			{ RETURN (CASE); }
@@ -80,7 +98,7 @@ IS			(u|U|l|L)*
 0[xX]{H}+{IS}?		{ RETURN (HEX_CONSTANT); }
 0{D}+{IS}?		{ RETURN (OCTAL_CONSTANT); }
 {D}+{IS}?		{ RETURN (INTEGER_CONSTANT); }
-'(\\.|[^\\'])+'	        { RETURN (CHAR_CONSTANT); }
+'(\\.|[^\\'])+'		{ RETURN (CHAR_CONSTANT); }
 L'(\\.|[^\\'])+'	{ RETURN (WCHAR_CONSTANT); }
 
 {D}+{E}{FS}?		{ RETURN (FLOATING_CONSTANT); }

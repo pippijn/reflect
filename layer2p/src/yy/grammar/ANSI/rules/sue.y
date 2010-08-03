@@ -15,10 +15,10 @@ struct_or_union_specifier
 	;
 
 struct_or_union
-	: n1:STRUCT
-	  { struct_or_union317 }
-	| n1:UNION
-	  { struct_or_union318 }
+	: struct_tok:STRUCT
+	  { struct }
+	| union_tok:UNION
+	  { union }
 	;
 
 struct_declaration_list

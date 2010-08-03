@@ -27,6 +27,12 @@ sub assemble_rules {
    my ($nodes, $rule) = @_;
 
    my $rhs = join ' ', map { $_->{expr} } @{ $rule->{rhs} };
+
+   for (qw/dprec merge/) {
+      $rhs .= " %$_ $rule->{$_}"
+         if $rule->{$_}
+   }
+
    my $code;
    if ($rule->{node}) {
       $code = "\n\t  { \$\$ = ${dataname}_$rule->{node}_new (";

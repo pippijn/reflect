@@ -9,7 +9,7 @@ use generate::grammar::tree;
 
 $dataname = "pt";
 
-use constant USAGE => "Usage: $0 <rules.y>";
+use constant USAGE => "Usage: $0 -[ay] <rules.y> <pt.ast>";
 
 my $arg  = $ARGV[0] || die USAGE;
 my $in   = $ARGV[1] || die USAGE;

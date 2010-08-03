@@ -6,10 +6,9 @@ my %state = (
 );
 
 sub expect {
-   my ($tok) = @_;
-
-   die "Expected $tok, got $state{token}"
-   if $state{token} ne $tok
+   local $" = ", ";
+   die "Expected one of @_, got $state{token}"
+      unless grep { $_ } map { $_ eq $state{token} } @_
 }
 
 sub parse {
@@ -28,7 +27,7 @@ sub parse {
 
       {
          $state{nonterm} = $state{token};
-         $state{num} = 1;
+         $state{num} = 1
       }
 
       # ':' after non-terminal
@@ -36,20 +35,26 @@ sub parse {
 
       {
          expect ':';
-         $state{num} = 2;
+         $state{num} = 2
       }
 
       # one right hand side token (term/nonterm)
       elsif ($state{num} == 2)
 
       {
+         # %dprec or %merge
+         if ($state{token} =~ /^%/) {
+            $state{num} = 6;
+            redo
+         }
+
          my ($name, $expr) = split /:/, $state{token}, 2;
          push @{ $state{rhs} }, {
             name => $name,
             expr => $expr,
          };
-         $state{num} = 3;
 
+         $state{num} = 3
       }
 
       # after a term/nonterm
@@ -59,16 +64,20 @@ sub parse {
          # one rule finished
          if ($state{token} eq '|' or $state{token} eq ';') {
             push @{ $rules{$state{nonterm}} }, {
-               rhs => $state{rhs},
-               node => $state{node},
+               rhs   => $state{rhs},
+               node  => $state{node},
+               dprec => $state{dprec},
+               merge => $state{merge},
             };
             delete $state{rhs};
             delete $state{node};
+            delete $state{dprec};
+            delete $state{merge};
          }
 
          # next will be the node name
          elsif ($state{token} eq '{') {
-            $state{num} = 4;
+            $state{num} = 4
          }
 
          # anything else must be another rhs token
@@ -79,10 +88,10 @@ sub parse {
 
          if ($state{token} eq '|') {
             # next rule
-            $state{num} = 2;
+            $state{num} = 2
          } elsif ($state{token} eq ';') {
             # finished nonterminal
-            $state{num} = 0;
+            $state{num} = 0
          }
       }
 
@@ -91,7 +100,7 @@ sub parse {
 
       {
          $state{node} = $state{token};
-         $state{num} = 5;
+         $state{num} = 5
       }
 
       # closing }
@@ -99,13 +108,29 @@ sub parse {
 
       {
          expect '}';
-         $state{num} = 3;
+         $state{num} = 3
+      }
+
+      # %dprec or %merge
+      elsif ($state{num} == 6)
+
+      {
+         expect "%dprec", "%merge";
+         ($state{directive}) = $state{token} =~ /%(.+)/;
+         $state{num} = 7
+      }
+
+      # the precedence or merge function
+      elsif ($state{num} == 7)
+      {
+         $state{$state{directive}} = $state{token};
+         $state{num} = 3
       }
 
       else
 
       {
-         last
+         die "Invalid state: $state{num}"
       }
    }
 
