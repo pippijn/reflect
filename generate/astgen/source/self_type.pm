@@ -9,6 +9,7 @@ sub gen_self_type {
 
    print $fh <<EOF;
 #include "../internal.h"
+#include <$dataname/gen/$name.h>
 #include "$name.h"
 
 /* type of *self */

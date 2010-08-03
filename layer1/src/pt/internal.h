@@ -1,3 +1,4 @@
+#define INTERNAL
 #include <pt.h>
 
 #define L_TREE pt

@@ -47,7 +47,7 @@ L (node_delete) (node_type *self)
 
   self->vtbl->destruct (self);
 
-  xfree (self, self->vtbl->ti.size);
+  mem_free (self, self->vtbl->ti.size);
 }
 
 

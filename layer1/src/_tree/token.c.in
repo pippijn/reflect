@@ -101,7 +101,7 @@ L (token_destruct) (node_type* object)
   assert (self->text);
 
   /* destroy our own data */
-  xfree (self->text, strlen (self->text));
+  mem_free (self->text, strlen (self->text));
 
   /* base destructor */
   BASE_DTOR ();

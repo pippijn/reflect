@@ -44,7 +44,7 @@ xml_input_endDocument (void *ctx)
 
   array_stack_delete (state->node_stack);
   stack_delete (state->state_stack);
-  xfree (state->token.text.data, state->token.text.capacity);
+  mem_free (state->token.text.data, state->token.text.capacity + 1);
 }
 
 static void
@@ -188,14 +188,18 @@ xml_input_characters ( void *ctx
 
   if (state->token.text.capacity - state->token.text.length - len < 0)
     {
-      state->token.text.data = xrealloc ( state->token.text.data
-                                        , state->token.text.capacity + len);
+      state->token.text.data = mem_realloc ( state->token.text.data
+                                           , state->token.text.capacity + len + 1);
       state->token.text.capacity += len;
     }
   if (state->token.text.length == 0)
     state->token.text.data[0] = '\0';
-  xmlStrncat (state->token.text.data, ch, len);
+  /* FIXME: use xmlStrncat, instead */
+  memcpy ( state->token.text.data + state->token.text.length
+         , ch
+         , len);
   state->token.text.length += len;
+  state->token.text.data[state->token.text.length] = '\0';
 }
 
 

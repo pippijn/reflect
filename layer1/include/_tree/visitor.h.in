@@ -7,7 +7,7 @@ struct L (visitor_vtbl)
   } ti;
   L (visit_fn) *visit_token;
 
-#include VISITOR_H
+#include VISITOR_VTBL_H
 };
 
 

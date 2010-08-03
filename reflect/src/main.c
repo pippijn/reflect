@@ -58,6 +58,7 @@ main (void)
     pt_node *node = test_xml_parse ("parse.xml");
     assert (node != NULL);
     print_node (node, "reparse.xml");
+    pt_node_unref (node);
   }
 
   return 0;

@@ -1,3 +1,4 @@
+#define INTERNAL
 #include <ast.h>
 
 #define L_TREE          ast

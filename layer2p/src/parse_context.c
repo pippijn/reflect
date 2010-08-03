@@ -16,7 +16,7 @@ struct parse_context
 parse_context *
 parse_context_new (void)
 {
-  parse_context *self = xalloc (sizeof *self);
+  parse_context *self = mem_alloc (sizeof *self);
 
   yylex_init (&self->scanner);
   yyset_extra (self, self->scanner);
@@ -34,7 +34,7 @@ parse_context_delete (parse_context *self)
   yylex_destroy (self->scanner);
   pt_node_unref_ornull (self->unit);
 
-  xfree (self, sizeof *self);
+  mem_free (self, sizeof *self);
 }
 
 

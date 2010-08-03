@@ -10,14 +10,18 @@ static pt_node *
 xml_input (char const *filename)
 {
   struct xml_input_state state = XML_INPUT_STATE_NULL;
+  pt_node *node = NULL;
+
+  xmlInitParser ();
 
   if (xmlSAXUserParseFile (&xml_input_handler, &state, filename) < 0)
-    {
-      pt_node_unref_ornull (state.root);
-      return NULL;
-    }
+    pt_node_unref_ornull (state.root);
   else
-    return state.root;
+    node = state.root;
+
+  xmlCleanupParser ();
+
+  return node;
 }
 
 
