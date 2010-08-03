@@ -1,12 +1,15 @@
 all: bin/reflect
 
+LINK.c		= $(LINK.cpp)
+
 LEX		= flex
 YACC		= bison
 MKDIR_P		= mkdir -p
 
 LDFLAGS		= -Wl,-z,defs -Wl,-rpath,$(PWD)/bin -Lbin
 CPPFLAGS	= -include stdinc.h -MD
-CFLAGS		= -Wall -Wextra -ggdb3 -O3 -fPIC
+CFLAGS		= -Wall -Wextra -O3 -ggdb3 -fPIC
+CXXFLAGS	= -Wall -Wextra -O3 -ggdb3 -fPIC -std=c++0x
 CFLAGS		+= -Wredundant-decls			\
 		   -Wmissing-prototypes			\
 		   -Wnested-externs			\

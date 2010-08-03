@@ -82,5 +82,5 @@ ${dataname}_store_visitor_delete (visitor_type *object)
 {
   SELF ();
 
-  sever (self, self->base.vtbl->ti.size);
+  xfree (self, self->base.vtbl->ti.size);
 }

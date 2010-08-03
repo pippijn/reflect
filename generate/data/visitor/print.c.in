@@ -72,5 +72,5 @@ ${dataname}_print_visitor_delete (visitor_type *object)
   xmlDocDump (self->fh, self->doc);
   xmlFreeDoc (self->doc);
 
-  sever (self, self->base.vtbl->ti.size);
+  xfree (self, self->base.vtbl->ti.size);
 }

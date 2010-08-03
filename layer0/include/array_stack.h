@@ -1,5 +1,7 @@
 #pragma once
 
+__BEGIN_DECLS
+
 /**
  * This data structure is a stack of arrays.
  * All index accesses are zero-based.
@@ -22,6 +24,7 @@ void array_stack_delete (array_stack *self);
  * Push @c data onto the array of the current level.
  */
 void array_stack_push (array_stack *self, void *data);
+
 
 /**
  * Pop the last array element off the current level array and return it.
@@ -70,16 +73,18 @@ void array_stack_push_level (array_stack *self);
  *   and decrease the level count.
  * This pointer is valid until push_level reached this level again.
  */
-void **array_stack_pop_level (array_stack *self);
+void *const *array_stack_pop_level (array_stack *self);
 
 /**
  * Return pointer to the first element of the array in the current level.
  * This pointer is valid until a pop_level/push_level sequence reached this
  *   level again.
  */
-void **array_stack_last_level (array_stack const *self);
+void *const *array_stack_last_level (array_stack const *self);
 
 /**
  * Return the number of levels.
  */
 size_t array_stack_levels (array_stack const *self);
+
+__END_DECLS

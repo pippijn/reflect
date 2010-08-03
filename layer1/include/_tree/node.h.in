@@ -12,7 +12,7 @@ typedef L (node) *L (accessor_fn) (L (node) const *self);
  */
 
 /* call constructor named by string */
-L (node)               *L (new)                 (char const *type, L (node) **args);
+L (node)               *L (new)                 (char const *type, L (node) *const *args);
 
 /*
  * refcounting

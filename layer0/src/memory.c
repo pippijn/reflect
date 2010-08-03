@@ -10,7 +10,7 @@
 #define FILL_MEMORY 1
 
 void *
-alloc (size_t bytes)
+xalloc (size_t bytes)
 {
   void *ptr;
 
@@ -22,8 +22,21 @@ alloc (size_t bytes)
   return ptr;
 }
 
+void *
+xrealloc (void *ptr, size_t bytes)
+{
+  void *newptr;
+
+  if (ptr == NULL)
+    newptr = xalloc (bytes);
+  else
+    newptr = realloc (ptr, bytes);
+  assert (newptr != NULL);
+  return newptr;
+}
+
 void
-sever (void *memory, size_t bytes)
+xfree (void *memory, size_t bytes)
 {
 #if FILL_MEMORY
   memset (memory, OLD_FILL, bytes);

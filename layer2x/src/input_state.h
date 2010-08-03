@@ -1,26 +1,43 @@
 #include <pt.h>
 
-typedef struct stack stack;
+#include <array_stack.h>
+#include <stack.h>
+
+enum state
+{
+  TOKEN,
+  STRUCT,
+  MEMBER
+};
 
 struct xml_input_state
 {
   pt_node *root;
-  struct stack* stack;
+  array_stack *node_stack;
+  stack *state_stack;
   struct
   {
     struct location location;
-    xmlChar const *text;
-    int length;
+    struct
+    {
+      xmlChar *data;
+      int length;
+      int capacity;
+    } text;
     int token;
   } token;
+  int empty_child;
 };
 
 #define XML_INPUT_STATE_NULL    \
   {                             \
     NULL,                       \
     NULL,                       \
+    NULL,                       \
     {                           \
       { 0, 0, 0, 0 },           \
-      NULL, 0, 0                \
-    }                           \
+      { NULL, 0, 0 },           \
+      0                         \
+    },                          \
+    0                           \
   }

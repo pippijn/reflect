@@ -57,7 +57,7 @@ main (void)
   {
     pt_node *node = test_xml_parse ("parse.xml");
     assert (node != NULL);
-    print_node (node, "/dev/stdout");
+    print_node (node, "reparse.xml");
   }
 
   return 0;
