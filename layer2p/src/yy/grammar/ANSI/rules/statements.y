@@ -2,18 +2,12 @@
 %%
 
 statement
-	: n1:labeled_statement
-	  { statement282 }
-	| n1:compound_statement
-	  { statement283 }
-	| n1:expression_statement
-	  { statement284 }
-	| n1:selection_statement
-	  { statement285 }
-	| n1:iteration_statement
-	  { statement286 }
-	| n1:jump_statement
-	  { statement287 }
+	: :labeled_statement
+	| :compound_statement
+	| :expression_statement
+	| :selection_statement
+	| :iteration_statement
+	| :jump_statement
 	;
 
 labeled_statement
@@ -54,7 +48,7 @@ statement_list
 
 expression_statement
 	: n1:expression_opt n2:';'
-	  { expression_statement300 }
+	  { expression_statement }
 	;
 
 selection_statement

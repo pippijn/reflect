@@ -183,8 +183,7 @@ expression
 	;
 
 constant_expression
-	: n1:conditional_expression
-	  { constant_expression253 }
+	: :conditional_expression
 	;
 
 expression_opt

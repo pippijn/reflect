@@ -96,24 +96,18 @@ declaration_qualifier_list
 	;
 
 declaration_qualifier
-	: n1:type_qualifier
-	  { declaration_qualifier34 }
-	| n1:storage_class
-	  { declaration_qualifier35 }
+	: :type_qualifier
+	| :storage_class
 	;
 
 type_specifier
-	: n1:type_specifier_nosue
-	  { type_specifier36 }
-	| n1:sue_type_specifier
-	  { type_specifier37 }
+	: :type_specifier_nosue
+	| :sue_type_specifier
 	;
 
 type_specifier_nosue
-	: n1:basic_type_specifier
-	  { type_specifier_nosue38 }
-	| n1:typedef_type_specifier
-	  { type_specifier_nosue39 }
+	: :basic_type_specifier
+	| :typedef_type_specifier
 	;
 
 basic_type_specifier
@@ -160,21 +154,15 @@ pointer_type_qualifier_list
 	;
 
 elaborated_type_name
-	: n1:struct_or_union_specifier
-	  { elaborated_type_name54 }
-	| n1:enum_specifier
-	  { elaborated_type_name55 }
+	: :struct_or_union_specifier
+	| :enum_specifier
 	;
 
 declarator
-	: n1:paren_typedef_declarator
-	  { declarator56 }
-	| n1:parameter_typedef_declarator
-	  { declarator57 }
-	| n1:identifier_declarator
-	  { declarator58 }
-	| n1:old_function_declarator
-	  { declarator59 }
+	: :paren_typedef_declarator
+	| :parameter_typedef_declarator
+	| :identifier_declarator
+	| :old_function_declarator
 	;
 
 paren_typedef_declarator
@@ -272,10 +260,8 @@ postfixing_abstract_declarator
 	;
 
 identifier_declarator
-	: n1:unary_identifier_declarator
-	  { identifier_declarator92 }
-	| n1:paren_identifier_declarator
-	  { identifier_declarator93 }
+	: :unary_identifier_declarator
+	| :paren_identifier_declarator
 	;
 
 unary_identifier_declarator
@@ -329,8 +315,8 @@ identifier_list
 	;
 
 identifier_or_typedef_name
-	: n1:IDENTIFIER
-	| n1:TYPEDEF_NAME
+	: :IDENTIFIER
+	| :TYPEDEF_NAME
 	;
 
 type_name
@@ -342,7 +328,7 @@ type_name
 
 
 nonnull_expression_list
-	: n1:argument_expression_list
+	: :argument_expression_list
 	;
 
 any_word
@@ -376,8 +362,8 @@ initialiser
 	;
 
 basic_initialiser
-	: n1:bracketed_initialiser_list
-	| n1:assignment_expression
+	: :bracketed_initialiser_list
+	| :assignment_expression
 	;
 
 bracketed_initialiser_list
