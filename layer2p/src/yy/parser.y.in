@@ -10,7 +10,7 @@
 %locations
 %debug
 %error-verbose
-%expect 3
+%expect 2
 %glr-parser
 %token-table
 

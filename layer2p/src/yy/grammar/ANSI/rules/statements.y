@@ -52,7 +52,7 @@ expression_statement
 	;
 
 selection_statement
-	: if_tok:IF lbrack:'(' cond:expression rbrack:')' then_stmt:statement
+	: if_tok:IF lbrack:'(' cond:expression rbrack:')' then_stmt:statement %prec SHIFT_THERE
 	  { if_statement }
 	| if_tok:IF lbrack:'(' cond:expression rbrack:')' then_stmt:statement else_tok:ELSE else_stmt:statement
 	  { if_statement }

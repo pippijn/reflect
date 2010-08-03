@@ -33,3 +33,6 @@
 %token IF	"if"
 %token STATIC	"static"
 %token WHILE	"while"
+
+%nonassoc BARE_IF_PREC
+%nonassoc "else"

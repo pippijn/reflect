@@ -21,9 +21,9 @@ attribute
 	;
 
 attribute_list
-	: n1:attrib
+	: attrib:attrib
 	  { attribute_list373 }
-	| n1:attribute_list n2:',' n3:attrib
+	| prev:attribute_list comma:',' attrib:attrib
 	  { attribute_list374 }
 	;
 
