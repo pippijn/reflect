@@ -3,7 +3,7 @@
 
 statement
 	: n1:asm_statement
-	  { fmt350 }
+	  { statement350 }
 	;
 
 asm_statement
@@ -19,18 +19,18 @@ asm_statement
 
 asm_opt
 	: n1:empty
-	  { fmt359 }
+	  { asm_opt359 }
 	| n1:asm
-	  { fmt360 }
+	  { asm_opt360 }
 	;
 asm
 	: n1:ASM n2:'(' n3:string_literal_list n4:')'
-	  { fmt361 }
+	  { asm361 }
 	;
 
 asm_argument_list_opt
 	: n1:asm_argument_list
-	  { fmt362 }
+	  { asm_argument_list_opt362 }
 	;
 asm_argument_list
 	:                                  arg:asm_argument

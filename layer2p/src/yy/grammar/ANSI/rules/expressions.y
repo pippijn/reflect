@@ -2,19 +2,15 @@
 %%
 
 primary_expression
-	: id:IDENTIFIER
-	  { variable }
-	| constant:constant
-	  { constant }
-	| list:string_literal_list
-	  { string_literal }
+	: :IDENTIFIER
+	| :constant
+	| :string_literal_list
 	| lbrack:'(' expr:expression rbrack:')'
 	  { bracket_expression }
 	;
 
 postfix_expression
-	: n1:primary_expression
-	  { fmt180 }
+	: :primary_expression
 	| lhs:postfix_expression lsqbrack:'[' rhs:expression rsqbrack:']'
 	  { array_access }
 	| lhs:postfix_expression lbrack:'('                               rbrack:')'
@@ -39,8 +35,7 @@ argument_expression_list
 	;
 
 unary_expression
-	: n1:postfix_expression
-	  { fmt192 }
+	: :postfix_expression
 	| op:INC_OP expr:unary_expression
 	  { pre_increment }
 	| op:DEC_OP expr:unary_expression
@@ -64,8 +59,7 @@ unary_expression
 	;
 
 cast_expression
-	: n1:unary_expression
-	  { fmt204 }
+	: :unary_expression
 	| lbrack:'(' type:type_name rbrack:')' init_list:bracketed_initialiser_list
 	  { compound_literal }
 	| lbrack:'(' type:type_name rbrack:')' expr:cast_expression
@@ -73,8 +67,7 @@ cast_expression
 	;
 
 multiplicative_expression
-	: n1:cast_expression
-	  { fmt207 }
+	: :cast_expression
 	| lhs:multiplicative_expression op:'*' rhs:cast_expression
 	  { multiply }
 	| lhs:multiplicative_expression op:'/' rhs:cast_expression
@@ -84,8 +77,7 @@ multiplicative_expression
 	;
 
 additive_expression
-	: n1:multiplicative_expression
-	  { fmt211 }
+	: :multiplicative_expression
 	| lhs:additive_expression op:'+' rhs:multiplicative_expression
 	  { add }
 	| lhs:additive_expression op:'-' rhs:multiplicative_expression
@@ -93,8 +85,7 @@ additive_expression
 	;
 
 shift_expression
-	: n1:additive_expression
-	  { fmt214 }
+	: :additive_expression
 	| lhs:shift_expression op:LSH_OP rhs:additive_expression
 	  { shift_left }
 	| lhs:shift_expression op:RSH_OP rhs:additive_expression
@@ -102,8 +93,7 @@ shift_expression
 	;
 
 relational_expression
-	: n1:shift_expression
-	  { fmt217 }
+	: :shift_expression
 	| lhs:relational_expression op:'<' rhs:shift_expression
 	  { less_than }
 	| lhs:relational_expression op:'>' rhs:shift_expression
@@ -115,8 +105,7 @@ relational_expression
 	;
 
 equality_expression
-	: n1:relational_expression
-	  { fmt222 }
+	: :relational_expression
 	| lhs:equality_expression op:EQ_OP rhs:relational_expression
 	  { equals }
 	| lhs:equality_expression op:NE_OP rhs:relational_expression
@@ -124,43 +113,37 @@ equality_expression
 	;
 
 and_expression
-	: n1:equality_expression
-	  { fmt225 }
+	: :equality_expression
 	| lhs:and_expression op:'&' rhs:equality_expression
 	  { bitwise_and }
 	;
 
 exclusive_or_expression
-	: n1:and_expression
-	  { fmt227 }
+	: :and_expression
 	| lhs:exclusive_or_expression op:'^' rhs:and_expression
 	  { bitwise_xor }
 	;
 
 inclusive_or_expression
-	: n1:exclusive_or_expression
-	  { fmt229 }
+	: :exclusive_or_expression
 	| lhs:inclusive_or_expression op:'|' rhs:exclusive_or_expression
 	  { bitwise_or }
 	;
 
 logical_and_expression
-	: n1:inclusive_or_expression
-	  { fmt231 }
+	: :inclusive_or_expression
 	| lhs:logical_and_expression op:AND_OP rhs:inclusive_or_expression
 	  { logical_and }
 	;
 
 logical_or_expression
-	: n1:logical_and_expression
-	  { fmt233 }
+	: :logical_and_expression
 	| lhs:logical_or_expression op:OR_OP rhs:logical_and_expression
 	  { logical_or }
 	;
 
 conditional_expression
-	: n1:logical_or_expression
-	  { fmt235 }
+	: :logical_or_expression
 	| cond:logical_or_expression qmark:'?' then_expr:expression colon:':' else_expr:conditional_expression
 	  { ternary_op }
 	| cond:logical_or_expression qmark:'?'                      colon:':' else_expr:conditional_expression
@@ -168,8 +151,7 @@ conditional_expression
 	;
 
 assignment_expression
-	: n1:conditional_expression
-	  { fmt238 }
+	: :conditional_expression
 	| lhs:cast_expression op:'=' rhs:assignment_expression
 	  { assign }
 	| lhs:cast_expression op:MUL_ASSIGN rhs:assignment_expression
@@ -195,20 +177,19 @@ assignment_expression
 	;
 
 expression
-	: n1:assignment_expression
-	  { fmt251 }
-	| n1:expression n2:',' n3:assignment_expression
-	  { fmt252 }
+	: :assignment_expression
+	| prev:expression comma:',' expr:assignment_expression
+	  { comma_expression }
 	;
 
 constant_expression
 	: n1:conditional_expression
-	  { fmt253 }
+	  { constant_expression253 }
 	;
 
 expression_opt
 	: n1:empty
-	  { fmt250 }
+	  { expression_opt250 }
 	| n1:expression
-	  { fmt254 }
+	  { expression_opt254 }
 	;

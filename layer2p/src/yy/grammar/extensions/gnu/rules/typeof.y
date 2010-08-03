@@ -3,14 +3,14 @@
 
 type_specifier_nosue
 	: n1:typeof_type_specifier
-	  { fmt387 }
+	  { type_specifier_nosue387 }
 	;
 
 typeof_expression
 	: n1:expression
-	  { fmt388 }
+	  { typeof_expression388 }
 	| n1:type_specifier
-	  { fmt389 }
+	  { typeof_expression389 }
 	;
 
 typeof_type_specifier

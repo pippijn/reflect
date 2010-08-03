@@ -3,16 +3,16 @@
 
 attributes_opt
 	: n1:empty
-	  { fmt368 }
+	  { attributes_opt368 }
 	| n1:attributes
-	  { fmt369 }
+	  { attributes_opt369 }
 	;
 
 attributes
 	: n1:attribute
-	  { fmt370 }
+	  { attributes370 }
 	| n1:attributes n2:attribute
-	  { fmt371 }
+	  { attributes371 }
 	;
 
 attribute
@@ -22,14 +22,14 @@ attribute
 
 attribute_list
 	: n1:attrib
-	  { fmt373 }
+	  { attribute_list373 }
 	| n1:attribute_list n2:',' n3:attrib
-	  { fmt374 }
+	  { attribute_list374 }
 	;
 
 attrib
 	: n1:empty
-	  { fmt375 }
+	  { attrib375 }
 	| name:any_word
 	  { attrib }
 	| name:any_word lbrack:'(' id:IDENTIFIER                                        rbrack:')'

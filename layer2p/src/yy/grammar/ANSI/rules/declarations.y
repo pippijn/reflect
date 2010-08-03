@@ -3,146 +3,146 @@
 
 declaration
 	: n1:declaring_list n2:';'
-	  { fmt1 }
+	  { declaration1 }
 	| n1:default_declaring_list n2:';'
-	  { fmt2 }
+	  { declaration2 }
 	| n1:sue_declaration_specifier n2:';'
-	  { fmt3 }
+	  { declaration3 }
 	| n1:sue_type_specifier n2:';'
-	  { fmt4 }
+	  { declaration4 }
 	| n1:declaration_specifier n2:identifier_declarator n3:compound_statement
-	  { fmt5 }
+	  { declaration5 }
 	| n1:declaration_specifier_nosue n2:attributes n3:identifier_declarator n4:compound_statement
-	  { fmt6 }
+	  { declaration6 }
 	| n1:type_specifier n2:identifier_declarator n3:compound_statement
-	  { fmt7 }
+	  { declaration7 }
 	| n1:type_specifier_nosue n2:attributes n3:identifier_declarator n4:compound_statement
-	  { fmt8 }
+	  { declaration8 }
 	;
 
 
 declaring_list
 	: n1:declaration_specifier n2:declarator n3:asm_opt n4:attributes_opt n5:initialiser_opt
-	  { fmt9 }
+	  { declaring_list9 }
 	| n1:declaration_specifier_nosue n2:attributes n3:declarator n4:asm_opt n5:attributes_opt n6:initialiser_opt
-	  { fmt10 }
+	  { declaring_list10 }
 	| n1:type_specifier n2:declarator n3:asm_opt n4:attributes_opt n5:initialiser_opt
-	  { fmt11 }
+	  { declaring_list11 }
 	| n1:type_specifier_nosue n2:attributes n3:declarator n4:asm_opt n5:attributes_opt n6:initialiser_opt
-	  { fmt12 }
+	  { declaring_list12 }
 	| n1:declaring_list n2:',' n3:declarator n4:asm_opt n5:attributes_opt n6:initialiser_opt
-	  { fmt13 }
+	  { declaring_list13 }
 	;
 
 default_declaring_list
 	: n1:declaration_qualifier_list n2:identifier_declarator n3:attributes_opt n4:initialiser_opt
-	  { fmt14 }
+	  { default_declaring_list14 }
 	| n1:type_qualifier_list n2:identifier_declarator n3:attributes_opt n4:initialiser_opt
-	  { fmt15 }
+	  { default_declaring_list15 }
 	| n1:default_declaring_list n2:',' n3:identifier_declarator n4:attributes_opt n5:initialiser_opt
-	  { fmt16 }
+	  { default_declaring_list16 }
 	;
 
 declaration_specifier
 	: n1:declaration_specifier_nosue
-	  { fmt17 }
+	  { declaration_specifier17 }
 	| n1:sue_declaration_specifier
-	  { fmt18 }
+	  { declaration_specifier18 }
 	;
 
 declaration_specifier_nosue
 	: n1:basic_declaration_specifier
-	  { fmt19 }
+	  { declaration_specifier_nosue19 }
 	| n1:typedef_declaration_specifier
-	  { fmt20 }
+	  { declaration_specifier_nosue20 }
 	;
 
 basic_declaration_specifier
 	: n1:basic_type_specifier n2:storage_class
-	  { fmt21 }
+	  { basic_declaration_specifier21 }
 	| n1:declaration_qualifier_list n2:basic_type_name
-	  { fmt22 }
+	  { basic_declaration_specifier22 }
 	| n1:basic_declaration_specifier n2:declaration_qualifier
-	  { fmt23 }
+	  { basic_declaration_specifier23 }
 	| n1:basic_declaration_specifier n2:basic_type_name
-	  { fmt24 }
+	  { basic_declaration_specifier24 }
 	;
 
 sue_declaration_specifier
 	: n1:sue_type_specifier n2:storage_class
-	  { fmt25 }
+	  { sue_declaration_specifier25 }
 	| n1:declaration_qualifier_list n2:elaborated_type_name n3:attributes_opt
-	  { fmt26 }
+	  { sue_declaration_specifier26 }
 	| n1:sue_declaration_specifier n2:declaration_qualifier
-	  { fmt27 }
+	  { sue_declaration_specifier27 }
 	;
 
 typedef_declaration_specifier
 	: n1:typedef_type_specifier n2:storage_class
-	  { fmt28 }
+	  { typedef_declaration_specifier28 }
 	| n1:declaration_qualifier_list n2:TYPEDEF_NAME
-	  { fmt29 }
+	  { typedef_declaration_specifier29 }
 	| n1:typedef_declaration_specifier n2:declaration_qualifier
-	  { fmt30 }
+	  { typedef_declaration_specifier30 }
 	;
 
 declaration_qualifier_list
 	: n1:storage_class n2:attributes_opt
-	  { fmt31 }
+	  { declaration_qualifier_list31 }
 	| n1:type_qualifier_list n2:attributes_opt n3:storage_class n4:attributes_opt
-	  { fmt32 }
+	  { declaration_qualifier_list32 }
 	| n1:declaration_qualifier_list n2:declaration_qualifier
-	  { fmt33 }
+	  { declaration_qualifier_list33 }
 	;
 
 declaration_qualifier
 	: n1:type_qualifier
-	  { fmt34 }
+	  { declaration_qualifier34 }
 	| n1:storage_class
-	  { fmt35 }
+	  { declaration_qualifier35 }
 	;
 
 type_specifier
 	: n1:type_specifier_nosue
-	  { fmt36 }
+	  { type_specifier36 }
 	| n1:sue_type_specifier
-	  { fmt37 }
+	  { type_specifier37 }
 	;
 
 type_specifier_nosue
 	: n1:basic_type_specifier
-	  { fmt38 }
+	  { type_specifier_nosue38 }
 	| n1:typedef_type_specifier
-	  { fmt39 }
+	  { type_specifier_nosue39 }
 	;
 
 basic_type_specifier
 	: n1:basic_type_name
-	  { fmt40 }
+	  { basic_type_specifier40 }
 	| n1:type_qualifier_list n2:basic_type_name
-	  { fmt41 }
+	  { basic_type_specifier41 }
 	| n1:basic_type_specifier n2:type_qualifier
-	  { fmt42 }
+	  { basic_type_specifier42 }
 	| n1:basic_type_specifier n2:basic_type_name
-	  { fmt43 }
+	  { basic_type_specifier43 }
 	;
 
 sue_type_specifier
 	: n1:elaborated_type_name
-	  { fmt44 }
+	  { sue_type_specifier44 }
 	| n1:type_qualifier_list n2:elaborated_type_name
-	  { fmt45 }
+	  { sue_type_specifier45 }
 	| n1:sue_type_specifier n2:type_qualifier
-	  { fmt46 }
+	  { sue_type_specifier46 }
 	;
 
 typedef_type_specifier
 	: n1:TYPEDEF_NAME
-	  { fmt47 }
+	  { typedef_type_specifier47 }
 	| n1:type_qualifier_list n2:TYPEDEF_NAME
-	  { fmt48 }
+	  { typedef_type_specifier48 }
 	| n1:typedef_type_specifier n2:type_qualifier
-	  { fmt49 }
+	  { typedef_type_specifier49 }
 	;
 
 type_qualifier_list
@@ -161,83 +161,83 @@ pointer_type_qualifier_list
 
 elaborated_type_name
 	: n1:struct_or_union_specifier
-	  { fmt54 }
+	  { elaborated_type_name54 }
 	| n1:enum_specifier
-	  { fmt55 }
+	  { elaborated_type_name55 }
 	;
 
 declarator
 	: n1:paren_typedef_declarator
-	  { fmt56 }
+	  { declarator56 }
 	| n1:parameter_typedef_declarator
-	  { fmt57 }
+	  { declarator57 }
 	| n1:identifier_declarator
-	  { fmt58 }
+	  { declarator58 }
 	| n1:old_function_declarator
-	  { fmt59 }
+	  { declarator59 }
 	;
 
 paren_typedef_declarator
 	: n1:paren_postfix_typedef_declarator
-	  { fmt60 }
+	  { paren_typedef_declarator60 }
 	| n1:'*' n2:attributes_opt n3:paren_typedef_declarator
-	  { fmt61 }
+	  { paren_typedef_declarator61 }
 	| n1:'*' n2:attributes_opt n3:'(' n4:simple_paren_typedef_declarator n5:')'
-	  { fmt62 }
+	  { paren_typedef_declarator62 }
 	| n1:'*' n2:attributes_opt n3:pointer_type_qualifier_list n4:'(' n5:simple_paren_typedef_declarator n6:')'
-	  { fmt63 }
+	  { paren_typedef_declarator63 }
 	| n1:'*' n2:attributes_opt n3:pointer_type_qualifier_list n4:paren_typedef_declarator
-	  { fmt64 }
+	  { paren_typedef_declarator64 }
 	;
 
 paren_postfix_typedef_declarator
 	: n1:'(' n2:paren_typedef_declarator n3:')'
-	  { fmt65 }
+	  { paren_postfix_typedef_declarator65 }
 	| n1:'(' n2:simple_paren_typedef_declarator n3:postfixing_abstract_declarator n4:')'
-	  { fmt66 }
+	  { paren_postfix_typedef_declarator66 }
 	| n1:'(' n2:paren_typedef_declarator n3:')' n4:postfixing_abstract_declarator
-	  { fmt67 }
+	  { paren_postfix_typedef_declarator67 }
 	;
 
 simple_paren_typedef_declarator
 	: n1:TYPEDEF_NAME
-	  { fmt68 }
+	  { simple_paren_typedef_declarator68 }
 	| n1:'(' n2:simple_paren_typedef_declarator n3:')'
-	  { fmt69 }
+	  { simple_paren_typedef_declarator69 }
 	;
 
 parameter_typedef_declarator
 	: n1:TYPEDEF_NAME
-	  { fmt70 }
+	  { parameter_typedef_declarator70 }
 	| n1:TYPEDEF_NAME n2:postfixing_abstract_declarator
-	  { fmt71 }
+	  { parameter_typedef_declarator71 }
 	| n1:clean_typedef_declarator
-	  { fmt72 }
+	  { parameter_typedef_declarator72 }
 	;
 
 clean_typedef_declarator
 	: n1:clean_postfix_typedef_declarator
-	  { fmt73 }
+	  { clean_typedef_declarator73 }
 	| n1:'*' n2:attributes_opt n3:parameter_typedef_declarator
-	  { fmt74 }
+	  { clean_typedef_declarator74 }
 	| n1:'*' n2:attributes_opt n3:pointer_type_qualifier_list n4:parameter_typedef_declarator
-	  { fmt75 }
+	  { clean_typedef_declarator75 }
 	;
 
 clean_postfix_typedef_declarator
 	: n1:'(' n2:clean_typedef_declarator n3:')'
-	  { fmt76 }
+	  { clean_postfix_typedef_declarator76 }
 	| n1:'(' n2:clean_typedef_declarator n3:')' n4:postfixing_abstract_declarator
-	  { fmt77 }
+	  { clean_postfix_typedef_declarator77 }
 	;
 
 abstract_declarator
 	: n1:unary_abstract_declarator
-	  { fmt78 }
+	  { abstract_declarator78 }
 	| n1:postfix_abstract_declarator
-	  { fmt79 }
+	  { abstract_declarator79 }
 	| n1:postfixing_abstract_declarator
-	  { fmt80 }
+	  { abstract_declarator80 }
 	;
 
 unary_abstract_declarator
@@ -253,72 +253,72 @@ unary_abstract_declarator
 
 postfix_abstract_declarator
 	: n1:'(' n2:unary_abstract_declarator n3:')'
-	  { fmt85 }
+	  { postfix_abstract_declarator85 }
 	| n1:'(' n2:unary_abstract_declarator n3:')' n4:postfixing_abstract_declarator
-	  { fmt88 }
+	  { postfix_abstract_declarator88 }
 	| n1:'(' n2:postfix_abstract_declarator n3:')'
-	  { fmt86 }
+	  { postfix_abstract_declarator86 }
 	| n1:'(' n2:postfixing_abstract_declarator n3:')'
-	  { fmt87 }
+	  { postfix_abstract_declarator87 }
 	;
 
 postfixing_abstract_declarator
 	: n1:array_abstract_declarator
-	  { fmt89 }
+	  { postfixing_abstract_declarator89 }
 	| n1:'('                        n3:')'
-	  { fmt90 }
+	  { postfixing_abstract_declarator90 }
 	| n1:'(' n2:parameter_type_list n3:')'
-	  { fmt90 }
+	  { postfixing_abstract_declarator90 }
 	;
 
 identifier_declarator
 	: n1:unary_identifier_declarator
-	  { fmt92 }
+	  { identifier_declarator92 }
 	| n1:paren_identifier_declarator
-	  { fmt93 }
+	  { identifier_declarator93 }
 	;
 
 unary_identifier_declarator
 	: n1:postfix_identifier_declarator
-	  { fmt94 }
+	  { unary_identifier_declarator94 }
 	| n1:'*' n2:attributes_opt                                n4:identifier_declarator
-	  { fmt95 }
+	  { unary_identifier_declarator95 }
 	| n1:'*' n2:attributes_opt n3:pointer_type_qualifier_list n4:identifier_declarator
-	  { fmt95 }
+	  { unary_identifier_declarator95 }
 	;
 
 postfix_identifier_declarator
 	: n1:paren_identifier_declarator n2:postfixing_abstract_declarator
-	  { fmt97 }
+	  { postfix_identifier_declarator97 }
 	| n1:'(' n2:unary_identifier_declarator n3:')'
-	  { fmt98 }
+	  { postfix_identifier_declarator98 }
 	| n1:'(' n2:unary_identifier_declarator n3:')' n4:postfixing_abstract_declarator
-	  { fmt99 }
+	  { postfix_identifier_declarator99 }
 	;
 
 paren_identifier_declarator
 	: n1:IDENTIFIER
-	  { fmt100 }
+	  { paren_identifier_declarator100 }
 	| n1:'(' n2:paren_identifier_declarator n3:')'
-	  { fmt101 }
+	  { paren_identifier_declarator101 }
 	 ;
 
 old_function_declarator
 	: n1:postfix_old_function_declarator
-	  { fmt102 }
+	  { old_function_declarator102 }
 	| n1:'*' n2:attributes_opt                                n4:old_function_declarator
-	  { fmt103 }
+	  { old_function_declarator103 }
 	| n1:'*' n2:attributes_opt n3:pointer_type_qualifier_list n4:old_function_declarator
-	  { fmt103 }
+	  { old_function_declarator103 }
 	;
 
 postfix_old_function_declarator
 	: n1:paren_identifier_declarator n2:'(' n3:identifier_list n4:')'
-	  { fmt105 }
+	  { postfix_old_function_declarator105 }
 	| n1:'(' n2:old_function_declarator n3:')'
-	  { fmt106 }
+	  { postfix_old_function_declarator106 }
 	| n1:'(' n2:old_function_declarator n3:')' n4:postfixing_abstract_declarator
-	  { fmt106 }
+	  { postfix_old_function_declarator106 }
 	;
 
 identifier_list
@@ -330,9 +330,9 @@ identifier_list
 
 identifier_or_typedef_name
 	: n1:IDENTIFIER
-	  { fmt110 }
+	  { identifier_or_typedef_name110 }
 	| n1:TYPEDEF_NAME
-	  { fmt111 }
+	  { identifier_or_typedef_name111 }
 	;
 
 type_name
@@ -345,45 +345,42 @@ type_name
 
 nonnull_expression_list
 	: n1:argument_expression_list
-	  { fmt114 }
+	  { nonnull_expression_list114 }
 	;
 
 any_word
 	: n1:IDENTIFIER
-	  { fmt115 }
+	  { any_word115 }
 	| n1:TYPEDEF_NAME
-	  { fmt116 }
+	  { any_word116 }
 	| n1:CONST
-	  { fmt117 }
+	  { any_word117 }
 	;
 
 initialiser_opt
 	: n1:empty
-	  { fmt118 }
+	  { initialiser_opt118 }
 	| n1:'=' n2:initialiser
-	  { fmt119 }
+	  { initialiser_opt119 }
 	;
 
 initialiser
 	: n1:basic_initialiser
-	  { fmt120 }
 	| n1:identifier_or_typedef_name n2:':' n3:basic_initialiser
-	  { fmt121 }
+	  { initialiser121 }
 	| n1:'.' n2:identifier_or_typedef_name n3:'=' n4:basic_initialiser
-	  { fmt123 }
-	| n1:'[' n2:assignment_expression n3:']' n4:basic_initialiser
-	  { fmt125 }
-	| n1:'[' n2:assignment_expression n3:']' n4:'=' n5:basic_initialiser
-	  { fmt126 }
-	| n1:'[' n2:assignment_expression n3:ELLIPSIS n4:assignment_expression n5:']' n6:basic_initialiser
-	  { fmt127 }
+	  { designated_initialiser }
+	| n1:'[' n2:assignment_expression                                      n5:']'        n7:basic_initialiser
+	  { array_labelled_initialised }
+	| n1:'[' n2:assignment_expression                                      n5:']' n6:'=' n7:basic_initialiser
+	  { array_labelled_initialised }
+	| n1:'[' n2:assignment_expression n3:ELLIPSIS n4:assignment_expression n5:']'        n7:basic_initialiser
+	  { array_labelled_initialised }
 	;
 
 basic_initialiser
 	: n1:bracketed_initialiser_list
-	  { fmt128 }
 	| n1:assignment_expression
-	  { fmt129 }
 	;
 
 bracketed_initialiser_list
@@ -402,9 +399,9 @@ initialiser_list
 
 parameter_type_list
 	: n1:parameter_list
-	  { fmt135 }
+	  { parameter_type_list135 }
 	| n1:parameter_list n2:',' n3:ELLIPSIS
-	  { fmt135 }
+	  { parameter_type_list135 }
 	;
 
 parameter_list
@@ -416,21 +413,21 @@ parameter_list
 
 parameter_declaration
 	: n1:attributes_opt n2:declaration_specifier
-	  { fmt139 }
+	  { parameter_declaration139 }
 	| n1:attributes_opt n2:declaration_specifier n3:abstract_declarator
-	  { fmt140 }
+	  { parameter_declaration140 }
 	| n1:attributes_opt n2:declaration_specifier n3:identifier_declarator
-	  { fmt141 }
+	  { parameter_declaration141 }
 	| n1:attributes_opt n2:declaration_specifier n3:parameter_typedef_declarator
-	  { fmt142 }
+	  { parameter_declaration142 }
 	| n1:attributes_opt n2:type_specifier
-	  { fmt143 }
+	  { parameter_declaration143 }
 	| n1:attributes_opt n2:type_specifier n3:abstract_declarator
-	  { fmt144 }
+	  { parameter_declaration144 }
 	| n1:attributes_opt n2:type_specifier n3:identifier_declarator n4:attributes_opt
-	  { fmt145 }
+	  { parameter_declaration145 }
 	| n1:attributes_opt n2:type_specifier n3:parameter_typedef_declarator
-	  { fmt146 }
+	  { parameter_declaration146 }
 	;
 
 array_abstract_declarator

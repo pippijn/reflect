@@ -16,9 +16,9 @@ struct_or_union_specifier
 
 struct_or_union
 	: n1:STRUCT
-	  { fmt317 }
+	  { struct_or_union317 }
 	| n1:UNION
-	  { fmt318 }
+	  { struct_or_union318 }
 	;
 
 struct_declaration_list
@@ -30,48 +30,48 @@ struct_declaration_list
 
 struct_declaration
 	: n1:struct_declaring_list n2:';'
-	  { fmt321 }
+	  { struct_declaration321 }
 	| n1:struct_default_declaring_list n2:';'
-	  { fmt322 }
+	  { struct_declaration322 }
 	;
 
 struct_default_declaring_list
 	: n1:type_qualifier_list n2:struct_identifier_declarator
-	  { fmt323 }
+	  { struct_default_declaring_list323 }
 	| n1:struct_default_declaring_list n2:',' n3:struct_identifier_declarator
-	  { fmt324 }
+	  { struct_default_declaring_list324 }
 	;
 
 struct_declaring_list
 	: n1:type_specifier n2:struct_declarator
-	  { fmt325 }
+	  { struct_declaring_list325 }
 	| n1:type_specifier_nosue n2:attributes n3:struct_declarator
-	  { fmt326 }
+	  { struct_declaring_list326 }
 	| n1:struct_declaring_list n2:',' n3:struct_declarator
-	  { fmt327 }
+	  { struct_declaring_list327 }
 	;
 
 
 struct_declarator
 	: n1:declarator n2:bit_field_size_opt n3:attributes_opt
-	  { fmt328 }
+	  { struct_declarator328 }
 	;
 
 struct_identifier_declarator
 	: n1:identifier_declarator n2:bit_field_size_opt n3:attributes_opt
-	  { fmt329 }
+	  { struct_identifier_declarator329 }
 	;
 
 bit_field_size_opt
 	: n1:empty
-	  { fmt330 }
+	  { bit_field_size_opt330 }
 	| n1:bit_field_size
-	  { fmt331 }
+	  { bit_field_size_opt331 }
 	;
 
 bit_field_size
 	: n1:':' n2:constant_expression
-	  { fmt332 }
+	  { bit_field_size332 }
 	;
 
 enum_specifier
@@ -92,14 +92,14 @@ enumerator_list
 
 enumerator_value_opt
 	: n1:empty
-	  { fmt338 }
+	  { enumerator_value_opt338 }
 	| n1:'=' n2:constant_expression
-	  { fmt339 }
+	  { enumerator_value_opt339 }
 	;
 
 comma_opt
 	: n1:empty
-	  { fmt340 }
+	  { comma_opt340 }
 	| n1:','
-	  { fmt341 }
+	  { comma_opt341 }
 	;

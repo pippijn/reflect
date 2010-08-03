@@ -3,25 +3,25 @@
 
 struct_declaration
 	: n1:gcc_extension n2:struct_declaration
-	  { fmt382 }
+	  { struct_declaration382 }
 	;
 
 unary_expression
 	: n1:gcc_extension n2:cast_expression
-	  { fmt383 }
+	  { unary_expression383 }
 	;
 
 declarator
 	: n1:gcc_extension n2:declarator
-	  { fmt384 }
+	  { declarator384 }
 	;
 
 external_definition
 	: n1:gcc_extension n2:external_definition
-	  { fmt385 }
+	  { external_definition385 }
 	;
 
 gcc_extension
 	: n1:EXTENSION
-	  { fmt386 }
+	  { gcc_extension386 }
 	;

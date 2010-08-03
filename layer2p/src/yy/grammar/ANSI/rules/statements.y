@@ -3,17 +3,17 @@
 
 statement
 	: n1:labeled_statement
-	  { fmt282 }
+	  { statement282 }
 	| n1:compound_statement
-	  { fmt283 }
+	  { statement283 }
 	| n1:expression_statement
-	  { fmt284 }
+	  { statement284 }
 	| n1:selection_statement
-	  { fmt285 }
+	  { statement285 }
 	| n1:iteration_statement
-	  { fmt286 }
+	  { statement286 }
 	| n1:jump_statement
-	  { fmt287 }
+	  { statement287 }
 	;
 
 labeled_statement
@@ -54,7 +54,7 @@ statement_list
 
 expression_statement
 	: n1:expression_opt n2:';'
-	  { fmt300 }
+	  { expression_statement300 }
 	;
 
 selection_statement

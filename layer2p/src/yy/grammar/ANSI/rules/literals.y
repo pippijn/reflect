@@ -32,9 +32,9 @@ type_qualifier
 
 type_qualifier_opt
 	: n1:empty
-	  { fmt270 }
+	  { type_qualifier_opt270 }
 	| n1:type_qualifier
-	  { fmt271 }
+	  { type_qualifier_opt271 }
 	;
 
 pointer_type_qualifier

@@ -10,11 +10,11 @@ translation_unit
 
 external_definition
 	: n1:declaration
-	  { fmt159 }
+	  { external_definition159 }
 	| n1:function_definition
-	  { fmt160 }
+	  { external_definition160 }
 	| n1:';'
-	  { fmt161 }
+	  { external_definition161 }
 	;
 
 function_definition
@@ -32,9 +32,9 @@ function_definition
 
 function_declarator
 	: n1:identifier_declarator
-	  { fmt162 }
+	  { function_declarator162 }
 	| n2:full_old_function_declarator
-	  { fmt163 }
+	  { function_declarator163 }
 	;
 
 full_old_function_declarator
@@ -47,5 +47,5 @@ full_old_function_declarator
 
 old_function_declaration_list
 	: n1:declaration_list
-	  { fmt164 }
+	  { old_function_declaration_list164 }
 	;
