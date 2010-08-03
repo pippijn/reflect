@@ -14,8 +14,8 @@
 %glr-parser
 %token-table
 
-%parse-param { parse_context* context }
-%lex-param { void* scanner }
+%parse-param { parse_context *context }
+%lex-param { void *scanner }
 
 %destructor { pt_node_unref ($$); } <>
 

@@ -1,3 +1,5 @@
+#include "_error.h"
+
 void
 L (visitor_construct) (visitor_type *self, struct L (visitor_vtbl) const *vtbl)
 {

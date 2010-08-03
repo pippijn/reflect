@@ -41,3 +41,5 @@ struct xml_input_state
     },                          \
     0                           \
   }
+
+extern xmlSAXHandler const xml_input_handler;

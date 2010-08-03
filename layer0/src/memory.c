@@ -39,7 +39,8 @@ void
 mem_free (void *memory, size_t bytes)
 {
 #if FILL_MEMORY
-  memset (memory, OLD_FILL, bytes);
+  if (memory != NULL)
+    memset (memory, OLD_FILL, bytes);
 #endif
   free (memory);
 }

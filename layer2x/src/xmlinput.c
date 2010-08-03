@@ -4,18 +4,17 @@
 
 #include "input_state.h"
 
-extern xmlSAXHandler xml_input_handler;
-
 static pt_node *
 xml_input (char const *filename)
 {
+  xmlSAXHandler handler = xml_input_handler;
   struct xml_input_state state = XML_INPUT_STATE_NULL;
   pt_node *node = NULL;
 
   xmlInitParser ();
 
-  if (xmlSAXUserParseFile (&xml_input_handler, &state, filename) < 0)
-    pt_node_unref_ornull (state.root);
+  if (xmlSAXUserParseFile (&handler, &state, filename) < 0)
+    assert (state.root == NULL);
   else
     node = state.root;
 

@@ -51,16 +51,35 @@ static void
 xml_input_endDocument (void *ctx)
 {
   struct xml_input_state *state = ctx;
-  if (0)
   assert (state->root == NULL);
   assert (state->node_stack != NULL);
-  assert (array_stack_levels (state->node_stack) == 1);
-  assert (array_stack_size (state->node_stack) == 1);
   assert (state->state_stack != NULL);
-  assert (stack_size (state->state_stack) == 0);
 
-  state->root = array_stack_last (state->node_stack);
+  if (array_stack_levels (state->node_stack) != 1)
+    {
+      /* parsing failed, clean up the already parsed nodes */
+      do
+        {
+          while (array_stack_size (state->node_stack) != 0)
+            pt_node_unref_ornull (array_stack_pop (state->node_stack));
+          array_stack_pop_level (state->node_stack);
+        }
+      while (array_stack_levels (state->node_stack) != 0);
+    }
+  else
+    {
+      /* parsing succeeded, there must be exactly one node in the array stack */
+      assert (array_stack_size (state->node_stack) == 1);
+      assert (stack_size (state->state_stack) == 0);
 
+      /* refcounts were never changed, it should be 1
+       * we can return it and the caller will gain ownership of this reference
+       */
+      state->root = array_stack_last (state->node_stack);
+    }
+
+  /* clear data structures used during parsing
+   */
   array_stack_delete (state->node_stack);
   stack_delete (state->state_stack);
   mem_free (state->token.text.data, state->token.text.capacity + 1);
@@ -72,6 +91,8 @@ xml_input_startElement ( void *ctx
                        , const xmlChar **atts)
 {
   struct xml_input_state *state = ctx;
+  assert (state != NULL);
+  assert (name != NULL);
 
   if (xmlStrcmp (name, ROOT) == 0)
     return;
@@ -149,6 +170,8 @@ xml_input_endElement ( void *ctx
                      , const xmlChar *name)
 {
   struct xml_input_state *state = ctx;
+  assert (state != NULL);
+  assert (name != NULL);
 
   if (xmlStrcmp (name, ROOT) == 0)
     return;
@@ -221,6 +244,9 @@ xml_input_characters ( void *ctx
                      , int len)
 {
   struct xml_input_state *state = ctx;
+  assert (state != NULL);
+  assert (ch != NULL);
+  assert (len > 0);
 
   if (state->token.text.capacity - state->token.text.length - len < 0)
     {
@@ -236,6 +262,8 @@ xml_input_characters ( void *ctx
          , len);
   state->token.text.length += len;
   state->token.text.data[state->token.text.length] = '\0';
+
+  assert (xmlStrlen (state->token.text.data) == state->token.text.length);
 }
 
 
@@ -244,6 +272,8 @@ xml_input_comment ( void *ctx
                   , const xmlChar *value)
 {
   struct xml_input_state *state = ctx;
+  assert (state != NULL);
+  assert (value != NULL);
 
   printf ("%p->%s (%s)\n", state, __func__, value);
 }
@@ -252,8 +282,10 @@ static void
 xml_input_warning ( void *ctx
                   , const char *msg, ...)
 {
-  va_list ap;
   struct xml_input_state *state = ctx;
+  va_list ap;
+  assert (state != NULL);
+  assert (msg != NULL);
 
   fprintf (stdout, "%p: warning: ", state->root);
   va_start (ap, msg);
@@ -265,8 +297,10 @@ static void
 xml_input_error ( void *ctx
                 , const char *msg, ...)
 {
-  va_list ap;
   struct xml_input_state *state = ctx;
+  va_list ap;
+  assert (state != NULL);
+  assert (msg != NULL);
 
   fprintf (stdout, "%p: error: ", state->root);
   va_start (ap, msg);
@@ -275,7 +309,7 @@ xml_input_error ( void *ctx
 }
 
 
-xmlSAXHandler xml_input_handler = {
+xmlSAXHandler const xml_input_handler = {
   NULL,
   NULL,
   NULL,
