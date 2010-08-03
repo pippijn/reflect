@@ -44,17 +44,13 @@ default_declaring_list
 	;
 
 declaration_specifier
-	: n1:declaration_specifier_nosue
-	  { declaration_specifier17 }
-	| n1:sue_declaration_specifier
-	  { declaration_specifier18 }
+	: :declaration_specifier_nosue
+	| :sue_declaration_specifier
 	;
 
 declaration_specifier_nosue
-	: n1:basic_declaration_specifier
-	  { declaration_specifier_nosue19 }
-	| n1:typedef_declaration_specifier
-	  { declaration_specifier_nosue20 }
+	: :basic_declaration_specifier
+	| :typedef_declaration_specifier
 	;
 
 basic_declaration_specifier
@@ -111,8 +107,8 @@ type_specifier_nosue
 	;
 
 basic_type_specifier
-	: n1:basic_type_name
-	  { basic_type_specifier40 }
+	:                        n2:basic_type_name
+	  { basic_type_specifier41 }
 	| n1:type_qualifier_list n2:basic_type_name
 	  { basic_type_specifier41 }
 	| n1:basic_type_specifier n2:type_qualifier
@@ -122,19 +118,19 @@ basic_type_specifier
 	;
 
 sue_type_specifier
-	: n1:elaborated_type_name
+	:                        n2:elaborated_type_name
 	  { sue_type_specifier44 }
 	| n1:type_qualifier_list n2:elaborated_type_name
-	  { sue_type_specifier45 }
+	  { sue_type_specifier44 }
 	| n1:sue_type_specifier n2:type_qualifier
 	  { sue_type_specifier46 }
 	;
 
 typedef_type_specifier
-	: n1:TYPEDEF_NAME
+	:                        n2:TYPEDEF_NAME
 	  { typedef_type_specifier47 }
 	| n1:type_qualifier_list n2:TYPEDEF_NAME
-	  { typedef_type_specifier48 }
+	  { typedef_type_specifier47 }
 	| n1:typedef_type_specifier n2:type_qualifier
 	  { typedef_type_specifier49 }
 	;
@@ -220,12 +216,9 @@ clean_postfix_typedef_declarator
 	;
 
 abstract_declarator
-	: n1:unary_abstract_declarator
-	  { abstract_declarator78 }
-	| n1:postfix_abstract_declarator
-	  { abstract_declarator79 }
-	| n1:postfixing_abstract_declarator
-	  { abstract_declarator80 }
+	: :unary_abstract_declarator
+	| :postfix_abstract_declarator
+	| :postfixing_abstract_declarator
 	;
 
 unary_abstract_declarator
@@ -253,9 +246,9 @@ postfix_abstract_declarator
 postfixing_abstract_declarator
 	: n1:array_abstract_declarator_list
 	  { postfixing_abstract_declarator89 }
-	| n1:'('                        n3:')'
+	| lbrack:'('                            rbrack:')'
 	  { postfixing_abstract_declarator90 }
-	| n1:'(' n2:parameter_type_list n3:')'
+	| lbrack:'(' params:parameter_type_list rbrack:')'
 	  { postfixing_abstract_declarator90 }
 	;
 
@@ -351,13 +344,13 @@ initialiser
 	: n1:basic_initialiser
 	| n1:identifier_or_typedef_name n2:':' n3:basic_initialiser
 	  { initialiser121 }
-	| n1:'.' n2:identifier_or_typedef_name n3:'=' n4:basic_initialiser
+	| dot:'.' id:identifier_or_typedef_name equals:'=' init:basic_initialiser
 	  { designated_initialiser }
-	| n1:'[' n2:assignment_expression                                      n5:']'        n7:basic_initialiser
+	| lsqbrack:'[' expr:assignment_expression                                           rsqbrack:']'            init:basic_initialiser
 	  { array_labelled_initialised }
-	| n1:'[' n2:assignment_expression                                      n5:']' n6:'=' n7:basic_initialiser
+	| lsqbrack:'[' expr:assignment_expression                                           rsqbrack:']' equals:'=' init:basic_initialiser
 	  { array_labelled_initialised }
-	| n1:'[' n2:assignment_expression n3:ELLIPSIS n4:assignment_expression n5:']'        n7:basic_initialiser
+	| lsqbrack:'[' expr:assignment_expression dots:ELLIPSIS expr2:assignment_expression rsqbrack:']'            init:basic_initialiser
 	  { array_labelled_initialised }
 	;
 

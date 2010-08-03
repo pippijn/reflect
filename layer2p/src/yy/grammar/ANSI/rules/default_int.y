@@ -1,24 +1,29 @@
 %%
 %%
 
+default_int
+	: n1:empty
+	  { default_int }
+	;
+
 type_name
-	: n1:type_qualifier_list /*DEFAULT_INT*/
+	: tquals:type_qualifier_list defint:default_int
 	  { type_name151 }
-	| n1:type_qualifier_list /*DEFAULT_INT*/ n2:abstract_declarator
+	| tquals:type_qualifier_list defint:default_int decl:abstract_declarator
 	  { type_name151 }
 	;
 
 parameter_declaration
-	: n1:attributes_opt n2:declaration_qualifier_list /*DEFAULT_INT*/
+	: attrs:attributes_opt dquals:declaration_qualifier_list defint:default_int
 	  { parameter_declaration153 }
-	| n1:attributes_opt n2:declaration_qualifier_list /*DEFAULT_INT*/ n3:abstract_declarator
+	| attrs:attributes_opt dquals:declaration_qualifier_list defint:default_int decl:abstract_declarator
 	  { parameter_declaration154 }
-	| n1:attributes_opt n2:declaration_qualifier_list /*DEFAULT_INT*/ n3:identifier_declarator
+	| attrs:attributes_opt dquals:declaration_qualifier_list defint:default_int decl:identifier_declarator
 	  { parameter_declaration155 }
-	| n1:attributes_opt n2:type_qualifier_list /*DEFAULT_INT*/
+	| attrs:attributes_opt tquals:type_qualifier_list defint:default_int
 	  { parameter_declaration156 }
-	| n1:attributes_opt n2:type_qualifier_list /*DEFAULT_INT*/ n3:abstract_declarator
+	| attrs:attributes_opt tquals:type_qualifier_list defint:default_int decl:abstract_declarator
 	  { parameter_declaration157 }
-	| n1:attributes_opt n2:type_qualifier_list /*DEFAULT_INT*/ n3:identifier_declarator
+	| attrs:attributes_opt tquals:type_qualifier_list defint:default_int decl:identifier_declarator
 	  { parameter_declaration158 }
 	;

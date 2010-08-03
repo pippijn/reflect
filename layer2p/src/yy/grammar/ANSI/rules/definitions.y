@@ -33,9 +33,9 @@ function_declarator
 	;
 
 full_old_function_declarator
-	: n1:old_function_declarator
+	: declarator:old_function_declarator
 	  { fullold_function_declarator }
-	| n1:old_function_declarator n2:old_function_declaration_list
+	| declarator:old_function_declarator decls:old_function_declaration_list
 	  { fullold_function_declarator }
 	;
 
