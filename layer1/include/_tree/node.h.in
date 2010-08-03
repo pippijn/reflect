@@ -14,10 +14,17 @@ typedef L (node) *L (accessor_fn) (L (node) const *self);
 /* call constructor named by string */
 L (node)               *L (new)                 (char const *type, L (node) **args);
 
-/* refcounting */
+/*
+ * refcounting
+ */
+
+/*!< Increase refcount. Aborts if @c self is NULL. */
 L (node)               *L (node_ref)            (L (node) *self);
+/*!< Increase refcount. @c self may be NULL. */
 L (node)               *L (node_ref_ornull)     (L (node) *self);
+/*!< Decrease refcount. Aborts if @c self is NULL. */
 void                    L (node_unref)          (L (node) *self);
+/*!< Decrease refcount. @c self may be NULL. */
 void                    L (node_unref_ornull)   (L (node) *self);
 
 /* accessors */

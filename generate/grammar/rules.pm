@@ -23,30 +23,36 @@ sub locate_args {
    \%nodes
 }
 
-sub assemble {
+sub assemble_rules {
    my ($nodes, $rule) = @_;
 
    my $rhs = join ' ', map { $_->{expr} } @{ $rule->{rhs} };
    my $code = "\n\t  { \$\$ = ${dataname}_$rule->{node}_new (";
 
+   my $node = $nodes->{$rule->{node}};
+
    my @args;
+   my $cur = 0;
    for my $i (0 .. $#{ $rule->{rhs} }) {
       my $arg  = $rule->{rhs}[$i]{name};
-      my $node = $rule->{node};
-      my $idx  = $nodes->{$node}{$arg};
+      my $idx  = $node->{$arg};
 
-      push @args, undef
-         for $i + 1 .. $idx - 1;
+      for ($cur + 1 .. $idx - 1) {
+         push @args, undef;
+         ++$cur
+      }
 
       push @args, $arg;
+
+      ++$cur
    }
    push @args, undef
-      for @args + 1 .. keys %{ $nodes->{$rule->{node}} };
+      for $cur .. (keys %{ $nodes->{$rule->{node}} }) - 1;
 
-   my $count = 1;
-   $code .= join ", ", map { $_ ? '$' . $count++ : "NULL" } @args;
+   my $count = 0;
+   $code .= join ", ", map { $_ ? '$' . ++$count : "NULL" } @args;
 
-   $rhs . $code . "); }"
+   $rhs . $code . "); parse_context_unit_set (context, \$\$); }"
 }
 
 sub gen_rules {
@@ -55,9 +61,9 @@ sub gen_rules {
    while (my ($nterm, $rule) = each %$rules) {
       my $nodes = locate_args $rule;
 
-      print $fh "$nterm\n\t: ";
-      print $fh join "\n\t| ", map { assemble $nodes, $_ } @$rule;
-      print $fh "\n\t;\n\n";
+      print $fh "$nterm\n\t: "
+              . (join "\n\t| ", map { assemble_rules $nodes, $_ } @$rule)
+              . "\n\t;\n\n";
    }
 }
 

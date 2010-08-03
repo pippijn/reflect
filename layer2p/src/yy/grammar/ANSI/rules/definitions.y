@@ -1,6 +1,13 @@
 %%
 %%
 
+translation_unit
+	: n1:external_definition
+	  { fmt159 }
+	| n1:translation_unit n2:external_definition
+	  { fmt160 }
+	;
+
 external_definition
 	: n1:declaration
 	  { fmt161 }

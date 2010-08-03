@@ -17,7 +17,7 @@ postfix_expression
 	  { fmt180 }
 	| n1:postfix_expression n2:'[' n3:expression n4:']'
 	  { array_access }
-	| n1:postfix_expression n2:'(' n3:')'
+	| n1:postfix_expression n2:'(' n4:')'
 	  { function_call }
 	| n1:postfix_expression n2:'(' n3:argument_expression_list n4:')'
 	  { function_call }
@@ -163,7 +163,7 @@ conditional_expression
 	  { fmt235 }
 	| n1:logical_or_expression n2:'?' n3:expression n4:':' n5:conditional_expression
 	  { ternary_op }
-	| n1:logical_or_expression n2:'?' n3:':' n4:conditional_expression
+	| n1:logical_or_expression n2:'?' n4:':' n5:conditional_expression
 	  { ternary_op }
 	;
 

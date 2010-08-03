@@ -51,3 +51,5 @@ codegen: pt.codegen.stamp
 -include prepare
 prepare: $(SOURCES)
 	$(MKDIR_P) bin
+
+-include $(shell find . -name "*.d")

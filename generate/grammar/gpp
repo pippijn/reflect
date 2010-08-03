@@ -17,12 +17,11 @@ my $out  = $ARGV[2] || die USAGE;
 
 my $rules = parse $in;
 
+open my $fh, ">", $out
+   or die "Could not open $out: $!";
+
 if ($arg eq '-y') {
-   open my $fh, ">", $out
-      or die "Could not open $out: $!";
    gen_rules $rules, $fh
 } elsif ($arg eq '-a') {
-   open my $fh, ">", $out
-      or die "Could not open $out: $!";
    gen_tree $rules, $fh
 }

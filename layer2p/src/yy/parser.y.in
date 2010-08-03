@@ -26,11 +26,4 @@ empty
 	: /* empty */
 	  { new (token) (&@$, "<empty>", 7, EOF); }
 	;
-
-translation_unit
-	: external_definition
-	  { new (fmt159) ($1); parse_context_unit_set (context, $$); }
-	| translation_unit external_definition
-	  { new (fmt160) ($1, $2); parse_context_unit_set (context, $$); }
-	;
 %%
