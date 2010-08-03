@@ -48,6 +48,10 @@ sub gen_visitor_c {
 void
 ${dataname}_visitor_visit_$name (${dataname}_visitor *self, ${dataname}_node const *node)
 {
+  assert (self != NULL);
+  assert (self->vtbl != NULL);
+  assert (self->vtbl->visit_$name != NULL);
+
   self->vtbl->visit_$name (self, node);
 }
 EOF
