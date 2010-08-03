@@ -68,90 +68,60 @@ cast_expression
 
 multiplicative_expression
 	: :cast_expression
-	| lhs:multiplicative_expression op:'*' rhs:cast_expression
+	| lhs:multiplicative_expression op:'*' rhs:multiplicative_expression
 	  { multiply }
-	| lhs:multiplicative_expression op:'/' rhs:cast_expression
+	| lhs:multiplicative_expression op:'/' rhs:multiplicative_expression
 	  { divide }
-	| lhs:multiplicative_expression op:'%' rhs:cast_expression
+	| lhs:multiplicative_expression op:'%' rhs:multiplicative_expression
 	  { modulo }
-	;
 
-additive_expression
-	: :multiplicative_expression
-	| lhs:additive_expression op:'+' rhs:multiplicative_expression
+	| lhs:multiplicative_expression op:'+' rhs:multiplicative_expression
 	  { add }
-	| lhs:additive_expression op:'-' rhs:multiplicative_expression
+	| lhs:multiplicative_expression op:'-' rhs:multiplicative_expression
 	  { subtract }
-	;
 
-shift_expression
-	: :additive_expression
-	| lhs:shift_expression op:LSH_OP rhs:additive_expression
+	| lhs:multiplicative_expression op:LSH_OP rhs:multiplicative_expression
 	  { shift_left }
-	| lhs:shift_expression op:RSH_OP rhs:additive_expression
+	| lhs:multiplicative_expression op:RSH_OP rhs:multiplicative_expression
 	  { shift_right }
-	;
 
-relational_expression
-	: :shift_expression
-	| lhs:relational_expression op:'<' rhs:shift_expression
+	| lhs:multiplicative_expression op:'<' rhs:multiplicative_expression
 	  { less_than }
-	| lhs:relational_expression op:'>' rhs:shift_expression
+	| lhs:multiplicative_expression op:'>' rhs:multiplicative_expression
 	  { greater_than }
-	| lhs:relational_expression op:LE_OP rhs:shift_expression
+	| lhs:multiplicative_expression op:LE_OP rhs:multiplicative_expression
 	  { less_than_equals }
-	| lhs:relational_expression op:GE_OP rhs:shift_expression
+	| lhs:multiplicative_expression op:GE_OP rhs:multiplicative_expression
 	  { greater_than_equals }
-	;
 
-equality_expression
-	: :relational_expression
-	| lhs:equality_expression op:EQ_OP rhs:relational_expression
+	| lhs:multiplicative_expression op:EQ_OP rhs:multiplicative_expression
 	  { equals }
-	| lhs:equality_expression op:NE_OP rhs:relational_expression
+	| lhs:multiplicative_expression op:NE_OP rhs:multiplicative_expression
 	  { not_equals }
-	;
 
-and_expression
-	: :equality_expression
-	| lhs:and_expression op:'&' rhs:equality_expression
+	| lhs:multiplicative_expression op:'&' rhs:multiplicative_expression
 	  { bitwise_and }
-	;
 
-exclusive_or_expression
-	: :and_expression
-	| lhs:exclusive_or_expression op:'^' rhs:and_expression
+	| lhs:multiplicative_expression op:'^' rhs:multiplicative_expression
 	  { bitwise_xor }
-	;
 
-inclusive_or_expression
-	: :exclusive_or_expression
-	| lhs:inclusive_or_expression op:'|' rhs:exclusive_or_expression
+	| lhs:multiplicative_expression op:'|' rhs:multiplicative_expression
 	  { bitwise_or }
-	;
 
-logical_and_expression
-	: :inclusive_or_expression
-	| lhs:logical_and_expression op:AND_OP rhs:inclusive_or_expression
+	| lhs:multiplicative_expression op:AND_OP rhs:multiplicative_expression
 	  { logical_and }
-	;
 
-logical_or_expression
-	: :logical_and_expression
-	| lhs:logical_or_expression op:OR_OP rhs:logical_and_expression
+	| lhs:multiplicative_expression op:OR_OP rhs:multiplicative_expression
 	  { logical_or }
-	;
 
-conditional_expression
-	: :logical_or_expression
-	| cond:logical_or_expression qmark:'?' then_expr:expression colon:':' else_expr:conditional_expression
+	| cond:multiplicative_expression qmark:'?' then_expr:expression colon:':' else_expr:multiplicative_expression
 	  { ternary_op }
-	| cond:logical_or_expression qmark:'?'                      colon:':' else_expr:conditional_expression
+	| cond:multiplicative_expression qmark:'?'                      colon:':' else_expr:multiplicative_expression
 	  { ternary_op }
 	;
 
 assignment_expression
-	: :conditional_expression
+	: :multiplicative_expression
 	| lhs:cast_expression op:'=' rhs:assignment_expression
 	  { assign }
 	| lhs:cast_expression op:MUL_ASSIGN rhs:assignment_expression
@@ -183,7 +153,7 @@ expression
 	;
 
 constant_expression
-	: :conditional_expression
+	: :multiplicative_expression
 	;
 
 expression_opt

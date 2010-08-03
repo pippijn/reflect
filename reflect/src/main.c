@@ -63,7 +63,8 @@ main (void)
 
   pctx = parse_context_new ();
   yydebug = 0;
-  yyparse (pctx);
+  if (yyparse (pctx) == 1)
+    puts ("An unrecoverable syntax has occurred. Parsing was aborted.");
   node = parse_context_unit (pctx);
 
   print_node (node, "parse.xml");
