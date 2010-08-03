@@ -8,6 +8,7 @@ use Template;
 use Template::Stash;
 
 $Template::Stash::SCALAR_OPS->{optional}  = sub { 0 };
+$Template::Stash::SCALAR_OPS->{upper}     = sub { uc $_[0] };
 $Template::Stash::LIST_OPS->{optional}    = sub { 1 };
 $Template::Stash::LIST_OPS->{all}         = \&all;
 $Template::Stash::LIST_OPS->{args}        = sub {

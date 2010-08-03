@@ -2,11 +2,16 @@
 
 /* vtable */
 
+static char const *const members[] = {
+  NULL
+};
+
 vtbl_type const L (node_vtbl) = {
   {
     NULL,
     "node",
     U (NODE),
+    members,
     sizeof (node_type),
   },
   L (node_destruct),
@@ -101,6 +106,13 @@ L (node_destruct) (node_type *self)
   assert (self->vtbl != NULL);
 }
 
+
+/*
+ * public
+ */
+
+/* refcounting */
+
 node_type *
 L (node_ref) (node_type *self)
 {
@@ -142,4 +154,43 @@ L (node_unref_ornull) (node_type *self)
       if (--self->refcnt == 0)
         L (node_delete) (self);
     }
+}
+
+
+/* string member access */
+
+node_type *
+L (node_path) (node_type const *self, char const *path)
+{
+  node_type *node = NULL;
+  node_type const *next = self;
+  char *pieces = strdup (path);
+  char *token = strtok (pieces, "/");
+
+  do
+    next = node = L (node_member) (next, token);
+  while ((token = strtok (NULL, "/")) != NULL);
+
+  return node;
+}
+
+
+/* member list */
+char const *const *
+L (node_members) (node_type const *self)
+{
+  assert (self != NULL);
+  assert (self->vtbl != NULL);
+  assert (self->vtbl->ti.members != NULL);
+  return self->vtbl->ti.members;
+}
+
+/* get node type name */
+char const *
+L (node_type_name) (L (node) const *self)
+{
+  assert (self != NULL);
+  assert (self->vtbl != NULL);
+  assert (self->vtbl->ti.name != NULL);
+  return self->vtbl->ti.name;
 }

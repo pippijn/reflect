@@ -2,6 +2,14 @@
 #include <$dataname/gen/nodes.h>
 #include "nodes.h"
 
+static void
+no_such_ctor (char const *type)
+{
+  fprintf (stderr, "No such constructor: %s\n", type);
+  abort ();
+}
+
+
 node_type *
 ${dataname}_new (char const *type, node_type *const *args)
 {
@@ -15,6 +23,6 @@ ${dataname}_new (char const *type, node_type *const *args)
 
 [% END %]
 
-  fprintf (stderr, "No such constructor: %s\n", type);
-  abort ();
+  no_such_ctor (type);
+  return NULL;
 }

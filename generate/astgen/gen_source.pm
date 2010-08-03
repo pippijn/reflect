@@ -6,6 +6,7 @@ use astgen::util;
 
 use astgen::source::accessors;
 use astgen::source::ctor;
+use astgen::source::member_list;
 use astgen::source::new;
 use astgen::source::self_type;
 use astgen::source::functions;
@@ -18,6 +19,7 @@ sub generate {
       or return;
 
    gen_self_type $fh, $dataname, $name, $members;
+   gen_member_list $fh, $dataname, $name, $members;
    gen_vtbl $fh, $dataname, $name, $members;
    gen_ctor $fh, $dataname, $name, $members;
    gen_new $fh, $dataname, $name, $members;

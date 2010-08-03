@@ -30,5 +30,15 @@ void                    L (node_unref_ornull)   (L (node) *self);
 /* accessors */
 struct location const  *L (node_location)       (L (node) const *self);
 
+/* call accessor named by string */
+L (node)               *L (node_member)         (L (node) const *self, char const *field);
+L (node)               *L (node_path)           (L (node) const *self, char const *path);
+
+/* get array with field names */
+char const *const      *L (node_members)        (L (node) const *self);
+
+/* get node type name */
+char const             *L (node_type_name)      (L (node) const *self);
+
 /* methods */
 void                    L (node_accept)         (L (node) const *self, L (visitor) *visitor);

@@ -21,6 +21,7 @@ struct ${dataname}_vtbl const ${dataname}_${name}_vtbl = {
     &${dataname}_node_vtbl,
     "$name",
     ${DATANAME}_$NAME,
+    members,
     sizeof (self_type),
   },
 EOF

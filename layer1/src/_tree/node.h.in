@@ -23,6 +23,7 @@ struct L (vtbl)
     vtbl_type const *base;
     char const *name;
     kind_type kind;
+    char const *const *members;
     size_t size;
   } ti;
   destruct_fn *destruct;

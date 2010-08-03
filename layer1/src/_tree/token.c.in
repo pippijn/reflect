@@ -17,6 +17,10 @@ typedef struct L (node_token) self_type;
 
 /* vtable */
 
+static char const *const members[] = {
+  NULL
+};
+
 static destruct_fn L (token_destruct);
 static accept_fn L (token_accept);
 
@@ -27,6 +31,7 @@ vtbl_type const L (token_vtbl) = {
     &L (node_vtbl),
     "token",
     U (TOKEN),
+    members,
     sizeof (self_type),
   },
   L (token_destruct),

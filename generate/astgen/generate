@@ -15,7 +15,7 @@ use astgen::gen_extra;
 our $dataname;
 our @vfuns     = qw/destruct accept/;
 our @visitors  = qw/print store/;
-our @extra     = qw/string_ctor/;
+our @extra     = qw/string_acc string_ctor/;
 
 my $rules = do {
    my $file = $ARGV[0]
