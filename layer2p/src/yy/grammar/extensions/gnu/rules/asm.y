@@ -33,18 +33,18 @@ asm_argument_list_opt
 	  { fmt362 }
 	;
 asm_argument_list
-	: n1:asm_argument
-	  { fmt363 }
-	| n1:asm_argument_list n2:',' n3:asm_argument
-	  { fmt364 }
+	:                                  arg:asm_argument
+	  { asm_argument_list }
+	| prev:asm_argument_list comma:',' arg:asm_argument
+	  { asm_argument_list }
 	;
 asm_argument
 	: target:string_literal_list lbrack:'(' expr:assignment_expression rbrack:')'
 	  { asm_argument }
 	;
 asm_clobbered_list
-	: n1:string_literal_list
-	  { fmt366 }
-	| n1:asm_clobbered_list n2:',' n3:string_literal_list
-	  { fmt367 }
+	:                                   clobber:string_literal_list
+	  { asm_clobbered_list }
+	| prev:asm_clobbered_list comma:',' clobber:string_literal_list
+	  { asm_clobbered_list }
 	;

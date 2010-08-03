@@ -22,10 +22,10 @@ struct_or_union
 	;
 
 struct_declaration_list
-	: n1:attributes_opt n2:struct_declaration
-	  { fmt319 }
-	| n1:struct_declaration_list n2:attributes_opt n3:struct_declaration
-	  { fmt320 }
+	:                              attrs:attributes_opt decl:struct_declaration
+	  { struct_declaration_list }
+	| prev:struct_declaration_list attrs:attributes_opt decl:struct_declaration
+	  { struct_declaration_list }
 	;
 
 struct_declaration
@@ -84,10 +84,10 @@ enum_specifier
 	;
 
 enumerator_list
-	: n1:identifier_or_typedef_name n2:enumerator_value_opt
-	  { fmt336 }
-	| n1:enumerator_list n2:',' n3:identifier_or_typedef_name n4:enumerator_value_opt
-	  { fmt337 }
+	:                                id:identifier_or_typedef_name value:enumerator_value_opt
+	  { enumerator_list }
+	| prev:enumerator_list comma:',' id:identifier_or_typedef_name value:enumerator_value_opt
+	  { enumerator_list }
 	;
 
 enumerator_value_opt

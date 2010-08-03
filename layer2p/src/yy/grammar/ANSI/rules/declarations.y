@@ -146,17 +146,17 @@ typedef_type_specifier
 	;
 
 type_qualifier_list
-	: n1:type_qualifier
-	  { fmt50 }
-	| n1:type_qualifier_list n2:type_qualifier
-	  { fmt51 }
+	:                          qual:type_qualifier
+	  { type_qualifier_list }
+	| prev:type_qualifier_list qual:type_qualifier
+	  { type_qualifier_list }
 	;
 
 pointer_type_qualifier_list
-	: n1:pointer_type_qualifier
-	  { fmt52 }
-	| n1:pointer_type_qualifier_list n2:pointer_type_qualifier
-	  { fmt53 }
+	:                                  qual:pointer_type_qualifier
+	  { pointer_type_qualifier_list }
+	| prev:pointer_type_qualifier_list qual:pointer_type_qualifier
+	  { pointer_type_qualifier_list }
 	;
 
 elaborated_type_name
@@ -245,7 +245,7 @@ unary_abstract_declarator
 	  { pointer }
 	| n1:'*' n2:attributes_opt n3:pointer_type_qualifier_list
 	  { pointer }
-	| n1:'*' n2:attributes_opt n4:abstract_declarator
+	| n1:'*' n2:attributes_opt                                n4:abstract_declarator
 	  { pointer }
 	| n1:'*' n2:attributes_opt n3:pointer_type_qualifier_list n4:abstract_declarator
 	  { pointer }
@@ -265,10 +265,10 @@ postfix_abstract_declarator
 postfixing_abstract_declarator
 	: n1:array_abstract_declarator
 	  { fmt89 }
-	| n1:'(' n2:')'
+	| n1:'('                        n3:')'
 	  { fmt90 }
 	| n1:'(' n2:parameter_type_list n3:')'
-	  { fmt91 }
+	  { fmt90 }
 	;
 
 identifier_declarator
@@ -281,10 +281,10 @@ identifier_declarator
 unary_identifier_declarator
 	: n1:postfix_identifier_declarator
 	  { fmt94 }
-	| n1:'*' n2:attributes_opt n3:identifier_declarator
+	| n1:'*' n2:attributes_opt                                n4:identifier_declarator
 	  { fmt95 }
 	| n1:'*' n2:attributes_opt n3:pointer_type_qualifier_list n4:identifier_declarator
-	  { fmt96 }
+	  { fmt95 }
 	;
 
 postfix_identifier_declarator
@@ -306,10 +306,10 @@ paren_identifier_declarator
 old_function_declarator
 	: n1:postfix_old_function_declarator
 	  { fmt102 }
-	| n1:'*' n2:attributes_opt n3:old_function_declarator
+	| n1:'*' n2:attributes_opt                                n4:old_function_declarator
 	  { fmt103 }
 	| n1:'*' n2:attributes_opt n3:pointer_type_qualifier_list n4:old_function_declarator
-	  { fmt104 }
+	  { fmt103 }
 	;
 
 postfix_old_function_declarator
@@ -318,14 +318,14 @@ postfix_old_function_declarator
 	| n1:'(' n2:old_function_declarator n3:')'
 	  { fmt106 }
 	| n1:'(' n2:old_function_declarator n3:')' n4:postfixing_abstract_declarator
-	  { fmt107 }
+	  { fmt106 }
 	;
 
 identifier_list
-	: n1:IDENTIFIER
-	  { fmt108 }
-	| n1:identifier_list n2:',' n3:IDENTIFIER
-	  { fmt109 }
+	:                                id:IDENTIFIER
+	  { identifier_list }
+	| prev:identifier_list comma:',' id:IDENTIFIER
+	  { identifier_list }
 	;
 
 identifier_or_typedef_name
@@ -394,24 +394,24 @@ bracketed_initialiser_list
 	;
 
 initialiser_list
-	: n1:initialiser
-	  { fmt133 }
-	| n1:initialiser_list n2:',' n3:initialiser
-	  { fmt134 }
+	:                                 init:initialiser
+	  { initialiser_list }
+	| prev:initialiser_list comma:',' init:initialiser
+	  { initialiser_list }
 	;
 
 parameter_type_list
 	: n1:parameter_list
 	  { fmt135 }
 	| n1:parameter_list n2:',' n3:ELLIPSIS
-	  { fmt136 }
+	  { fmt135 }
 	;
 
 parameter_list
-	: n1:parameter_declaration
-	  { fmt137 }
-	| n1:parameter_list n2:',' n3:parameter_declaration
-	  { fmt138 }
+	:                               param:parameter_declaration
+	  { parameter_list }
+	| prev:parameter_list comma:',' param:parameter_declaration
+	  { parameter_list }
 	;
 
 parameter_declaration

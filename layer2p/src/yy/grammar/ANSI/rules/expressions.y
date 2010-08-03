@@ -32,10 +32,10 @@ postfix_expression
 	;
 
 argument_expression_list
-	: n1:assignment_expression
-	  { fmt190 }
-	| n1:argument_expression_list n2:',' n3:assignment_expression
-	  { fmt191 }
+	:                                         expr:assignment_expression
+	  { argument_expression_list }
+	| prev:argument_expression_list comma:',' expr:assignment_expression
+	  { argument_expression_list }
 	;
 
 unary_expression

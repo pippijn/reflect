@@ -17,9 +17,9 @@ constant
 	;
 
 string_literal_list
-	: n2:STRING_LITERAL
+	:                          string:STRING_LITERAL
 	  { string_literal_list }
-	| n1:string_literal_list n2:STRING_LITERAL
+	| prev:string_literal_list string:STRING_LITERAL
 	  { string_literal_list }
 	;
 

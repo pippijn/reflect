@@ -5,7 +5,7 @@ type_name
 	: n1:type_qualifier_list /*DEFAULT_INT*/
 	  { fmt151 }
 	| n1:type_qualifier_list /*DEFAULT_INT*/ n2:abstract_declarator
-	  { fmt152 }
+	  { fmt151 }
 	;
 
 parameter_declaration

@@ -39,17 +39,17 @@ compound_statement
 
 
 declaration_list
-	: n1:declaration
-	  { fmt296 }
-	| n1:declaration_list n2:declaration
-	  { fmt297 }
+	:                       decl:declaration
+	  { declaration_list }
+	| prev:declaration_list decl:declaration
+	  { declaration_list }
 	;
 
 statement_list
-	: n1:statement
-	  { fmt298 }
-	| n1:statement_list n2:statement
-	  { fmt299 }
+	:                     stmt:statement
+	  { statement_list }
+	| prev:statement_list stmt:statement
+	  { statement_list }
 	;
 
 expression_statement
