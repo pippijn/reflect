@@ -336,10 +336,10 @@ identifier_or_typedef_name
 	;
 
 type_name
-	: n1:type_specifier
-	  { fmt112 }
-	| n1:type_specifier n2:abstract_declarator
-	  { fmt113 }
+	: tspec:type_specifier
+	  { type_name }
+	| tspec:type_specifier decl:abstract_declarator
+	  { type_name }
 	;
 
 

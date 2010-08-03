@@ -104,7 +104,7 @@ main (void)
     pt_node *node = test_xml_parse ("parse.xml");
     assert (node != NULL);
     print_members (node, 0);
-    print_node (pt_node_path (node, "/n1/n1"), "reparse.xml");
+    print_node (pt_node_path (node, "/def/n1"), "reparse.xml");
     pt_node_unref (node);
   }
 
