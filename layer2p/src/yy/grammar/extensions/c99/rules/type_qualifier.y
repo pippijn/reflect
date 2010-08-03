@@ -3,14 +3,14 @@
 
 type_qualifier
 	: n1:INLINE
-	  { fmt344 }
+	  { inline_type_qualifier }
 	| n1:RESTRICT
-	  { fmt345 }
+	  { restrict_type_qualifier }
 	| n1:COMPLEX
-	  { fmt346 }
+	  { complex_type_qualifier }
 	;
 
 pointer_type_qualifier
 	: n1:RESTRICT
-	  { fmt347 }
+	  { restrict_pointer_type_qualifier }
 	;

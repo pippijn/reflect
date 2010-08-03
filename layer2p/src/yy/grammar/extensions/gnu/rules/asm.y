@@ -7,22 +7,14 @@ statement
 	;
 
 asm_statement
-	: n1:ASM n2:'(' n3:string_literal_list n4:')' n5:';'
-	  { fmt351 }
-	| n1:ASM n2:'(' n3:string_literal_list n4:':' n5:asm_argument_list_opt n6:')' n7:';'
-	  { fmt352 }
-	| n1:ASM n2:'(' n3:string_literal_list n4:':' n5:asm_argument_list_opt n6:':' n7:asm_argument_list_opt n8:')' n9:';'
-	  { fmt353 }
-	| n1:ASM n2:'(' n3:string_literal_list n4:':' n5:asm_argument_list_opt n6:':' n7:asm_argument_list_opt n8:':' n9:asm_clobbered_list n10:')' n11:';'
-	  { fmt354 }
-	| n1:ASM n2:type_qualifier n3:'(' n4:string_literal_list n5:')' n6:';'
-	  { fmt355 }
-	| n1:ASM n2:type_qualifier n3:'(' n4:string_literal_list n5:':' n6:asm_argument_list_opt n7:')' n8:';'
-	  { fmt356 }
-	| n1:ASM n2:type_qualifier n3:'(' n4:string_literal_list n5:':' n6:asm_argument_list_opt n7:':' n8:asm_argument_list_opt n9:')' n10:';'
-	  { fmt357 }
-	| n1:ASM n2:type_qualifier n3:'(' n4:string_literal_list n5:':' n6:asm_argument_list_opt n7:':' n8:asm_argument_list_opt n9:':' n10:asm_clobbered_list n11:')' n12:';'
-	  { fmt358 }
+	: asm_tok:ASM tquals:type_qualifier_opt lbrack:'(' code:string_literal_list                                                                                                                                               rbrack:')' semi:';'
+	  { asm_statement }
+	| asm_tok:ASM tquals:type_qualifier_opt lbrack:'(' code:string_literal_list in_arg_colon:':' in_args:asm_argument_list_opt                                                                                                rbrack:')' semi:';'
+	  { asm_statement }
+	| asm_tok:ASM tquals:type_qualifier_opt lbrack:'(' code:string_literal_list in_arg_colon:':' in_args:asm_argument_list_opt out_arg_colon:':' out_args:asm_argument_list_opt                                               rbrack:')' semi:';'
+	  { asm_statement }
+	| asm_tok:ASM tquals:type_qualifier_opt lbrack:'(' code:string_literal_list in_arg_colon:':' in_args:asm_argument_list_opt out_arg_colon:':' out_args:asm_argument_list_opt clobber_colon:':' clobbers:asm_clobbered_list rbrack:')' semi:';'
+	  { asm_statement }
 	;
 
 asm_opt
@@ -47,8 +39,8 @@ asm_argument_list
 	  { fmt364 }
 	;
 asm_argument
-	: n1:string_literal_list n2:'(' n3:assignment_expression n4:')'
-	  { fmt365 }
+	: target:string_literal_list lbrack:'(' expr:assignment_expression rbrack:')'
+	  { asm_argument }
 	;
 asm_clobbered_list
 	: n1:string_literal_list

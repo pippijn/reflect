@@ -2,11 +2,11 @@
 %%
 
 unary_expression
-	: n1:VA_ARG n2:'(' n3:assignment_expression n4:',' n5:type_name n6:')'
-	  { fmt393 }
+	: va_arg_op:VA_ARG lbrack:'(' expr:assignment_expression comma:',' type:type_name rbrack:')'
+	  { va_arg_expression }
 	;
 
 basic_type_name
 	: n1:VA_LIST
-	  { fmt394 }
+	  { va_list_type_spec }
 	;

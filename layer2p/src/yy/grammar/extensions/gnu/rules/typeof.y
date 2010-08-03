@@ -14,8 +14,8 @@ typeof_expression
 	;
 
 typeof_type_specifier
-	: n1:TYPEOF n2:'(' n3:typeof_expression n4:')'
-	  { fmt390 }
-	| n1:type_qualifier_list n2:TYPEOF n3:'(' n4:typeof_expression n5:')'
-	  { fmt391 }
+	:                            typeof_tok:TYPEOF lbrack:'(' expr:typeof_expression rbrack:')'
+	  { typeof_type_specifier }
+	| tquals:type_qualifier_list typeof_tok:TYPEOF lbrack:'(' expr:typeof_expression rbrack:')'
+	  { typeof_type_specifier }
 	;

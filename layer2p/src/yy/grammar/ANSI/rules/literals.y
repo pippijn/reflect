@@ -30,6 +30,13 @@ type_qualifier
 	  { volatile_type_qualifier }
 	;
 
+type_qualifier_opt
+	: n1:empty
+	  { fmt270 }
+	| n1:type_qualifier
+	  { fmt271 }
+	;
+
 pointer_type_qualifier
 	: n1:CONST
 	  { const_pointer_type_qualifier }

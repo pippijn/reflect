@@ -16,8 +16,8 @@ attributes
 	;
 
 attribute
-	: n1:ATTRIBUTE n2:'(' n3:'(' n4:attribute_list n5:')' n6:')'
-	  { fmt372 }
+	: attribute_tok:ATTRIBUTE lbrack1:'(' lbrack2:'(' attributes:attribute_list rbrack1:')' rbrack2:')'
+	  { attribute }
 	;
 
 attribute_list
@@ -30,12 +30,12 @@ attribute_list
 attrib
 	: n1:empty
 	  { fmt375 }
-	| n1:any_word
-	  { fmt376 }
-	| n1:any_word n2:'(' n3:IDENTIFIER n4:')'
-	  { fmt377 }
-	| n1:any_word n2:'(' n3:IDENTIFIER n4:',' n5:nonnull_expression_list n6:')'
-	  { fmt378 }
-	| n1:any_word n2:'(' n3:nonnull_expression_list n4:')'
-	  { fmt379 }
+	| name:any_word
+	  { attrib }
+	| name:any_word lbrack:'(' id:IDENTIFIER                                        rbrack:')'
+	  { attrib }
+	| name:any_word lbrack:'(' id:IDENTIFIER comma:',' expr:nonnull_expression_list rbrack:')'
+	  { attrib }
+	| name:any_word lbrack:'('                         expr:nonnull_expression_list rbrack:')'
+	  { attrib }
 	;
