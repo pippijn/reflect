@@ -41,6 +41,8 @@ depclean: clean
 
 codegen: ast.codegen.stamp
 codegen: pt.codegen.stamp
+	$(MKDIR_P) bin
+	$(MAKE) prepare
 
 %.codegen.stamp: generate/astgen/generate generate/data/%.ast
 	$(MKDIR_P) layer1/include/$*/gen
@@ -48,8 +50,6 @@ codegen: pt.codegen.stamp
 	$(MKDIR_P) layer2v/src/visitor/$*/gen
 	@./$+
 
--include prepare
 prepare: $(SOURCES)
-	$(MKDIR_P) bin
 
 -include $(shell find . -name "*.d")

@@ -27,32 +27,36 @@ sub assemble_rules {
    my ($nodes, $rule) = @_;
 
    my $rhs = join ' ', map { $_->{expr} } @{ $rule->{rhs} };
-   my $code = "\n\t  { \$\$ = ${dataname}_$rule->{node}_new (";
+   my $code;
+   if ($rule->{node}) {
+      $code = "\n\t  { \$\$ = ${dataname}_$rule->{node}_new (";
 
-   my $node = $nodes->{$rule->{node}};
+      my $node = $nodes->{$rule->{node}};
 
-   my @args;
-   my $cur = 0;
-   for my $i (0 .. $#{ $rule->{rhs} }) {
-      my $arg  = $rule->{rhs}[$i]{name};
-      my $idx  = $node->{$arg};
+      my @args;
+      my $cur = 0;
+      for my $i (0 .. $#{ $rule->{rhs} }) {
+         my $arg  = $rule->{rhs}[$i]{name};
+         my $idx  = $node->{$arg};
 
-      for ($cur + 1 .. $idx - 1) {
-         push @args, undef;
+         for ($cur + 1 .. $idx - 1) {
+            push @args, undef;
+            ++$cur
+         }
+
+         push @args, $arg;
+
          ++$cur
       }
+      push @args, undef
+         for $cur .. (keys %{ $nodes->{$rule->{node}} }) - 1;
 
-      push @args, $arg;
-
-      ++$cur
+      my $count = 0;
+      $code .= join ", ", map { $_ ? '$' . ++$count : "NULL" } @args;
+      $code .= "); parse_context_unit_set (context, \$\$); }";
    }
-   push @args, undef
-      for $cur .. (keys %{ $nodes->{$rule->{node}} }) - 1;
 
-   my $count = 0;
-   $code .= join ", ", map { $_ ? '$' . ++$count : "NULL" } @args;
-
-   $rhs . $code . "); parse_context_unit_set (context, \$\$); }"
+   $rhs . $code
 }
 
 sub gen_rules {

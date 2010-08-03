@@ -254,12 +254,12 @@ unary_abstract_declarator
 postfix_abstract_declarator
 	: n1:'(' n2:unary_abstract_declarator n3:')'
 	  { fmt85 }
+	| n1:'(' n2:unary_abstract_declarator n3:')' n4:postfixing_abstract_declarator
+	  { fmt88 }
 	| n1:'(' n2:postfix_abstract_declarator n3:')'
 	  { fmt86 }
 	| n1:'(' n2:postfixing_abstract_declarator n3:')'
 	  { fmt87 }
-	| n1:'(' n2:unary_abstract_declarator n3:')' n4:postfixing_abstract_declarator
-	  { fmt88 }
 	;
 
 postfixing_abstract_declarator
@@ -387,12 +387,10 @@ basic_initialiser
 	;
 
 bracketed_initialiser_list
-	: n1:'{' n2:'}'
-	  { fmt130 }
-	| n1:'{' n2:initialiser_list n3:'}'
-	  { fmt131 }
-	| n1:'{' n2:initialiser_list n3:',' n4:'}'
-	  { fmt132 }
+	: lbrack:'{'                                       rbrack:'}'
+	  { bracketed_initialiser_list }
+	| lbrack:'{' list:initialiser_list comma:comma_opt rbrack:'}'
+	  { bracketed_initialiser_list }
 	;
 
 initialiser_list
@@ -436,12 +434,12 @@ parameter_declaration
 	;
 
 array_abstract_declarator
-	: n1:'[' n2:']'
-	  { fmt147 }
-	| n1:'[' n2:constant_expression n3:']'
-	  { fmt148 }
-	| n1:array_abstract_declarator n2:'[' n3:constant_expression n4:']'
-	  { fmt149 }
-	| n1:array_abstract_declarator n2:'[' n3:']'
-	  { fmt150 }
+	:                                lsqbrack:'['                          rsqbrack:']'
+	  { array_abstract_declarator }
+	|                                lsqbrack:'[' expr:constant_expression rsqbrack:']'
+	  { array_abstract_declarator }
+	| decl:array_abstract_declarator lsqbrack:'[' expr:constant_expression rsqbrack:']'
+	  { array_abstract_declarator }
+	| decl:array_abstract_declarator lsqbrack:'['                          rsqbrack:']'
+	  { array_abstract_declarator }
 	;

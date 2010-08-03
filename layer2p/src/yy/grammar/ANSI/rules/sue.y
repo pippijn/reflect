@@ -2,16 +2,16 @@
 %%
 
 struct_or_union_specifier
-	: n1:struct_or_union n2:'{' n3:struct_declaration_list n4:'}'
-	  { fmt312 }
-	| n1:struct_or_union n2:identifier_or_typedef_name n3:'{' n4:struct_declaration_list n5:'}'
-	  { fmt313 }
-	| n1:struct_or_union n2:identifier_or_typedef_name
-	  { fmt314 }
-	| n1:struct_or_union n2:'{' n3:'}'
-	  { fmt315 }
-	| n1:struct_or_union n2:identifier_or_typedef_name n3:'{' n4:'}'
-	  { fmt316 }
+	: sudcl:struct_or_union                               lbrace:'{'                                rbrace:'}'
+	  { struct_or_union_specifier }
+	| sudcl:struct_or_union                               lbrace:'{' fields:struct_declaration_list rbrace:'}'
+	  { struct_or_union_specifier }
+	| sudcl:struct_or_union id:identifier_or_typedef_name
+	  { struct_or_union_specifier }
+	| sudcl:struct_or_union id:identifier_or_typedef_name lbrace:'{'                                rbrace:'}'
+	  { struct_or_union_specifier }
+	| sudcl:struct_or_union id:identifier_or_typedef_name lbrace:'{' fields:struct_declaration_list rbrace:'}'
+	  { struct_or_union_specifier }
 	;
 
 struct_or_union
@@ -75,12 +75,12 @@ bit_field_size
 	;
 
 enum_specifier
-	: n1:ENUM n2:'{' n3:enumerator_list n4:comma_opt n5:'}'
-	  { fmt333 }
-	| n1:ENUM n2:identifier_or_typedef_name n3:'{' n4:enumerator_list n5:comma_opt n6:'}'
-	  { fmt334 }
-	| n1:ENUM n2:identifier_or_typedef_name
-	  { fmt335 }
+	: enum_tok:ENUM                                lbrace:'{' values:enumerator_list comma:comma_opt rbrace:'}'
+	  { enum_specifier }
+	| enum_tok:ENUM tag:identifier_or_typedef_name lbrace:'{' values:enumerator_list comma:comma_opt rbrace:'}'
+	  { enum_specifier }
+	| enum_tok:ENUM tag:identifier_or_typedef_name
+	  { enum_specifier }
 	;
 
 enumerator_list

@@ -3,74 +3,74 @@
 
 constant
 	: n1:FLOATING_CONSTANT
-	  { fmt255 }
+	  { floating_constant }
 	| n1:INTEGER_CONSTANT
-	  { fmt256 }
+	  { integer_constant }
 	| n1:OCTAL_CONSTANT
-	  { fmt257 }
+	  { octal_constant }
 	| n1:HEX_CONSTANT
-	  { fmt258 }
+	  { hex_constant }
 	| n1:CHAR_CONSTANT
-	  { fmt259 }
+	  { char_constant }
 	| n1:WCHAR_CONSTANT
-	  { fmt260 }
+	  { wchar_constant }
 	;
 
 string_literal_list
-	: n1:STRING_LITERAL
-	  { fmt261 }
+	: n2:STRING_LITERAL
+	  { string_literal_list }
 	| n1:string_literal_list n2:STRING_LITERAL
-	  { fmt262 }
+	  { string_literal_list }
 	;
 
 type_qualifier
 	: n1:CONST
-	  { fmt263 }
+	  { const_type_qualifier }
 	| n1:VOLATILE
-	  { fmt264 }
+	  { volatile_type_qualifier }
 	;
 
 pointer_type_qualifier
 	: n1:CONST
-	  { fmt265 }
+	  { const_pointer_type_qualifier }
 	| n1:VOLATILE
-	  { fmt266 }
+	  { volatile_pointer_type_qualifier }
 	;
 
 storage_class
 	: n1:TYPEDEF
-	  { fmt267 }
+	  { typedef_str_class_spec }
 	| n1:EXTERN
-	  { fmt268 }
+	  { extern_str_class_spec }
 	| n1:STATIC
-	  { fmt269 }
+	  { static_str_class_spec }
 	| n1:AUTO
-	  { fmt270 }
+	  { auto_str_class_spec }
 	| n1:REGISTER
-	  { fmt271 }
+	  { register_str_class_spec }
 	;
 
 basic_type_name
 	: n1:VOID
-	  { fmt272 }
+	  { void_type_spec }
 	| n1:CHAR
-	  { fmt273 }
+	  { char_type_spec }
 	| n1:WCHAR_T
-	  { fmt274 }
+	  { wchar_type_spec }
 	| n1:INT
-	  { fmt275 }
+	  { int_type_spec }
 	| n1:FLOAT
-	  { fmt276 }
+	  { float_type_spec }
 	| n1:DOUBLE
-	  { fmt277 }
+	  { double_type_spec }
 
 	| n1:SIGNED
-	  { fmt278 }
+	  { signer_type_spec }
 	| n1:UNSIGNED
-	  { fmt279 }
+	  { unsigned_type_spec }
 
 	| n1:SHORT
-	  { fmt280 }
+	  { short_type_spec }
 	| n1:LONG
-	  { fmt281 }
+	  { long_type_spec }
 	;

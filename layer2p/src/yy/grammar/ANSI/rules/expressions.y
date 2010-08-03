@@ -2,32 +2,32 @@
 %%
 
 primary_expression
-	: n1:IDENTIFIER
+	: id:IDENTIFIER
 	  { variable }
-	| n1:constant
+	| constant:constant
 	  { constant }
-	| n1:string_literal_list
+	| list:string_literal_list
 	  { string_literal }
-	| n1:'(' n2:expression n3:')'
+	| lbrack:'(' expr:expression rbrack:')'
 	  { bracket_expression }
 	;
 
 postfix_expression
 	: n1:primary_expression
 	  { fmt180 }
-	| n1:postfix_expression n2:'[' n3:expression n4:']'
+	| lhs:postfix_expression lsqbrack:'[' rhs:expression rsqbrack:']'
 	  { array_access }
-	| n1:postfix_expression n2:'(' n4:')'
+	| lhs:postfix_expression lbrack:'('                               rbrack:')'
 	  { function_call }
-	| n1:postfix_expression n2:'(' n3:argument_expression_list n4:')'
+	| lhs:postfix_expression lbrack:'(' args:argument_expression_list rbrack:')'
 	  { function_call }
-	| n1:postfix_expression n2:'.' n3:identifier_or_typedef_name
+	| lhs:postfix_expression op:'.' member:identifier_or_typedef_name
 	  { struct_access }
-	| n1:postfix_expression n2:PTR_OP n3:identifier_or_typedef_name
+	| lhs:postfix_expression op:PTR_OP member:identifier_or_typedef_name
 	  { pointer_access }
-	| n1:postfix_expression n2:INC_OP
+	| expr:postfix_expression op:INC_OP
 	  { post_increment }
-	| n1:postfix_expression n2:DEC_OP
+	| expr:postfix_expression op:DEC_OP
 	  { post_decrement }
 	;
 
@@ -41,156 +41,156 @@ argument_expression_list
 unary_expression
 	: n1:postfix_expression
 	  { fmt192 }
-	| n1:INC_OP n2:unary_expression
+	| op:INC_OP expr:unary_expression
 	  { pre_increment }
-	| n1:DEC_OP n2:unary_expression
+	| op:DEC_OP expr:unary_expression
 	  { pre_decrement }
-	| n1:'&' n2:cast_expression
+	| op:'&' expr:cast_expression
 	  { address_of }
-	| n1:'*' n2:cast_expression
+	| op:'*' expr:cast_expression
 	  { pointer_dereference }
-	| n1:'+' n2:cast_expression
+	| op:'+' expr:cast_expression
 	  { positive }
-	| n1:'-' n2:cast_expression
+	| op:'-' expr:cast_expression
 	  { negate }
-	| n1:'~' n2:cast_expression
+	| op:'~' expr:cast_expression
 	  { bitwise_negate }
-	| n1:'!' n2:cast_expression
+	| op:'!' expr:cast_expression
 	  { logical_not }
-	| n1:SIZEOF n2:unary_expression
+	| op:SIZEOF expr:unary_expression
 	  { sizeof_var }
-	| n1:SIZEOF n2:'(' n3:type_name n4:')'
+	| op:SIZEOF lbrack:'(' expr:type_name rbrack:')'
 	  { sizeof_type }
 	;
 
 cast_expression
 	: n1:unary_expression
 	  { fmt204 }
-	| n1:'(' n2:type_name n3:')' n4:bracketed_initialiser_list
+	| lbrack:'(' type:type_name rbrack:')' init_list:bracketed_initialiser_list
 	  { compound_literal }
-	| n1:'(' n2:type_name n3:')' n4:cast_expression
+	| lbrack:'(' type:type_name rbrack:')' expr:cast_expression
 	  { type_cast }
 	;
 
 multiplicative_expression
 	: n1:cast_expression
 	  { fmt207 }
-	| n1:multiplicative_expression n2:'*' n3:cast_expression
+	| lhs:multiplicative_expression op:'*' rhs:cast_expression
 	  { multiply }
-	| n1:multiplicative_expression n2:'/' n3:cast_expression
+	| lhs:multiplicative_expression op:'/' rhs:cast_expression
 	  { divide }
-	| n1:multiplicative_expression n2:'%' n3:cast_expression
+	| lhs:multiplicative_expression op:'%' rhs:cast_expression
 	  { modulo }
 	;
 
 additive_expression
 	: n1:multiplicative_expression
 	  { fmt211 }
-	| n1:additive_expression n2:'+' n3:multiplicative_expression
+	| lhs:additive_expression op:'+' rhs:multiplicative_expression
 	  { add }
-	| n1:additive_expression n2:'-' n3:multiplicative_expression
+	| lhs:additive_expression op:'-' rhs:multiplicative_expression
 	  { subtract }
 	;
 
 shift_expression
 	: n1:additive_expression
 	  { fmt214 }
-	| n1:shift_expression n2:LSH_OP n3:additive_expression
+	| lhs:shift_expression op:LSH_OP rhs:additive_expression
 	  { shift_left }
-	| n1:shift_expression n2:RSH_OP n3:additive_expression
+	| lhs:shift_expression op:RSH_OP rhs:additive_expression
 	  { shift_right }
 	;
 
 relational_expression
 	: n1:shift_expression
 	  { fmt217 }
-	| n1:relational_expression n2:'<' n3:shift_expression
+	| lhs:relational_expression op:'<' rhs:shift_expression
 	  { less_than }
-	| n1:relational_expression n2:'>' n3:shift_expression
+	| lhs:relational_expression op:'>' rhs:shift_expression
 	  { greater_than }
-	| n1:relational_expression n2:LE_OP n3:shift_expression
+	| lhs:relational_expression op:LE_OP rhs:shift_expression
 	  { less_than_equals }
-	| n1:relational_expression n2:GE_OP n3:shift_expression
+	| lhs:relational_expression op:GE_OP rhs:shift_expression
 	  { greater_than_equals }
 	;
 
 equality_expression
 	: n1:relational_expression
 	  { fmt222 }
-	| n1:equality_expression n2:EQ_OP n3:relational_expression
+	| lhs:equality_expression op:EQ_OP rhs:relational_expression
 	  { equals }
-	| n1:equality_expression n2:NE_OP n3:relational_expression
+	| lhs:equality_expression op:NE_OP rhs:relational_expression
 	  { not_equals }
 	;
 
 and_expression
 	: n1:equality_expression
 	  { fmt225 }
-	| n1:and_expression n2:'&' n3:equality_expression
+	| lhs:and_expression op:'&' rhs:equality_expression
 	  { bitwise_and }
 	;
 
 exclusive_or_expression
 	: n1:and_expression
 	  { fmt227 }
-	| n1:exclusive_or_expression n2:'^' n3:and_expression
+	| lhs:exclusive_or_expression op:'^' rhs:and_expression
 	  { bitwise_xor }
 	;
 
 inclusive_or_expression
 	: n1:exclusive_or_expression
 	  { fmt229 }
-	| n1:inclusive_or_expression n2:'|' n3:exclusive_or_expression
+	| lhs:inclusive_or_expression op:'|' rhs:exclusive_or_expression
 	  { bitwise_or }
 	;
 
 logical_and_expression
 	: n1:inclusive_or_expression
 	  { fmt231 }
-	| n1:logical_and_expression n2:AND_OP n3:inclusive_or_expression
+	| lhs:logical_and_expression op:AND_OP rhs:inclusive_or_expression
 	  { logical_and }
 	;
 
 logical_or_expression
 	: n1:logical_and_expression
 	  { fmt233 }
-	| n1:logical_or_expression n2:OR_OP n3:logical_and_expression
+	| lhs:logical_or_expression op:OR_OP rhs:logical_and_expression
 	  { logical_or }
 	;
 
 conditional_expression
 	: n1:logical_or_expression
 	  { fmt235 }
-	| n1:logical_or_expression n2:'?' n3:expression n4:':' n5:conditional_expression
+	| cond:logical_or_expression qmark:'?' then_expr:expression colon:':' else_expr:conditional_expression
 	  { ternary_op }
-	| n1:logical_or_expression n2:'?' n4:':' n5:conditional_expression
+	| cond:logical_or_expression qmark:'?'                      colon:':' else_expr:conditional_expression
 	  { ternary_op }
 	;
 
 assignment_expression
 	: n1:conditional_expression
 	  { fmt238 }
-	| n1:cast_expression n2:'=' n3:assignment_expression
+	| lhs:cast_expression op:'=' rhs:assignment_expression
 	  { assign }
-	| n1:cast_expression n2:MUL_ASSIGN n3:assignment_expression
+	| lhs:cast_expression op:MUL_ASSIGN rhs:assignment_expression
 	  { multiply_assign }
-	| n1:cast_expression n2:DIV_ASSIGN n3:assignment_expression
+	| lhs:cast_expression op:DIV_ASSIGN rhs:assignment_expression
 	  { divide_assign }
-	| n1:cast_expression n2:MOD_ASSIGN n3:assignment_expression
+	| lhs:cast_expression op:MOD_ASSIGN rhs:assignment_expression
 	  { modulo_assign }
-	| n1:cast_expression n2:ADD_ASSIGN n3:assignment_expression
+	| lhs:cast_expression op:ADD_ASSIGN rhs:assignment_expression
 	  { add_assign }
-	| n1:cast_expression n2:SUB_ASSIGN n3:assignment_expression
+	| lhs:cast_expression op:SUB_ASSIGN rhs:assignment_expression
 	  { subtract_assign }
-	| n1:cast_expression n2:LSH_ASSIGN n3:assignment_expression
+	| lhs:cast_expression op:LSH_ASSIGN rhs:assignment_expression
 	  { left_shift_assign }
-	| n1:cast_expression n2:RSH_ASSIGN n3:assignment_expression
+	| lhs:cast_expression op:RSH_ASSIGN rhs:assignment_expression
 	  { right_shift_assign }
-	| n1:cast_expression n2:AND_ASSIGN n3:assignment_expression
+	| lhs:cast_expression op:AND_ASSIGN rhs:assignment_expression
 	  { and_assign }
-	| n1:cast_expression n2:XOR_ASSIGN n3:assignment_expression
+	| lhs:cast_expression op:XOR_ASSIGN rhs:assignment_expression
 	  { xor_assign }
-	| n1:cast_expression n2:OR_ASSIGN n3:assignment_expression
+	| lhs:cast_expression op:OR_ASSIGN rhs:assignment_expression
 	  { or_assign }
 	;
 

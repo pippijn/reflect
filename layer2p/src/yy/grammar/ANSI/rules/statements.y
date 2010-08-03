@@ -17,23 +17,23 @@ statement
 	;
 
 labeled_statement
-	: n1:identifier_or_typedef_name n2:':'
+	: label:identifier_or_typedef_name semi:':'
 	  { label_statement }
-	| n1:CASE n2:constant_expression n3:':'
+	| case_tok:CASE expr:constant_expression semi:':'
 	  { case_label_statement }
-	| n1:DEFAULT n2:':'
+	| default_tok:DEFAULT semi:':'
 	  { default_label_statement }
 	;
 
 compound_statement
-	: n1:'{' n2:'}'
-	  { fmt292 }
-	| n1:'{' n2:declaration_list n3:'}'
-	  { fmt293 }
-	| n1:'{' n2:statement_list n3:'}'
-	  { fmt294 }
-	| n1:'{' n2:declaration_list n3:statement_list n4:'}'
-	  { fmt295 }
+	: lbrace:'{'                                             rbrace:'}'
+	  { compound_statement }
+	| lbrace:'{' decls:declaration_list                      rbrace:'}'
+	  { compound_statement }
+	| lbrace:'{'                        stmts:statement_list rbrace:'}'
+	  { compound_statement }
+	| lbrace:'{' decls:declaration_list stmts:statement_list rbrace:'}'
+	  { compound_statement }
 	;
 
 
@@ -58,30 +58,30 @@ expression_statement
 	;
 
 selection_statement
-	: n1:IF n2:'(' n3:expression n4:')' n5:statement
-	  { fmt301 }
-	| n1:IF n2:'(' n3:expression n4:')' n5:statement n6:ELSE n7:statement
-	  { fmt302 }
-	| n1:SWITCH n2:'(' n3:expression n4:')' n5:statement
-	  { fmt303 }
+	: if_tok:IF lbrack:'(' cond:expression rbrack:')' then_stmt:statement
+	  { if_statement }
+	| if_tok:IF lbrack:'(' cond:expression rbrack:')' then_stmt:statement else_tok:ELSE else_stmt:statement
+	  { if_statement }
+	| switch_tok:SWITCH lbrack:'(' expr:expression rbrack:')' stmt:statement
+	  { switch_statement }
 	;
 
 iteration_statement
-	: n1:WHILE n2:'(' n3:expression n4:')' n5:statement
-	  { fmt304 }
-	| n1:DO n2:statement n3:WHILE n4:'(' n5:expression n6:')' n7:';'
-	  { fmt305 }
-	| n1:FOR n2:'(' n3:expression_opt n4:';' n5:expression_opt n6:';' n7:expression_opt n8:')' n9:statement
-	  { fmt306 }
+	: while_tok:WHILE lbrack:'(' cond:expression rbrack:')' stmt:statement
+	  { while_statement }
+	| do_tok:DO stmt:statement while_tok:WHILE lbrack:'(' cond:expression rbrack:')' semi:';'
+	  { do_statement }
+	| for_tok:FOR lbrack:'(' init:expression_opt init_semi:';' cond:expression_opt cond_semi:';' inc:expression_opt rbrack:')' stmt:statement
+	  { for_statement }
 	;
 
 jump_statement
-	: n1:GOTO n2:identifier_or_typedef_name n3:';'
-	  { fmt307 }
-	| n1:CONTINUE n2:';'
-	  { fmt308 }
-	| n1:BREAK n2:';'
-	  { fmt309 }
-	| n1:RETURN n2:expression_opt n3:';'
-	  { fmt310 }
+	: goto_tok:GOTO label:identifier_or_typedef_name semi:';'
+	  { goto_statement }
+	| continue_tok:CONTINUE semi:';'
+	  { continue_statement }
+	| break_tok:BREAK semi:';'
+	  { break_statement }
+	| return_tok:RETURN expr:expression_opt semi:';'
+	  { return_statement }
 	;
