@@ -23,13 +23,13 @@ ${dataname}_print_visitor_visit_${name} (visitor_type *object, node_type const *
     [% IF member.optional %]
       [% FOREACH mem = member %]
 
-  if (${dataname}_${name}_${mem} (node) != NULL)
-    {
-      xmlNodePtr const last = self->cur;
-      self->cur = xmlNewChild (self->cur, NULL, BAD_CAST "$mem", NULL);
+  {
+    xmlNodePtr const last = self->cur;
+    self->cur = xmlNewChild (self->cur, NULL, BAD_CAST "$mem", NULL);
+    if (${dataname}_${name}_${mem} (node) != NULL)
       ${dataname}_node_accept (${dataname}_${name}_${mem} (node), &self->base);
-      self->cur = last;
-    }
+    self->cur = last;
+  }
 
       [% END %]
     [% ELSE %]
