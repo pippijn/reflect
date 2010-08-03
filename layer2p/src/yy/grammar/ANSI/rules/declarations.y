@@ -263,7 +263,7 @@ postfix_abstract_declarator
 	;
 
 postfixing_abstract_declarator
-	: n1:array_abstract_declarator
+	: n1:array_abstract_declarator_list
 	  { postfixing_abstract_declarator89 }
 	| n1:'('                        n3:')'
 	  { postfixing_abstract_declarator90 }
@@ -330,9 +330,7 @@ identifier_list
 
 identifier_or_typedef_name
 	: n1:IDENTIFIER
-	  { identifier_or_typedef_name110 }
 	| n1:TYPEDEF_NAME
-	  { identifier_or_typedef_name111 }
 	;
 
 type_name
@@ -345,7 +343,6 @@ type_name
 
 nonnull_expression_list
 	: n1:argument_expression_list
-	  { nonnull_expression_list114 }
 	;
 
 any_word
@@ -430,13 +427,16 @@ parameter_declaration
 	  { parameter_declaration146 }
 	;
 
+array_abstract_declarator_list
+	: decl:array_abstract_declarator
+	  { array_abstract_declarator_list }
+	| prev:array_abstract_declarator_list decl:array_abstract_declarator
+	  { array_abstract_declarator_list }
+	;
+
 array_abstract_declarator
-	:                                lsqbrack:'['                          rsqbrack:']'
+	: lsqbrack:'['                          rsqbrack:']'
 	  { array_abstract_declarator }
-	|                                lsqbrack:'[' expr:constant_expression rsqbrack:']'
-	  { array_abstract_declarator }
-	| decl:array_abstract_declarator lsqbrack:'[' expr:constant_expression rsqbrack:']'
-	  { array_abstract_declarator }
-	| decl:array_abstract_declarator lsqbrack:'['                          rsqbrack:']'
+	| lsqbrack:'[' expr:constant_expression rsqbrack:']'
 	  { array_abstract_declarator }
 	;
