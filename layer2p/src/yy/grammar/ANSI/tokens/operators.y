@@ -24,6 +24,10 @@
 %token XOR_ASSIGN	"^="
 %token OR_ASSIGN	"|="
 
+/* Low precedence */
+%right COMMA
+%right '=' "*=" "/=" "%=" "+=" "-=" "<<=" ">>=" "&=" "^=" "|="
+
 %right '?' ':'
 %left "||"
 %left "&&"
@@ -35,3 +39,10 @@
 %left "<<" ">>"
 %left '+' '-'
 %left '*' '/' '%'
+
+%nonassoc CAST
+
+%left '!' '~' UNARY
+%left "++" "--" '.' "->" '[' POSTFIX
+%left '(' ')'
+/* High precedence */
