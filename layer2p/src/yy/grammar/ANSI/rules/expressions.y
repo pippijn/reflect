@@ -122,27 +122,27 @@ multiplicative_expression
 
 assignment_expression
 	: :multiplicative_expression
-	| lhs:multiplicative_expression op:'=' rhs:assignment_expression
+	| lhs:cast_expression op:'=' rhs:assignment_expression
 	  { assign }
-	| lhs:multiplicative_expression op:MUL_ASSIGN rhs:assignment_expression
+	| lhs:cast_expression op:MUL_ASSIGN rhs:assignment_expression
 	  { multiply_assign }
-	| lhs:multiplicative_expression op:DIV_ASSIGN rhs:assignment_expression
+	| lhs:cast_expression op:DIV_ASSIGN rhs:assignment_expression
 	  { divide_assign }
-	| lhs:multiplicative_expression op:MOD_ASSIGN rhs:assignment_expression
+	| lhs:cast_expression op:MOD_ASSIGN rhs:assignment_expression
 	  { modulo_assign }
-	| lhs:multiplicative_expression op:ADD_ASSIGN rhs:assignment_expression
+	| lhs:cast_expression op:ADD_ASSIGN rhs:assignment_expression
 	  { add_assign }
-	| lhs:multiplicative_expression op:SUB_ASSIGN rhs:assignment_expression
+	| lhs:cast_expression op:SUB_ASSIGN rhs:assignment_expression
 	  { subtract_assign }
-	| lhs:multiplicative_expression op:LSH_ASSIGN rhs:assignment_expression
+	| lhs:cast_expression op:LSH_ASSIGN rhs:assignment_expression
 	  { left_shift_assign }
-	| lhs:multiplicative_expression op:RSH_ASSIGN rhs:assignment_expression
+	| lhs:cast_expression op:RSH_ASSIGN rhs:assignment_expression
 	  { right_shift_assign }
-	| lhs:multiplicative_expression op:AND_ASSIGN rhs:assignment_expression
+	| lhs:cast_expression op:AND_ASSIGN rhs:assignment_expression
 	  { and_assign }
-	| lhs:multiplicative_expression op:XOR_ASSIGN rhs:assignment_expression
+	| lhs:cast_expression op:XOR_ASSIGN rhs:assignment_expression
 	  { xor_assign }
-	| lhs:multiplicative_expression op:OR_ASSIGN rhs:assignment_expression
+	| lhs:cast_expression op:OR_ASSIGN rhs:assignment_expression
 	  { or_assign }
 	;
 
