@@ -14,16 +14,17 @@ type_name
 	;
 
 parameter_declaration
-	: attrs:attributes_opt dquals:declaration_qualifier_list defint:default_int
-	  { parameter_declaration153 }
-	| attrs:attributes_opt dquals:declaration_qualifier_list defint:default_int decl:abstract_declarator
-	  { parameter_declaration154 }
-	| attrs:attributes_opt dquals:declaration_qualifier_list defint:default_int decl:identifier_declarator
-	  { parameter_declaration155 }
-	| attrs:attributes_opt tquals:type_qualifier_list defint:default_int
+	: attrs:attributes_opt quals:qualifier_list defint:default_int
 	  { parameter_declaration156 }
-	| attrs:attributes_opt tquals:type_qualifier_list defint:default_int decl:abstract_declarator
+	| attrs:attributes_opt quals:qualifier_list defint:default_int decl:abstract_declarator
 	  { parameter_declaration157 }
-	| attrs:attributes_opt tquals:type_qualifier_list defint:default_int decl:identifier_declarator
+	| attrs:attributes_opt quals:qualifier_list defint:default_int decl:identifier_declarator
 	  { parameter_declaration158 }
+	;
+
+qualifier_list
+	: n1:declaration_qualifier_list
+	  { qualifier_list159 }
+	| n1:type_qualifier_list
+	  { qualifier_list160 }
 	;
