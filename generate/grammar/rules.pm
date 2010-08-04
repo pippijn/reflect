@@ -28,7 +28,7 @@ sub assemble_rules {
 
    my $rhs = join ' ', map { $_->{expr} } @{ $rule->{rhs} };
 
-   for (qw/prec dprec merge/) {
+   for (qw/dprec merge/) {
       $rhs .= " %$_ $rule->{$_}"
          if $rule->{$_}
    }

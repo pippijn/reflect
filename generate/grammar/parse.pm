@@ -42,7 +42,7 @@ sub parse {
       elsif ($state{num} == 2)
 
       {
-         # %prec, %dprec or %merge
+         # %dprec or %merge
          if ($state{token} =~ /^%/) {
             $state{num} = 6;
             redo
@@ -66,13 +66,11 @@ sub parse {
             push @{ $rules{$state{nonterm}} }, {
                rhs   => $state{rhs},
                node  => $state{node},
-               prec  => $state{prec},
                dprec => $state{dprec},
                merge => $state{merge},
             };
             delete $state{rhs};
             delete $state{node};
-            delete $state{prec};
             delete $state{dprec};
             delete $state{merge};
          }
@@ -113,11 +111,11 @@ sub parse {
          $state{num} = 3
       }
 
-      # %prec, %dprec or %merge
+      # %dprec or %merge
       elsif ($state{num} == 6)
 
       {
-         expect "%prec", "%dprec", "%merge";
+         expect "%dprec", "%merge";
          ($state{directive}) = $state{token} =~ /%(.+)/;
          $state{num} = 7
       }

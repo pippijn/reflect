@@ -23,15 +23,3 @@
 %token AND_ASSIGN	"&="
 %token XOR_ASSIGN	"^="
 %token OR_ASSIGN	"|="
-
-%right '?' ':'
-%left "||"
-%left "&&"
-%left '|'
-%left '^'
-%left '&'
-%left "==" "!="
-%left '<' '>' "<=" ">="
-%left "<<" ">>"
-%left '+' '-'
-%left '*' '/' '%'
