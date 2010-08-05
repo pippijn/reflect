@@ -186,3 +186,14 @@ START_TEST (pop_level2)
     }
 }
 END_TEST
+
+START_TEST (empty_stack_after_push)
+{
+  array_stack_push_level (stk);
+  array_stack_push (stk, "hello");
+  array_stack_pop_level (stk);
+  array_stack_push_level (stk);
+
+  fail_unless (array_stack_size (stk) == 0);
+}
+END_TEST

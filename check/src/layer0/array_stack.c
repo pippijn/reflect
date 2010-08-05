@@ -17,6 +17,7 @@ suite_array_stack (void)
   tcase_add_test (tc_master, get_set);
   tcase_add_test (tc_master, last_level);
   tcase_add_test (tc_master, pop_level2);
+  tcase_add_test (tc_master, empty_stack_after_push);
   suite_add_tcase (s, tc_master);
 
   return s;
