@@ -1,3 +1,8 @@
+/**
+ * This is the standard include header. It includes all standard headers we
+ * need and defines some universally usable macros.
+ */
+
 #include <assert.h>
 #include <limits.h>
 #include <stdbool.h>
