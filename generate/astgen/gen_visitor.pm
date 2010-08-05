@@ -5,11 +5,6 @@ use common::sense;
 use astgen::util;
 
 use Template;
-use Template::Stash;
-
-$Template::Stash::SCALAR_OPS->{optional}  = sub { 0 };
-$Template::Stash::LIST_OPS->{optional}    = sub { 1 };
-$Template::Stash::LIST_OPS->{all}         = \&all;
 
 my $template = new Template {
    INTERPOLATE    => 1,

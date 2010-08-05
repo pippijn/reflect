@@ -4,6 +4,6 @@ ${dataname}_node *
 ${dataname}_${name}_new
   ( $members.all.params)
 {
-  return NEW ($name, $members.all.named_args);
+  return NEW ($name, $members.all.args);
 }
 

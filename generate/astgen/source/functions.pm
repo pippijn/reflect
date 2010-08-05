@@ -7,12 +7,6 @@ use astgen::util;
 use Template;
 use Template::Stash;
 
-$Template::Stash::SCALAR_OPS->{optional}  = sub { 0 };
-$Template::Stash::LIST_OPS->{optional}    = sub { 1 };
-$Template::Stash::LIST_OPS->{named_args}  = sub { join ", ", @{$_[0]} };
-$Template::Stash::LIST_OPS->{all}         = \&all;
-$Template::Stash::LIST_OPS->{required}    = \&required;
-
 my $template = new Template {
    INTERPOLATE    => 1,
    PRE_CHOMP      => 1,
@@ -23,7 +17,8 @@ my $template = new Template {
 sub gen_functions {
    my ($fh, $dataname, $name, $members) = @_;
 
-   $Template::Stash::LIST_OPS->{params} = sub { join ", ", map { "${dataname}_node *$_\n  " } @{$_[0]} };
+   local $Template::Stash::LIST_OPS->{args}     = sub { join ", ", @{$_[0]} };
+   local $Template::Stash::LIST_OPS->{params}   = sub { join ", ", map { "${dataname}_node *$_\n  " } @{$_[0]} };
 
    (process $template "$_.c.in", {
       dataname => $dataname,
