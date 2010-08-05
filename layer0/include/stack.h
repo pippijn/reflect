@@ -3,42 +3,43 @@
 __BEGIN_DECLS
 
 /**
- * This data structure is a stack of arrays.
+ * This data structure behaves like a stack.
+ * It does not take ownership of the elements added to it.
  * All index accesses are zero-based.
+ *
+ * http://en.wikipedia.org/wiki/Stack_(data_structure)
  */
 typedef struct stack stack;
 
 /**
- * Create a new empty array stack. @c size and @c levels are initially both 0.
+ * Create a new empty stack. @c size is initially 0.
  */
 stack *stack_new (void);
 
 /**
- * Free array stack. Pointers to arrays returned by @c pop_level and
- *   @c last_level will hereafter become invalid.
+ * Free stack. Does not free its elements.
  */
 void stack_delete (stack *self);
 
 
 /**
- * Push @c data onto the array of the current level.
+ * Append @c data to the stack.
  */
 void stack_push (stack *self, void *data);
 
 
 /**
- * Pop the last array element off the current level array and return it.
+ * Returns the last element of the stack and removes it.
  */
 void *stack_pop (stack *self);
 
 /**
- * Return the last array element in the current level array without popping
- *   it off the array.
+ * Returns the last element of the stack.
  */
 void *stack_top (stack const *self);
 
 /**
- * Return the number of elements in the current level array.
+ * Return the number of elements in the stack.
  */
 size_t stack_size (stack const *self);
 
