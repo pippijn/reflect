@@ -39,6 +39,8 @@ struct L (node)
 };
 
 
+char const *L (kind_name) (kind_type kind);
+
 void L (pure_virtual) (void);
 bool L (kind_is) (node_type const *object, kind_type kind);
 bool L (kind_derived) (node_type const *object, kind_type kind);

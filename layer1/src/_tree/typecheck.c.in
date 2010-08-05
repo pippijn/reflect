@@ -49,6 +49,10 @@ L (cast_mutable) (node_type *object, kind_type kind)
 node_type const *
 L (cast_const) (node_type const *object, kind_type kind)
 {
-  assert (L (kind_derived) (object, kind));
+  if (!L (kind_derived) (object, kind))
+    {
+      printf ("unable to cast %s to %s\n", L (kind_name) (object->vtbl->ti.kind), L (kind_name) (kind));
+      abort ();
+    }
   return L (kind_derived) (object, kind) ? object : NULL;
 }

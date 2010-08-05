@@ -33,6 +33,21 @@ store_node (pt_node *node, char const *file)
 }
 
 static void
+print_tokens (pt_node const *node, char const *file)
+{
+  pt_visitor *printer;
+  FILE *fh = fopen (file, "w");
+  assert (fh != NULL);
+
+  printer = pt_token_visitor_new (fh);
+  pt_node_accept (node, printer);
+  fputc ('\n', fh);
+
+  pt_token_visitor_delete (printer);
+  fclose (fh);
+}
+
+static void
 print_members (pt_node const *node, int indent)
 {
   char const *const *members;
@@ -69,6 +84,8 @@ main (void)
 
   print_node (node, "parse.xml");
   store_node (node, "parse.lsp");
+  print_tokens (node, "/dev/stdout");
+  print_tokens (node, "tokens.txt");
 
   parse_context_delete (pctx);
 

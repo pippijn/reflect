@@ -1,10 +1,31 @@
+static void
+${dataname}_visitor_traverse_$name (${dataname}_visitor *self, ${dataname}_node const *node)
+{
+
+[% FOREACH member = members %]
+  [% IF member.optional %]
+    [% FOREACH mem = member.all %]
+  if (${dataname}_${name}_$mem (node) != NULL)
+    ${dataname}_node_accept (${dataname}_${name}_$mem (node), self);
+
+    [% END %]
+  [% ELSE %]
+  ${dataname}_node_accept (${dataname}_${name}_$member (node), self);
+
+  [% END %]
+
+[% END %]
+}
+
 void
 ${dataname}_visitor_visit_$name (${dataname}_visitor *self, ${dataname}_node const *node)
 {
   assert (self != NULL);
   assert (self->vtbl != NULL);
-  assert (self->vtbl->visit_$name != NULL);
 
-  self->vtbl->visit_$name (self, node);
+  if (self->vtbl->visit_$name != NULL)
+    self->vtbl->visit_$name (self, node);
+  else
+    ${dataname}_visitor_traverse_$name (self, node);
 }
 
