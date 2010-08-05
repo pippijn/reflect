@@ -1,7 +1,7 @@
 #include <pt.h>
 
-#include <cpparray_stack.h>
-#include <cppstack.h>
+#include <array_stack.h>
+#include <stack.h>
 
 enum state
 {

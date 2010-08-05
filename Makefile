@@ -6,10 +6,17 @@ LEX		= flex
 YACC		= bison
 MKDIR_P		= mkdir -p
 
-LDFLAGS		= -Wl,-z,defs -Wl,-rpath,$(PWD)/bin -Lbin
-CPPFLAGS	= -include stdinc.h -MD
-CFLAGS		= -Wall -Wextra -O3 -ggdb3 -fPIC
-CXXFLAGS	= -Wall -Wextra -O3 -ggdb3 -fPIC -std=c++0x
+ifdef WANT_GLIB
+LDFLAGS		+= $(shell pkg-config --libs glib-2.0)
+CPPFLAGS	+= -DWANT_GLIB
+CFLAGS		+= $(shell pkg-config --cflags glib-2.0)
+CXXFLAGS	+= $(shell pkg-config --cflags glib-2.0)
+endif
+
+LDFLAGS		+= -Wl,-z,defs -Wl,-rpath,$(PWD)/bin -Lbin
+CPPFLAGS	+= -include stdinc.h -MD
+CFLAGS		+= -Wall -Wextra -O0 -ggdb3 -fPIC
+CXXFLAGS	+= -Wall -Wextra -O0 -ggdb3 -fPIC -std=c++0x
 CFLAGS		+= -Wredundant-decls			\
 		   -Wmissing-prototypes			\
 		   -Wnested-externs			\
@@ -54,6 +61,7 @@ codegen: pt.codegen.stamp
 	$(MKDIR_P) layer2v/src/visitor/$*/gen
 	@./$+
 
+-include prepare
 prepare: $(SOURCES)
 
 -include $(shell find . -name "*.d")

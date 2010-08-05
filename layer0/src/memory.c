@@ -1,7 +1,7 @@
 #include <memman.h>
 
-#define NEW_FILL 0xdd
-#define OLD_FILL 0xaa
+#define NEW_FILL 0x33
+#define OLD_FILL 0xDD
 
 /*
  * We may not always want to do this. Specifically, if running under valgrind,

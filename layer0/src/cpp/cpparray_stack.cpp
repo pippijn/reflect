@@ -2,7 +2,7 @@
 
 #include <vector>
 
-struct cpparray_stack
+struct array_stack
 {
   std::vector<std::vector<void*>> data;
 };
@@ -15,7 +15,7 @@ struct cpparray_stack
  * Ensures that the array on the current level has at least size elements.
  */
 static void
-cpparray_stack_ensure (cpparray_stack *self, size_t index)
+array_stack_ensure (array_stack *self, size_t index)
 {
   assert (self != NULL);
   if (self->data.empty ())
@@ -30,14 +30,14 @@ cpparray_stack_ensure (cpparray_stack *self, size_t index)
  * public
  */
 
-cpparray_stack *
-cpparray_stack_new (void)
+array_stack *
+array_stack_new (void)
 {
-  return new cpparray_stack;
+  return new array_stack;
 }
 
 void
-cpparray_stack_delete (cpparray_stack *self)
+array_stack_delete (array_stack *self)
 {
   assert (self != NULL);
   delete self;
@@ -45,15 +45,15 @@ cpparray_stack_delete (cpparray_stack *self)
 
 
 void
-cpparray_stack_push (cpparray_stack *self, void *data)
+array_stack_push (array_stack *self, void *data)
 {
   assert (self != NULL);
-  cpparray_stack_ensure (self, -1);
+  assert (!self->data.empty ());
   self->data.back ().push_back (data);
 }
 
 void *
-cpparray_stack_pop (cpparray_stack *self)
+array_stack_pop (array_stack *self)
 {
   assert (self != NULL);
   assert (!self->data.empty ());
@@ -64,7 +64,7 @@ cpparray_stack_pop (cpparray_stack *self)
 }
 
 void *
-cpparray_stack_first (cpparray_stack const *self)
+array_stack_first (array_stack const *self)
 {
   assert (self != NULL);
   assert (!self->data.empty ());
@@ -73,7 +73,7 @@ cpparray_stack_first (cpparray_stack const *self)
 }
 
 void *
-cpparray_stack_last (cpparray_stack const *self)
+array_stack_last (array_stack const *self)
 {
   assert (self != NULL);
   assert (!self->data.empty ());
@@ -82,17 +82,17 @@ cpparray_stack_last (cpparray_stack const *self)
 }
 
 void *
-cpparray_stack_set (cpparray_stack *self, size_t index, void *data)
+array_stack_set (array_stack *self, size_t index, void *data)
 {
   assert (self != NULL);
-  cpparray_stack_ensure (self, index);
+  array_stack_ensure (self, index);
   void *prev = self->data.back ().back ();
   self->data.back ().back () = data;
   return prev;
 }
 
 void *
-cpparray_stack_get (cpparray_stack *self, size_t index)
+array_stack_get (array_stack *self, size_t index)
 {
   assert (self != NULL);
   assert (!self->data.empty ());
@@ -101,7 +101,7 @@ cpparray_stack_get (cpparray_stack *self, size_t index)
 }
 
 size_t
-cpparray_stack_size (cpparray_stack const *self)
+array_stack_size (array_stack const *self)
 {
   assert (self != NULL);
   assert (!self->data.empty ());
@@ -110,7 +110,7 @@ cpparray_stack_size (cpparray_stack const *self)
 
 
 void
-cpparray_stack_push_level (cpparray_stack *self)
+array_stack_push_level (array_stack *self)
 {
   assert (self != NULL);
   self->data.emplace_back ();
@@ -121,7 +121,7 @@ cpparray_stack_push_level (cpparray_stack *self)
  * top vector on pop_back
  */
 void *const *
-cpparray_stack_pop_level (cpparray_stack *self)
+array_stack_pop_level (array_stack *self)
 {
   assert (self != NULL);
   assert (!self->data.empty ());
@@ -130,7 +130,7 @@ cpparray_stack_pop_level (cpparray_stack *self)
 }
 
 void *const *
-cpparray_stack_last_level (cpparray_stack const *self)
+array_stack_last_level (array_stack const *self)
 {
   assert (self != NULL);
   assert (!self->data.empty ());
@@ -139,7 +139,7 @@ cpparray_stack_last_level (cpparray_stack const *self)
 }
 
 size_t
-cpparray_stack_levels (cpparray_stack const *self)
+array_stack_levels (array_stack const *self)
 {
   assert (self != NULL);
   return self->data.size ();

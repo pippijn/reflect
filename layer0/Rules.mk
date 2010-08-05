@@ -25,3 +25,8 @@ layer0/%.o: layer0/%.cpp
 
 # all sources
 SOURCES += $(layer0_SOURCES)
+
+prepare: layer0/include/stdinc.h.gch
+%.h.gch: %.h
+	$(RM) $@
+	$(COMPILE.c) $(layer0_CPPFLAGS) $<

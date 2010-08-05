@@ -1,5 +1,3 @@
-#pragma once
-
 __BEGIN_DECLS
 
 /**

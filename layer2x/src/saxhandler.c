@@ -45,6 +45,9 @@ xml_input_startDocument (void *ctx)
   assert (state->state_stack == NULL);
   state->node_stack = array_stack_new ();
   state->state_stack = stack_new ();
+
+  /* initial level for the root node */
+  array_stack_push_level (state->node_stack);
 }
 
 static void
@@ -179,7 +182,7 @@ xml_input_endElement ( void *ctx
   if (DEBUG)
     {
       printf ("%p->%s (%s)\n", state, __func__, name);
-      printf ( "levels: %zd size: %zd\n"
+      printf ( "   levels: %zd size: %zd\n"
              , array_stack_levels (state->node_stack)
              , array_stack_size   (state->node_stack));
     }
@@ -210,6 +213,7 @@ xml_input_endElement ( void *ctx
             for (i = 0; i < array_stack_size (state->node_stack) - 1; i++)
               printf ("%p, ", args[i]);
             printf ("%p) = ", args[i]);
+            fflush (stdout);
           }
         node = pt_new ((char const *)name, (pt_node *const *)args);
         assert (node != NULL);
@@ -236,6 +240,15 @@ xml_input_endElement ( void *ctx
         assert (!"bad case");
       }
     }
+
+  if (DEBUG)
+    {
+      printf ("now:\n");
+      printf ( "   levels: %zd size: %zd\n"
+             , array_stack_levels (state->node_stack)
+             , array_stack_size   (state->node_stack));
+    }
+
 }
 
 static void
