@@ -1,8 +1,10 @@
 *.[od]
 /bin
-/layer?/include/*/gen/*
-/layer?/src/*/gen/*
+/*/include/gen
+/*/include/*/gen
+/*/include/*/*/gen
+/*/src/gen
+/*/src/*/gen
+/*/src/*/*/gen
 /layer2p/src/yy/lexer.[ch]
 /layer2p/src/yy/parser.[chy]
-/layer2p/src/yy/gen/*
-/layer2v/src/visitor/*/gen/*

@@ -37,7 +37,7 @@ void array_stack_push (array_stack *self, void *data)
   assert (self != NULL);
   assert (self->levels > 0);
 
-  printf("level %d push %d\n", self->levels, stack_size (
+  printf("level %zd push %zd\n", self->levels, stack_size (
           stack_get (self->a, self->levels - 1)));
   stack_push (stack_get (self->a, self->levels - 1), data);
 
@@ -49,7 +49,7 @@ void *array_stack_pop (array_stack *self)
   assert (self != NULL);
   assert (self->levels > 0);
 
-  printf("level %d pop\n", self->levels);
+  printf("level %zd pop\n", self->levels);
   return stack_pop (stack_get (self->a, self->levels - 1));
 }
 
@@ -83,7 +83,7 @@ void *array_stack_set (array_stack *self, size_t index, void *data)
 
   if (stack_size (stack_get (self->a, levels - 1)) > index)
     {
-      printf ("NULLret @ size %d\n", stack_size (stack_get (self->a, levels - 1)));
+      printf ("NULLret @ size %zd\n", stack_size (stack_get (self->a, levels - 1)));
       ret = NULL;
     }
   else
