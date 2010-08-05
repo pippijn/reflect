@@ -4,7 +4,7 @@
 #include "stack.h"
 
 /* reallocate new stack with n slots */
-static void stack_realloc (stack *self, int n);
+static void stack_realloc (stack *self, size_t n);
 
 struct stack {
   void **a;      /* the stack */
@@ -33,7 +33,7 @@ void stack_delete (stack *self)
   printf ("max was %d\n", self->max);
 #endif
 
-  mem_free (self->a, self->max);
+  mem_free (self->a, sizeof (void *) * self->max);
   mem_free (self, sizeof (stack));
 
   return;
@@ -46,7 +46,10 @@ void stack_push (stack *self, void *data)
   if (self->size == self->max)
     stack_realloc (self, self->max * 2);
 
-  self->a[(self->size)++] = data;
+  assert (self->size < self->max);
+
+  self->a[self->size] = data;
+  self->size++;
 
 #if STACK_VERBOSE
   printf("push %d\n", self->size);
@@ -69,7 +72,8 @@ void *stack_pop (stack *self)
   printf("pop %d\n", self->size);
 #endif
 
-  return self->a[--(self->size)];
+  self->size--;
+  return self->a[self->size];
 }
 
 void *stack_top (stack const *self)
@@ -102,6 +106,9 @@ void *stack_set (stack *self, size_t index, void *data)
   void *ret;
 
   assert (self != NULL);
+#if STACK_VERBOSE
+  printf("setting %d/%d\n", index, self->size);
+#endif
 
   if (index >= self->size)
     {
@@ -125,15 +132,27 @@ void *const *stack_raw (stack *const self)
 
 /* static */
 
-static void stack_realloc (stack *self, int n)
+static void stack_realloc (stack *self, size_t n)
 {
   void **new;
+  /*
+  void **p, **q;
+  */
+
+  assert (self->size <= n);
 
   new = mem_alloc (sizeof (void *) * n);
 
-  memcpy (new, self->a, self->size);
+  memcpy (new, self->a, sizeof (void *) * self->size);
 
-  mem_free (self->a, self->max);
+  /*
+  q = new;
+  p = self->a;
+  while (p < self->a + self->size)
+    *q++ = *p++;
+  */
+
+  mem_free (self->a, sizeof (void *) * self->max);
   self->a = new;
   self->max = n;
 

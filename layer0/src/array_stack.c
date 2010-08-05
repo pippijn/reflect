@@ -37,8 +37,10 @@ void array_stack_push (array_stack *self, void *data)
   assert (self != NULL);
   assert (self->levels > 0);
 
+#if ARRAY_STACK_VERBOSE
   printf("level %zd push %zd\n", self->levels, stack_size (
           stack_get (self->a, self->levels - 1)));
+#endif
   stack_push (stack_get (self->a, self->levels - 1), data);
 
   return;
@@ -49,7 +51,9 @@ void *array_stack_pop (array_stack *self)
   assert (self != NULL);
   assert (self->levels > 0);
 
+#if ARRAY_STACK_VERBOSE
   printf("level %zd pop\n", self->levels);
+#endif
   return stack_pop (stack_get (self->a, self->levels - 1));
 }
 
@@ -81,9 +85,11 @@ void *array_stack_set (array_stack *self, size_t index, void *data)
 
   levels = self->levels;
 
-  if (stack_size (stack_get (self->a, levels - 1)) > index)
+  if (stack_size (stack_get (self->a, levels - 1)) <= index)
     {
-      printf ("NULLret @ size %zd\n", stack_size (stack_get (self->a, levels - 1)));
+#if ARRAY_STACK_VERBOSE
+      printf ("NULLret @ size %d\n", stack_size (stack_get (self->a, levels - 1)));
+#endif
       ret = NULL;
     }
   else
@@ -135,9 +141,9 @@ void *const *array_stack_pop_level (array_stack *self)
 {
   assert (self != NULL);
   assert (self->levels > 0);
-  assert (stack_size (stack_get (self->a, self->levels - 1)) > 0);
+  /* assert (stack_size (stack_get (self->a, self->levels - 1)) > 0); */
 
-  return stack_get (stack_get (self->a, --self->levels), 0);
+  return stack_raw (stack_get (self->a, --self->levels));
 }
 
 void *const *array_stack_last_level (array_stack const *self)
@@ -151,5 +157,5 @@ void *const *array_stack_last_level (array_stack const *self)
 
 size_t array_stack_levels (array_stack const *self)
 {
-  return stack_size (self->a) + 1;
+  return self->levels;
 }

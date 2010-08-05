@@ -104,6 +104,7 @@ END_TEST
 START_TEST (get_set)
 {
   size_t i;
+  void *r;
 
   array_stack_push_level (stk);
   iterate (i)
@@ -112,10 +113,12 @@ START_TEST (get_set)
     }
 
   fail_unless (array_stack_size (stk) == ITERATIONS);
-  array_stack_set (stk, ITERATIONS - 1, "last item");
+  r = array_stack_set (stk, ITERATIONS - 1, "last item");
+  fail_unless (r != NULL, "could not set last item");
   fail_unless (array_stack_size (stk) == ITERATIONS);
   fail_unless (array_stack_get (stk, ITERATIONS - 1) == array_stack_last (stk));
-  fail_unless (strcmp (array_stack_get (stk, ITERATIONS - 1), "last item") == 0);
+  fail_unless (strcmp (array_stack_get (stk, ITERATIONS - 1), "last item") == 0,
+      "expected \"last item\", got \"%s\"", array_stack_get (stk, ITERATIONS - 1));
 }
 END_TEST
 
