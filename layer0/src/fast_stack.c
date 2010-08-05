@@ -1,7 +1,7 @@
 #include <memman.h>
-#include <stack.h>
+#include <fast_stack.h>
 
-#include "stack.h"
+#include "fast_stack.h"
 
 /* reallocate new stack with n slots */
 static struct elem *elem_new (size_t n);

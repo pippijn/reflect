@@ -1,8 +1,6 @@
 /* internal stack interface
  * include this after include/stack.h */
 
-#pragma once
-
 __BEGIN_DECLS
 
 /* typedef struct stack stack; */

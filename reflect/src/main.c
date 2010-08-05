@@ -84,8 +84,8 @@ main (void)
 
   print_node (node, "parse.xml");
   store_node (node, "parse.lsp");
-  print_tokens (node, "/dev/stdout");
   print_tokens (node, "tokens.txt");
+  print_tokens (node, "/dev/stdout");
 
   parse_context_delete (pctx);
 
