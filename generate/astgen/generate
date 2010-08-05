@@ -13,7 +13,7 @@ use astgen::gen_visitor;
 use astgen::gen_extra;
 
 our $dataname;
-our @mfuns     = qw|construct new virtual/destruct virtual/accept|;
+our @mfuns     = qw|construct new visitor_visit virtual/destruct virtual/accept|;
 our @visitors  = qw/print store/;
 our @extra     = qw/string_acc string_ctor/;
 
@@ -35,29 +35,8 @@ open my $internal_nodes_h, ">", "layer1/src/${dataname}/gen/nodes.h"
    or die $!;
 open my $internal_visitor_h, ">", "layer1/src/${dataname}/gen/visitor.h"
    or die $!;
-open my $internal_visitor_c, ">", "layer1/src/${dataname}/gen/visitor.c"
-   or die $!;
 
 print "  ASTGEN  $ARGV[0]\n";
-
-sub gen_visitor_c {
-   my ($fh, $name) = @_;
-
-   print $internal_visitor_c <<EOF;
-
-void
-${dataname}_visitor_visit_$name (${dataname}_visitor *self, ${dataname}_node const *node)
-{
-  assert (self != NULL);
-  assert (self->vtbl != NULL);
-  assert (self->vtbl->visit_$name != NULL);
-
-  self->vtbl->visit_$name (self, node);
-}
-EOF
-}
-
-print $internal_visitor_c "#include \"../internal.h\"\n";
 
 astgen::visitor::generate $dataname, $rules;
 astgen::extra::generate $dataname, $rules;
@@ -69,9 +48,7 @@ for my $name (sort keys %$rules) {
    print $visitor_vtbl_h "  ${dataname}_visit_fn *visit_$name;\n";
    print $internal_kinds_h "  ${DATANAME}_" . (uc $name) . ",\n";
    print $internal_nodes_h "#include \"$name.h\"\n";
-   print $internal_visitor_h "void ${dataname}_visitor_visit_$name (${dataname}_visitor *self, ${dataname}_node const *node);\n";
-
-   gen_visitor_c $internal_visitor_c, $name;
+   print $internal_visitor_h "${dataname}_visit_fn ${dataname}_visitor_visit_$name;\n";
 
    gen_header_internal $dataname, $name, $members;
    gen_header          $dataname, $name, $members;
