@@ -124,9 +124,7 @@ void array_stack_push_level (array_stack *self)
 
   if (self->levels < stack_size (self->a))
     { /* replace the old array */
-      puts("delete");
       stack_delete (stack_get (self->a, self->levels));
-      puts("set");
       stack_set (self->a, self->levels, stack_new ());
     }
   else
