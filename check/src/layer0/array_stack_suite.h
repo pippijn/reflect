@@ -178,6 +178,12 @@ START_TEST (pop_level2)
 
   iterate (i)
     {
+      fail_unless (strcmp (array[i], "hello") == 0,
+                   "expected array[%d] to be \"%s\", but got \"%s\"", i, "hello", array[i]);
+    }
+
+  iterate (i)
+    {
       array_stack_push_level (stk);
     }
 
