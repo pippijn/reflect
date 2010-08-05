@@ -54,7 +54,7 @@ START_TEST (data_storage)
         {
           cppstack_push (stk, *it);
           fail_unless (cppstack_top (stk) == *it,
-                       "top should be \"%s\", but was \"%s\"", *it, cppstack_top (stk));
+                       "top should be \"%p\", but was \"%p\"", *it, cppstack_top (stk));
         }
     }
   fail_unless (cppstack_size (stk) == i * table_size);
@@ -65,7 +65,7 @@ START_TEST (data_storage)
       for (; it != et; it--)
         {
           fail_unless (cppstack_top (stk) == *it,
-                       "top should be \"%s\", but was \"%s\"", *it, cppstack_top (stk));
+                       "top should be \"%p\", but was \"%p\"", *it, cppstack_top (stk));
           fail_unless (strcmp (cppstack_pop (stk), *it) == 0);
         }
     }

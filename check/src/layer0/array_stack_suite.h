@@ -72,9 +72,9 @@ START_TEST (data_storage)
         {
           array_stack_push (stk, *it);
           fail_unless (array_stack_last (stk) == *it,
-                       "last should be \"%s\", but was \"%s\"", *it, array_stack_last (stk));
+                       "last should be \"%p\", but was \"%p\"", *it, array_stack_last (stk));
           fail_unless (array_stack_first (stk) == *table,
-                       "first should be \"%s\", but was \"%s\"", *table, array_stack_first (stk));
+                       "first should be \"%p\", but was \"%p\"", *table, array_stack_first (stk));
         }
       fail_unless (array_stack_size (stk) == table_size);
     }
@@ -87,12 +87,12 @@ START_TEST (data_storage)
       for (; it != et; it--)
         {
           fail_unless (array_stack_last (stk) == *it,
-                       "last should be \"%s\", but was \"%s\"", *it, array_stack_last (stk));
+                       "last should be \"%p\", but was \"%p\"", *it, array_stack_last (stk));
           if (it == table)
             fail_unless (array_stack_last (stk) == array_stack_first (stk),
                          "last should be first");
           fail_unless (array_stack_pop (stk) == *it,
-                       "last should be \"%s\", but was \"%s\"", *it, array_stack_last (stk));
+                       "last should be \"%p\", but was \"%p\"", *it, array_stack_last (stk));
         }
       fail_unless (array_stack_size (stk) == 0);
       array_stack_pop_level (stk);
