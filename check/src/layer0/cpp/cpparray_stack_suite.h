@@ -164,7 +164,7 @@ START_TEST (pop_level2)
     }
 
   fail_unless (cpparray_stack_size (stk) == ITERATIONS);
-  fail_unless (cpparray_stack_levels (stk) == ITERATIONS);
+  fail_unless (cpparray_stack_levels (stk) == ITERATIONS + 1);
 
   array = cpparray_stack_pop_level (stk);
   fail_unless (array != NULL);
