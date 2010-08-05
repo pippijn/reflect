@@ -13,13 +13,19 @@ CFLAGS		+= $(shell pkg-config --cflags glib-2.0)
 CXXFLAGS	+= $(shell pkg-config --cflags glib-2.0)
 endif
 
+ifdef WANT_MUDFLAP
+LDFLAGS		+= -lmudflap
+CFLAGS		+= -fmudflap
+else
+CFLAGS		+= -Wnested-externs
+endif
+
 LDFLAGS		+= -Wl,-z,defs -Wl,-rpath,$(PWD)/bin -Lbin
 CPPFLAGS	+= -include stdinc.h -MD
-CFLAGS		+= -Wall -Wextra -O0 -ggdb3 -fPIC
-CXXFLAGS	+= -Wall -Wextra -O0 -ggdb3 -fPIC -std=c++0x
+CFLAGS		+= -Wall -Wextra -O3 -ggdb3 -fPIC
+CXXFLAGS	+= -Wall -Wextra -O3 -ggdb3 -fPIC -std=c++0x
 CFLAGS		+= -Wredundant-decls			\
 		   -Wmissing-prototypes			\
-		   -Wnested-externs			\
 		   -Wbad-function-cast			\
 		   -Wdeclaration-after-statement	\
 		   -Wstrict-prototypes			\

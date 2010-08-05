@@ -23,6 +23,10 @@ layer0/%.o: layer0/%.cpp
 	@echo "   CXX    " $@
 	@$(COMPILE.cpp) $(layer0_CPPFLAGS) $(layer0_CXXFLAGS) $< -o $@
 
+clean: layer0-clean
+layer0-clean:
+	$(RM) layer0/include/stdinc.h.gch
+
 # all sources
 SOURCES += $(layer0_SOURCES)
 

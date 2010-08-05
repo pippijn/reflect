@@ -100,8 +100,6 @@ xml_input_startElement ( void *ctx
   if (xmlStrcmp (name, ROOT) == 0)
     return;
 
-  state->empty_child = 0;
-
   /* "token" with attributes is a token, without attributes, it's a member */
   if (xmlStrcmp (name, BAD_CAST "token") == 0 && atts != NULL)
     {
@@ -149,7 +147,7 @@ xml_input_startElement ( void *ctx
       else
         {
           push_state (state, MEMBER);
-          state->empty_child = 1;
+          state->empty_child = true;
         }
     }
 
@@ -241,7 +239,7 @@ xml_input_endElement ( void *ctx
       }
     }
 
-  if (DEBUG)
+  if (0 && DEBUG)
     {
       printf ("now:\n");
       printf ( "   levels: %zd size: %zd\n"
@@ -249,6 +247,7 @@ xml_input_endElement ( void *ctx
              , array_stack_size   (state->node_stack));
     }
 
+  state->empty_child = false;
 }
 
 static void
@@ -270,9 +269,13 @@ xml_input_characters ( void *ctx
   if (state->token.text.length == 0)
     state->token.text.data[0] = '\0';
   /* FIXME: use xmlStrncat, instead */
+#if 0
+  xmlStrncat (state->token.text.data, ch, len);
+#else
   memcpy ( state->token.text.data + state->token.text.length
          , ch
          , len);
+#endif
   state->token.text.length += len;
   state->token.text.data[state->token.text.length] = '\0';
 
