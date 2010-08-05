@@ -13,33 +13,51 @@ typedef struct stack stack;
 
 /**
  * Create a new empty stack. @c size is initially 0.
+ *
+ * Time: Θ(1)
+ * Space: Θ(1)
  */
 stack *stack_new (void);
 
 /**
  * Free stack. Does not free its elements.
+ *
+ * Time: O(log n) Ω(1) over @c size
+ * Space: Θ(1)
  */
 void stack_delete (stack *self);
 
 
 /**
  * Append @c data to the stack.
+ *
+ * Time: O(n) Ω(1) over @c size
+ * Space: Θ(1)
  */
 void stack_push (stack *self, void *data);
 
 
 /**
  * Returns the last element of the stack and removes it.
+ *
+ * Time: Θ(1)
+ * Space: Θ(1)
  */
 void *stack_pop (stack *self);
 
 /**
  * Returns the last element of the stack.
+ *
+ * Time: Θ(1)
+ * Space: Θ(1)
  */
 void *stack_top (stack const *self);
 
 /**
  * Return the number of elements in the stack.
+ *
+ * Time: Θ(1)
+ * Space: Θ(1)
  */
 size_t stack_size (stack const *self);
 
