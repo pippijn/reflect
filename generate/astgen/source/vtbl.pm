@@ -11,7 +11,7 @@ sub gen_vtbl {
    my $DATANAME = uc $dataname;
 
    print $fh "static ${_}_fn ${dataname}_${name}_$_;\n"
-      for @main::vfuns;
+      for map { /(\w+)$/ } grep { /virtual/ } @main::mfuns;
 
    print $fh <<EOF;
 
@@ -26,7 +26,7 @@ struct ${dataname}_vtbl const ${dataname}_${name}_vtbl = {
   },
 EOF
    print $fh "  ${dataname}_${name}_$_,\n"
-      for @main::vfuns;
+      for map { /(\w+)$/ } grep { /virtual/ } @main::mfuns;
    print $fh "};\n";
 }
 

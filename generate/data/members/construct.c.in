@@ -1,0 +1,35 @@
+/* internal */
+
+void
+${dataname}_${name}_construct
+  ( self_type *self
+  , $members.all.params)
+{
+  struct location loc;
+  ${dataname}_node *fst = NULL;
+  ${dataname}_node *lst = NULL;
+
+[% FOREACH member = members.required %]
+
+  assert ($member != NULL);
+[% END %]
+[% FOREACH member = members.all %]
+
+  if ($member != NULL)
+    {
+      lst = $member;
+      if (fst == NULL)
+        fst = $member;
+    }
+[% END %]
+
+  COMPUTE_LOC (fst, lst);
+  BASE_CTOR (node, &loc);
+
+[% FOREACH member = members.all %]
+
+  self->$member = $member;
+[% END %]
+
+}
+
