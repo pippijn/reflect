@@ -46,7 +46,7 @@ ${dataname}_store_visitor_visit_token (visitor_type *object, node_type const *no
 
   INDENT (self->fh, self->indent);
   fprintf ( self->fh
-          , "((%d %d) (%d %d) %s)\n"
+          , "(token (%d %d) (%d %d) %s)\n"
 	  , loc->first_line, loc->first_column
 	  , loc->last_line,  loc->last_column
 	  , strcmp ("<empty>", ${dataname}_token_text (node)) == 0
