@@ -168,31 +168,5 @@ START_TEST (pop_level2)
 
   array = array_stack_pop_level (stk);
   fail_unless (array != NULL);
-
-  iterate (i)
-    {
-      array_stack_pop_level (stk);
-    }
-
-  fail_unless (array_stack_levels (stk) == 1);
-
-  iterate (i)
-    {
-      fail_unless (strcmp (array[i], "hello") == 0,
-                   "expected array[%d] to be \"%s\", but got \"%s\"", i, "hello", array[i]);
-    }
-
-  iterate (i)
-    {
-      array_stack_push_level (stk);
-    }
-
-  fail_unless (array_stack_levels (stk) == ITERATIONS + 1);
-
-  iterate (i)
-    {
-      fail_unless (strcmp (array[i], "hello") == 0,
-                   "expected array[%d] to be \"%s\", but got \"%s\"", i, "hello", array[i]);
-    }
 }
 END_TEST
