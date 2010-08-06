@@ -2,21 +2,21 @@
 
 #include "fast_stack.h"
 
-/* reallocate new stack with n slots */
 static struct elem *elem_new (size_t n);
-static void stack_add_elem (stack *self, struct elem *last, size_t n);
+static void elem_free (struct elem *e);
+static void stack_add_elem (stack *self, size_t n);
 
 struct elem
 {
   void        **data;   /* data */
-  struct elem  *next;   /* next elem */
+  struct elem  *prev;   /* next elem */
   size_t        size;   /* used size */
   size_t        max;    /* max size */
 };
 
 struct stack
 {
-  struct elem *first;   /* the stack */
+  struct elem *last;    /* the last stack block */
   size_t       size;    /* current used size */
   size_t       max;     /* max slots available */
 };
@@ -28,7 +28,7 @@ stack_new (void)
 {
   stack *self = mem_alloc (sizeof (stack));
 
-  self->first = elem_new (1);
+  self->last = elem_new (1);
   self->max  = 1;
   self->size = 0;
 
@@ -46,12 +46,12 @@ stack_delete (stack *self)
   printf ("max was %d\n", self->max);
 #endif
 
-  e = self->first;
+  e = self->last;
   while (e)
     {
       rm = e;
-      e = e->next;
-      mem_free (rm, rm->max * sizeof (void *));
+      e = e->prev;
+      elem_free (rm);
     }
 
   mem_free (self, sizeof (stack));
@@ -64,14 +64,16 @@ stack_push (stack *self, void *data)
 
   assert (self != NULL);
 
-  e = self->first;
-  while (e->size == e->max && e->next)
-    e = e->next;
+  e = self->last;
 
   if (e->size == e->max)
     {
-      stack_add_elem (self, e, e->max * 2);
-      e = e->next;
+      stack_add_elem (self, self->size);
+      e = self->last;
+
+#if STACK_VERBOSE
+      printf("after add: %d/%d\n", self->size, self->max);
+#endif
     }
 
   assert (self->size < self->max);
@@ -88,29 +90,29 @@ stack_push (stack *self, void *data)
 void *
 stack_pop (stack *self)
 {
+  void *ret;
   struct elem *e;
 
   assert (self != NULL);
   assert (self->size > 0);
 
-#if 0
-  if (self->size < self->max / 4)
-    stack_realloc (self, self->max / 2);
-#endif
-
 #if STACK_VERBOSE
   printf ("pop %d\n", self->size);
 #endif
 
-  e = self->first;
-  while (e->size == e->max && e->next)
-    if (e->next->size)
-      e = e->next;
+  e = self->last;
 
   self->size--;
   e->size--;
+  ret = e->data[e->size];
 
-  return e->data[e->size];
+  if (!e->size)
+    {
+      self->last = e->prev;
+      elem_free (e);
+    }
+
+  return ret;
 }
 
 void *
@@ -121,9 +123,7 @@ stack_top (stack const *self)
   assert (self != NULL);
   assert (self->size > 0);
 
-  e = self->first;
-  while (e->size == e->max && e->next)
-    e = e->next;
+  e = self->last;
 
   return e->data[e->size - 1];
 }
@@ -141,27 +141,27 @@ stack_size (stack const *self)
 void *
 stack_get (stack const *self, size_t index)
 {
-  size_t i;
   struct elem *e;
+  size_t i, rindex;
 
   assert (self != NULL);
   assert (index < self->size);
 
-  e = self->first;
-  for (i = 0; i < index; i += e->size)
-    e = e->next;
+  rindex = self->size - index;
 
-  i -= e->size;
+  e = self->last;
+  for (i = 0; i < rindex; i += e->size)
+    e = e->prev;
 
-  return e->data[index - i];
+  return e->data[i - rindex];
 }
 
 void *
 stack_set (stack *self, size_t index, void *data)
 {
-  size_t i;
   void *ret;
   struct elem *e;
+  size_t i, rindex;
 
   assert (self != NULL);
 #if STACK_VERBOSE
@@ -174,14 +174,14 @@ stack_set (stack *self, size_t index, void *data)
     }
   else
     {
-      e = self->first;
-      for (i = 0; i < index; i += e->size)
-        e = e->next;
+      rindex = self->size - index;
 
-      i -= e->size;
+      e = self->last;
+      for (i = 0; i < rindex; i += e->size)
+        e = e->prev;
 
-      ret = e->data[index - i];
-      e->data[index - i] = data;
+      ret = e->data[i - rindex];
+      e->data[i - rindex] = data;
     }
 
   return ret;
@@ -192,7 +192,7 @@ stack_raw (stack *const self)
 {
   assert (self != NULL);
 
-  return self->first->data;
+  return self->last->data;
 }
 
 /* static */
@@ -205,7 +205,7 @@ elem_new (size_t n)
   e = mem_alloc (sizeof (struct elem));
 
   e->data = mem_alloc (n * sizeof (void *));
-  e->next = NULL;
+  e->prev = NULL;
   e->size = 0;
   e->max  = n;
 
@@ -213,12 +213,24 @@ elem_new (size_t n)
 }
 
 static void
-stack_add_elem (stack *self, struct elem *last, size_t n)
+elem_free (struct elem *e)
+{
+  mem_free (e->data, e->max * sizeof (void *));
+  mem_free (e, sizeof (struct elem));
+
+  return;
+}
+
+static void
+stack_add_elem (stack *self, size_t n)
 {
   struct elem *new;
 
   new = elem_new (n);
 
-  last->next = new;
+  new->prev = self->last;
+  self->last = new;
   self->max += n;
+
+  return;
 }
