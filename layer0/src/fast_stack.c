@@ -10,7 +10,7 @@ static void stack_repack (stack *self);
 struct elem
 {
   void        **data;   /* data */
-  struct elem  *prev;   /* next elem */
+  struct elem  *prev;   /* previous block */
   size_t        size;   /* used size */
   size_t        max;    /* max size */
 };
@@ -20,6 +20,7 @@ struct stack
   struct elem *last;    /* the last stack block */
   size_t       size;    /* current used size */
   size_t       max;     /* max slots available */
+  bool         packed;
 };
 
 /* public */
@@ -32,6 +33,7 @@ stack_new (void)
   self->last = elem_new (1);
   self->max  = 1;
   self->size = 0;
+  self->packed = true;
 
   return self;
 }
@@ -70,6 +72,7 @@ stack_push (stack *self, void *data)
   if (e->size == e->max)
     {
       stack_add_elem (self, self->size);
+      self->packed = false;
       e = self->last;
 
 #if STACK_VERBOSE
@@ -111,6 +114,7 @@ stack_pop (stack *self)
     {
       self->last = e->prev;
       elem_free (e);
+      self->packed = false;
     }
 
   return ret;
@@ -202,7 +206,8 @@ stack_raw (stack *const self)
   if (self->size == 0)
     return NULL;
 
-  stack_repack (self); 
+  if (!self->packed)
+    stack_repack (self); 
 
   return self->last->data;
 }
@@ -271,7 +276,8 @@ stack_repack (stack *self)
       elem_free (rm);
     }
 
-  self->last = new;
+  self->last   = new;
+  self->packed = true;
 
   return;
 }
