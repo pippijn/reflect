@@ -18,7 +18,7 @@ phase (char const *name)
       gettimeofday (&end, NULL);
       timersub (&end, &start, &diff);
 
-      printf ("%td.%td sec\n", diff.tv_sec, diff.tv_usec);
+      printf ("%td.%06td sec\n", diff.tv_sec, diff.tv_usec);
     }
   if (name)
     printf ("phase %2d: %s... ", ++number, name);
