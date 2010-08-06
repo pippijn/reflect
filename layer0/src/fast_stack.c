@@ -142,7 +142,7 @@ stack_size (stack const *self)
 void *
 stack_get (stack const *self, size_t index)
 {
-  struct elem *e;
+  struct elem *e, *pr;
   size_t i, rindex;
 
   assert (self != NULL);
@@ -151,17 +151,20 @@ stack_get (stack const *self, size_t index)
   rindex = self->size - index;
 
   e = self->last;
-  for (i = 0; i < rindex; i += e->size)
-    e = e->prev;
+  for (i = 0; i < rindex; i += pr->size)
+    {
+      pr = e;
+      e = e->prev;
+    }
 
-  return e->data[i - rindex];
+  return pr->data[i - rindex];
 }
 
 void *
 stack_set (stack *self, size_t index, void *data)
 {
   void *ret;
-  struct elem *e;
+  struct elem *e, *pr;
   size_t i, rindex;
 
   assert (self != NULL);
@@ -178,11 +181,14 @@ stack_set (stack *self, size_t index, void *data)
       rindex = self->size - index;
 
       e = self->last;
-      for (i = 0; i < rindex; i += e->size)
-        e = e->prev;
+      for (i = 0; i < rindex; i += pr->size)
+        {
+          pr = e;
+          e = e->prev;
+        }
 
-      ret = e->data[i - rindex];
-      e->data[i - rindex] = data;
+      ret = pr->data[i - rindex];
+      pr->data[i - rindex] = data;
     }
 
   return ret;
@@ -193,7 +199,10 @@ stack_raw (stack *const self)
 {
   assert (self != NULL);
 
-  stack_repack (self);
+  if (self->size == 0)
+    return NULL;
+
+  stack_repack (self); 
 
   return self->last->data;
 }
@@ -241,19 +250,21 @@ stack_add_elem (stack *self, size_t n)
 static void
 stack_repack (stack *self)
 {
-  int i, j;
+  int i;
   struct elem *new, *e, *rm;
 
   assert (self != NULL);
+  assert (self->size > 0);
+  assert (self->last != NULL);
 
   new = elem_new (self->size);
 
-  i = self->size - 1;
+  i = self->size;
   e = self->last;
-  while (i >= 0)
+  while (i)
     {
-      for (j = e->size - 1; j >= 0; j--)
-        new->data[i] = e->data[j];
+      i -= e->size;
+      memcpy (new->data + i, e->data, e->size * sizeof (void *));
 
       rm = e;
       e = e->prev;
