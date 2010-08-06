@@ -3,7 +3,7 @@ check_CPPFLAGS		:= $(layer2p_CPPFLAGS) $(layer2v_CPPFLAGS) $(layer2x_CPPFLAGS) -
 
 # private
 check_CFLAGS		:= -Icheck/src/include
-check_LDFLAGS		:= -lcheck -llayer2x -llayer2v -llayer2p -llayer1 -llayer0
+check_LDFLAGS		:= -lcheck -llayer2x -llayer2v -llayer2p -llayer1a -llayer0
 
 # sources
 check_SUITES		:= $(shell find check/src -name "*_suite.h")
@@ -11,7 +11,7 @@ check_SOURCES		:= $(patsubst %_suite.h,%.c,$(check_SUITES)) check/src/main.c
 check_OBJECTS		:= $(addsuffix .o,$(basename $(check_SOURCES)))
 
 # target
-bin/check: $(check_OBJECTS) bin/liblayer2x.so bin/liblayer2v.so bin/liblayer2p.so bin/liblayer1.so bin/liblayer0.so
+bin/check: $(check_OBJECTS) bin/liblayer2x.so bin/liblayer2v.so bin/liblayer2p.so bin/liblayer1a.so bin/liblayer0.so
 	@echo "   CCLD   " $@
 	@$(LINK.c) $(check_OBJECTS) $(check_LDFLAGS) -o $@
 
