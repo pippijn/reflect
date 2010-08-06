@@ -110,8 +110,6 @@ main (void)
   parse_context *pctx;
   pt_node *node;
 
-  mem_init ();
-
   pctx = parse_context_new ();
   yydebug = 0;
   phase ("parsing");

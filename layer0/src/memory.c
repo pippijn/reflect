@@ -128,3 +128,30 @@ mem_free (void *memory, size_t bytes)
       memset (memory, OLD_FILL, bytes);
   free (memory);
 }
+
+char *
+mem_strdup (char const *string)
+{
+  char *newstring;
+
+  assert (string != NULL);
+
+  newstring = (char*)mem_alloc (strlen (string) + 1);
+  strcpy (newstring, string);
+
+  return newstring;
+}
+
+char *
+mem_strndup (char const *string, size_t length)
+{
+  char *newstring;
+
+  assert (string != NULL);
+
+  newstring = (char*)mem_alloc (length + 1);
+  strncpy (newstring, string, length);
+  newstring[length] = '\0';
+
+  return newstring;
+}

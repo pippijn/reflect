@@ -164,12 +164,14 @@ L (node_path) (node_type const *self, char const *path)
 {
   node_type *node = NULL;
   node_type const *next = self;
-  char *pieces = strdup (path);
+  char *pieces = mem_strdup (path);
   char *token = strtok (pieces, "/");
 
   do
     next = node = L (node_member) (next, token);
   while ((token = strtok (NULL, "/")) != NULL);
+
+  mem_free (pieces, strlen (path) + 1);
 
   return node;
 }

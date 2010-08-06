@@ -53,7 +53,7 @@ L (token_construct) (self_type* self, struct location const* loc, char const* te
   BASE_CTOR (node, loc);
 
   /* initialise our own data */
-  self->text = strndup (text, length);
+  self->text = mem_strndup (text, length);
   self->token = token;
 
   assert (self->text != NULL);
@@ -106,7 +106,7 @@ L (token_destruct) (node_type* object)
   assert (self->text);
 
   /* destroy our own data */
-  mem_free (self->text, strlen (self->text));
+  mem_free (self->text, strlen (self->text) + 1);
 
   /* base destructor */
   BASE_DTOR ();

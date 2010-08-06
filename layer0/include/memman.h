@@ -1,10 +1,13 @@
 #pragma once
 
+__BEGIN_DECLS
+
 /**
  * Initialise the memory subsystem. This registers the malloc check functions
  * and sets resource limits.
  */
 void mem_init (void);
+
 
 /**
  * Allocate an object of @c bytes chars. If it fails, it aborts the program.
@@ -25,3 +28,15 @@ void* mem_realloc (void *ptr, size_t bytes);
  * likely to fail. If @c memory is NULL, this function does nothing.
  */
 void mem_free (void *memory, size_t bytes);
+
+/**
+ * Same as @c strdup but using mem_alloc.
+ */
+char* mem_strdup (char const *string);
+
+/**
+ * Same as @c strndup but using mem_alloc.
+ */
+char* mem_strndup (char const *string, size_t length);
+
+__END_DECLS

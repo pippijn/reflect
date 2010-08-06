@@ -6,8 +6,6 @@ main (void)
   int failed;
   SRunner *sr;
 
-  mem_init ();
-  
   sr = srunner_create (NULL);
 
 #define SUITE(suite) srunner_add_suite (sr, suite_##suite ());
