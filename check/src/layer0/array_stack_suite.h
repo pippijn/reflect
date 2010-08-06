@@ -201,3 +201,14 @@ START_TEST (empty_stack_after_push)
   fail_unless (array_stack_size (stk) == 0);
 }
 END_TEST
+
+START_TEST (last_level_twice)
+{
+  size_t i;
+
+  iterate (i)
+    array_stack_push_level (stk);
+
+  fail_unless (array_stack_last_level (stk) == array_stack_last_level (stk));
+}
+END_TEST
