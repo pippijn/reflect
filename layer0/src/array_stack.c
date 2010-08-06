@@ -158,7 +158,7 @@ array_stack_last_level (array_stack const *self)
 {
   assert (self != NULL);
   assert (self->levels > 0);
-  assert (stack_size (stack_get (self->arrays, self->levels - 1)) > 0);
+  /* assert (stack_size (stack_get (self->arrays, self->levels - 1)) > 0); */
 
   return stack_raw (stack_get (self->arrays, self->levels - 1));
 }
