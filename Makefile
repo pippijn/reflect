@@ -1,3 +1,6 @@
+WANT_MUDFLAP	= 1
+#WANT_GLIB	= 1
+
 all: bin/reflect bin/check
 
 LINK.c		= $(LINK.cpp)
@@ -14,7 +17,7 @@ CXXFLAGS	+= $(shell pkg-config --cflags glib-2.0)
 endif
 
 ifdef WANT_MUDFLAP
-LDFLAGS		+= -lmudflap
+LDFLAGS		+= -fmudflap -lmudflap
 CFLAGS		+= -fmudflap
 else
 CFLAGS		+= -Wnested-externs
