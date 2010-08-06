@@ -1,5 +1,7 @@
-WANT_MUDFLAP	= 1
-#WANT_GLIB	= 1
+WANT_MCHECK	= 0
+WANT_VALGRIND	= 1
+WANT_MUDFLAP	= 0
+WANT_GLIB	= 0
 
 all: bin/reflect bin/check
 
@@ -9,24 +11,34 @@ LEX		= flex
 YACC		= bison
 MKDIR_P		= mkdir -p
 
-ifdef WANT_GLIB
-LDFLAGS		+= $(shell pkg-config --libs glib-2.0)
+ifeq ($(WANT_VALGRIND),1)
+CPPFLAGS	+= -DWANT_VALGRIND
+endif
+
+ifeq ($(WANT_GLIB),1)
 CPPFLAGS	+= -DWANT_GLIB
+LDFLAGS		+= $(shell pkg-config --libs glib-2.0)
 CFLAGS		+= $(shell pkg-config --cflags glib-2.0)
 CXXFLAGS	+= $(shell pkg-config --cflags glib-2.0)
 endif
 
-ifdef WANT_MUDFLAP
+ifeq ($(WANT_MUDFLAP),1)
+CPPFLAGS	+= -DWANT_MUDFLAP
 LDFLAGS		+= -fmudflap -lmudflap
 CFLAGS		+= -fmudflap
 else
 CFLAGS		+= -Wnested-externs
 endif
 
-LDFLAGS		+= -Wl,-z,defs -Wl,-rpath,$(PWD)/bin -Lbin -lmcheck
+ifeq ($(WANT_MCHECK),1)
+CPPFLAGS	+= -DWANT_MCHECK
+LDFLAGS		+= -lmcheck
+endif
+
+LDFLAGS		+= -Wl,-z,defs -Wl,-rpath,$(PWD)/bin -Lbin
 CPPFLAGS	+= -include stdinc.h -MD
-CFLAGS		+= -Wall -Wextra -O3 -ggdb3 -fPIC
-CXXFLAGS	+= -Wall -Wextra -O3 -ggdb3 -fPIC -std=c++0x
+CFLAGS		+= -Wall -Wextra -O0 -ggdb3 -fPIC
+CXXFLAGS	+= -Wall -Wextra -O0 -ggdb3 -fPIC -std=c++0x
 CFLAGS		+= -Wredundant-decls			\
 		   -Wmissing-prototypes			\
 		   -Wbad-function-cast			\

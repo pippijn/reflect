@@ -1,12 +1,22 @@
 #include <unistd.h>
 #include <sys/resource.h>
 
-#include <mcheck.h>
-#include <valgrind/valgrind.h>
+#if WANT_MCHECK
+# include <mcheck.h>
+#else
+# define mcheck(fun) 0
+#endif
+
+#if WANT_VALGRIND
+# include <valgrind/valgrind.h>
+#else
+# define RUNNING_ON_VALGRIND 0
+#endif
 
 #define NEW_FILL 0x33
 #define OLD_FILL 0xDD
 
+#if WANT_MCHECK
 static void
 mem_check_abort (enum mcheck_status status)
 {
@@ -41,6 +51,7 @@ mem_check_abort (enum mcheck_status status)
     }
   abort ();
 }
+#endif
 
 static bool mem_inited = false;
 
