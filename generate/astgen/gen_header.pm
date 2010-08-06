@@ -1,7 +1,7 @@
 sub gen_header {
    my ($dataname, $name, $members) = @_;
 
-   my $fh = maybe_open ("layer1/include/${dataname}/gen/$name.h")
+   my $fh = maybe_open ("layer1/a/include/${dataname}/gen/$name.h")
       or return;
 
    print $fh "/*\n * ";

@@ -13,7 +13,7 @@ use astgen::source::vtbl;
 sub generate {
    my ($dataname, $name, $members) = @_;
 
-   my $fh = maybe_open "layer1/src/${dataname}/gen/$name.c"
+   my $fh = maybe_open "layer1/a/src/${dataname}/gen/$name.c"
       or return;
 
    gen_self_type $fh, $dataname, $name, $members;

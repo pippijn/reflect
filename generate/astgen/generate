@@ -25,15 +25,15 @@ my $rules = do {
 
 my $DATANAME = uc $dataname;
 
-open my $nodes_h, ">", "layer1/include/${dataname}/gen/nodes.h"
+open my $nodes_h, ">", "layer1/a/include/${dataname}/gen/nodes.h"
    or die $!;
-open my $visitor_vtbl_h, ">", "layer1/include/${dataname}/gen/visitor_vtbl.h"
+open my $visitor_vtbl_h, ">", "layer1/a/include/${dataname}/gen/visitor_vtbl.h"
    or die $!;
-open my $internal_kinds_h, ">", "layer1/src/${dataname}/gen/kinds.h"
+open my $internal_kinds_h, ">", "layer1/a/src/${dataname}/gen/kinds.h"
    or die $!;
-open my $internal_nodes_h, ">", "layer1/src/${dataname}/gen/nodes.h"
+open my $internal_nodes_h, ">", "layer1/a/src/${dataname}/gen/nodes.h"
    or die $!;
-open my $internal_visitor_h, ">", "layer1/src/${dataname}/gen/visitor.h"
+open my $internal_visitor_h, ">", "layer1/a/src/${dataname}/gen/visitor.h"
    or die $!;
 
 print "  ASTGEN  $ARGV[0]\n";

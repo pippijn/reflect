@@ -7,5 +7,11 @@
 /*/src/gen
 /*/src/*/gen
 /*/src/*/*/gen
-/layer2p/src/yy/lexer.[ch]
-/layer2p/src/yy/parser.[chy]
+/*/*/include/gen
+/*/*/include/*/gen
+/*/*/include/*/*/gen
+/*/*/src/gen
+/*/*/src/*/gen
+/*/*/src/*/*/gen
+/layer2/p/src/yy/lexer.[ch]
+/layer2/p/src/yy/parser.[chy]

@@ -17,7 +17,7 @@ sub generate {
    my ($dataname, $rules) = @_;
 
    for my $visitor (@main::visitors) {
-      my $fh = maybe_open "layer2v/src/visitor/$dataname/gen/$visitor.c"
+      my $fh = maybe_open "layer2/v/src/visitor/$dataname/gen/$visitor.c"
          or next;
 
       process $template "$visitor.c.in", {

@@ -25,7 +25,7 @@ sub generate {
    };
 
    for my $extra (@main::extra) {
-      my $fh = maybe_open "layer1/src/$dataname/gen/$extra.c"
+      my $fh = maybe_open "layer1/a/src/$dataname/gen/$extra.c"
          or next;
 
       process $template "$extra.c.in", {

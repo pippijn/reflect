@@ -28,7 +28,7 @@ sz (int length)
 
 %option bison-locations
 %option reentrant
-%option header-file="layer2p/src/yy/lexer.h"
+%option header-file="layer2/p/src/yy/lexer.h"
 %option yylineno
 %option noyywrap nounput noinput
 

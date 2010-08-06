@@ -57,10 +57,10 @@ CFLAGS		+= -Wredundant-decls			\
 	@$(LEX) -o$@ $<
 
 include layer0/Rules.mk
-include layer1/Rules.mk
-include layer2p/Rules.mk
-include layer2v/Rules.mk
-include layer2x/Rules.mk
+include layer1/a/Rules.mk
+include layer2/p/Rules.mk
+include layer2/v/Rules.mk
+include layer2/x/Rules.mk
 include check/Rules.mk
 include reflect/Rules.mk
 
@@ -77,9 +77,9 @@ codegen: pt.codegen.stamp
 	$(MAKE) prepare
 
 %.codegen.stamp: generate/astgen/generate generate/data/%.ast
-	$(MKDIR_P) layer1/include/$*/gen
-	$(MKDIR_P) layer1/src/$*/gen
-	$(MKDIR_P) layer2v/src/visitor/$*/gen
+	$(MKDIR_P) layer1/a/include/$*/gen
+	$(MKDIR_P) layer1/a/src/$*/gen
+	$(MKDIR_P) layer2/v/src/visitor/$*/gen
 	@./$+
 
 -include prepare
