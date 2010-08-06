@@ -1,4 +1,3 @@
-#include <memman.h>
 #include <fast_stack.h>
 
 #include "fast_stack.h"
