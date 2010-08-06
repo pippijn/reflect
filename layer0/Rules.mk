@@ -2,7 +2,7 @@
 layer0_CPPFLAGS		:= -Ilayer0/include
 
 # private
-layer0_CFLAGS		:=
+layer0_CFLAGS		:= -Ilayer0/src/include
 layer0_LDFLAGS		:= -shared
 
 # sources

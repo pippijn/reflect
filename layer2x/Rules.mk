@@ -2,7 +2,7 @@
 layer2x_CPPFLAGS	:= $(layer1_CPPFLAGS) -Ilayer2x/include
 
 # private
-layer2x_CFLAGS		:= $(shell pkg-config --cflags libxml-2.0)
+layer2x_CFLAGS		:= -Ilayer2x/src/include $(shell pkg-config --cflags libxml-2.0)
 layer2x_LDFLAGS		:= -shared -llayer1 -llayer0 $(shell pkg-config --libs libxml-2.0)
 
 # sources

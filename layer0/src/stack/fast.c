@@ -1,6 +1,8 @@
-#include <fast_stack.h>
+#include <stack/impl_fast.h>
+#include <stack.h>
 
-#include "fast_stack.h"
+#include "internal/fast_stack.h"
+
 
 static struct elem *elem_new (size_t n);
 static void elem_free (struct elem *e);

@@ -1,3 +1,25 @@
+#ifndef IMPLEMENTATION_H
+# include <array_stack/impl_stack.h>
+#endif
+#undef IMPLEMENTATION_H
+
+#if !defined (array_stack)              \
+ || !defined (array_stack_new)          \
+ || !defined (array_stack_delete)       \
+ || !defined (array_stack_push)         \
+ || !defined (array_stack_pop)          \
+ || !defined (array_stack_first)        \
+ || !defined (array_stack_last)         \
+ || !defined (array_stack_set)          \
+ || !defined (array_stack_get)          \
+ || !defined (array_stack_size)         \
+ || !defined (array_stack_push_level)   \
+ || !defined (array_stack_pop_level)    \
+ || !defined (array_stack_last_level)   \
+ || !defined (array_stack_levels)
+# error Incomplete array_stack implementation
+#endif
+
 __BEGIN_DECLS
 
 /**
@@ -124,6 +146,7 @@ void *const *array_stack_pop_level (array_stack *self);
  * this level again or until the next call to @c last_level, if any mutating
  * operation was done. That means, two directly successive calls will always
  * return the same pointer.
+ * If there were no elements on this level, the pointer returned will be NULL.
  * The array_stack will keep ownership of this array, which means that client
  * code does not need to free it. In fact, freeing it is undefined.
  *
@@ -141,3 +164,21 @@ void *const *array_stack_last_level (array_stack const *self);
 size_t array_stack_levels (array_stack const *self);
 
 __END_DECLS
+
+#if WANT_IMPL
+#undef WANT_IMPL
+#undef array_stack
+#undef array_stack_new
+#undef array_stack_delete
+#undef array_stack_push
+#undef array_stack_pop
+#undef array_stack_first
+#undef array_stack_last
+#undef array_stack_set
+#undef array_stack_get
+#undef array_stack_size
+#undef array_stack_push_level
+#undef array_stack_pop_level
+#undef array_stack_last_level
+#undef array_stack_levels
+#endif

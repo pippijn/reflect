@@ -1,6 +1,7 @@
+#include <stack/impl_array.h>
 #include <stack.h>
 
-#include "stack.h"
+#include "internal/stack.h"
 
 /* reallocate new stack with n slots */
 static void stack_realloc (stack *self, size_t n);

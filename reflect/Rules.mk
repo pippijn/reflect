@@ -2,7 +2,7 @@
 reflect_CPPFLAGS	:= $(layer2p_CPPFLAGS) $(layer2v_CPPFLAGS) $(layer2x_CPPFLAGS) -Ireflect/include
 
 # private
-reflect_CFLAGS		:=
+reflect_CFLAGS		:= -Ireflect/src/include
 reflect_LDFLAGS		:= -llayer2x -llayer2v -llayer2p -llayer1 -llayer0
 
 # sources

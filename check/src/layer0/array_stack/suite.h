@@ -1,5 +1,3 @@
-#include <array_stack.h>
-
 static array_stack *stk;
 
 static void
@@ -37,12 +35,28 @@ START_TEST (pop_level)
 }
 END_TEST
 
+START_TEST (pop_level_null)
+{
+  array_stack_push_level (stk);
+  fail_unless (array_stack_pop_level (stk) == NULL);
+}
+END_TEST
+
+START_TEST (pop_level_non_null)
+{
+  array_stack_push_level (stk);
+  array_stack_push (stk, "hello");
+  fail_unless (array_stack_pop_level (stk) != NULL);
+}
+END_TEST
+
 START_TEST (last_pop)
 {
   void *const *last;
   void *const *popped;
 
   array_stack_push_level (stk);
+  array_stack_push (stk, NULL);
   last = array_stack_last_level (stk);
   popped = array_stack_pop_level (stk);
   fail_unless (last == popped);
@@ -153,6 +167,7 @@ START_TEST (last_level)
   fail_unless (array_stack_levels (stk) == ITERATIONS);
 
   array = array_stack_last_level (stk);
+  fail_unless (array != NULL);
 
   iterate (i)
     {
@@ -225,7 +240,7 @@ END_TEST
 START_TEST (last_level_twice_with_data)
 {
   array_stack_push_level (stk);
-  array_stack_push (stk, "hello");
+  array_stack_push (stk, NULL);
 
   fail_unless (array_stack_last_level (stk) == array_stack_last_level (stk));
 }
@@ -236,13 +251,15 @@ START_TEST (last_level_twice_often)
   size_t i;
 
   iterate (i)
-    array_stack_push_level (stk);
+    {
+      array_stack_push_level (stk);
+    }
 
   fail_unless (array_stack_last_level (stk) == array_stack_last_level (stk));
 }
 END_TEST
 
-START_TEST (last_level_twice_with_data_often)
+START_TEST (last_level_twice_often_with_data)
 {
   size_t i;
 

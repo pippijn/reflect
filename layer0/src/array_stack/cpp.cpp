@@ -1,4 +1,5 @@
-#include <cpparray_stack.h>
+#include <array_stack/impl_cpp.h>
+#include <array_stack.h>
 
 #include <vector>
 
@@ -134,7 +135,10 @@ array_stack_last_level (array_stack const *self)
 {
   assert (self != NULL);
   assert (!self->data.empty ());
-  assert (!self->data.back ().empty ());
+
+  if (self->data.back ().empty ())
+    return NULL;
+
   return &self->data.back ()[0];
 }
 

@@ -2,7 +2,7 @@
 layer2p_CPPFLAGS	:= $(layer1_CPPFLAGS) -Ilayer2p/include -Ilayer2p/src/yy
 
 # private
-layer2p_CFLAGS		:=
+layer2p_CFLAGS		:= -Ilayer2p/src/include
 layer2p_LDFLAGS		:= -shared -llayer1 -llayer0
 
 # sources

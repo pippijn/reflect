@@ -1,6 +1,6 @@
 WANT_MCHECK	= 0
 WANT_VALGRIND	= 1
-WANT_MUDFLAP	= 0
+WANT_MUDFLAP	= 1
 WANT_GLIB	= 0
 
 all: bin/reflect bin/check
@@ -37,8 +37,8 @@ endif
 
 LDFLAGS		+= -Wl,-z,defs -Wl,-rpath,$(PWD)/bin -Lbin
 CPPFLAGS	+= -include stdinc.h -MD
-CFLAGS		+= -Wall -Wextra -O0 -ggdb3 -fPIC
-CXXFLAGS	+= -Wall -Wextra -O0 -ggdb3 -fPIC -std=c++0x
+CFLAGS		+= -Wall -Wextra -O3 -ggdb3 -fPIC
+CXXFLAGS	+= -Wall -Wextra -O3 -ggdb3 -fPIC -std=c++0x
 CFLAGS		+= -Wredundant-decls			\
 		   -Wmissing-prototypes			\
 		   -Wbad-function-cast			\

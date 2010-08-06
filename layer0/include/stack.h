@@ -1,3 +1,18 @@
+#ifndef IMPLEMENTATION_H
+# include <stack/impl_fast.h>
+#endif
+#undef IMPLEMENTATION_H
+
+#if !defined (stack)            \
+ || !defined (stack_new)        \
+ || !defined (stack_delete)     \
+ || !defined (stack_push)       \
+ || !defined (stack_pop)        \
+ || !defined (stack_top)        \
+ || !defined (stack_size)
+# error Incomplete stack implementation
+#endif
+
 __BEGIN_DECLS
 
 /**
@@ -60,3 +75,14 @@ void *stack_top (stack const *self);
 size_t stack_size (stack const *self);
 
 __END_DECLS
+
+#if WANT_IMPL
+#undef WANT_IMPL
+#undef stack
+#undef stack_new
+#undef stack_delete
+#undef stack_push
+#undef stack_pop
+#undef stack_top
+#undef stack_size
+#endif

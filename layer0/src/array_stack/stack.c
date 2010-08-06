@@ -1,7 +1,8 @@
+#include <array_stack/impl_stack.h>
 #include <array_stack.h>
-#include <fast_stack.h>
+#include <stack.h>
 
-#include "fast_stack.h"
+#include "internal/fast_stack.h"
 
 struct array_stack
 {
@@ -176,16 +177,19 @@ array_stack_push_level (array_stack *self)
 void *const *
 array_stack_pop_level (array_stack *self)
 {
+  stack *current;
 #if ARRAY_STACK_TRACE
   printf ("%s (%p)\n", __func__, self);
 #endif
   assert (self != NULL);
   assert (self->levels > 0);
-#if 0
-  assert (stack_size (stack_get (self->arrays, self->levels - 1)) > 0);
-#endif
 
-  return stack_raw (stack_get (self->arrays, --self->levels));
+  current = stack_get (self->arrays, --self->levels);
+
+  if (stack_size (current) == 0)
+    return NULL;
+
+  return stack_raw (current);
 }
 
 void *const *
@@ -196,7 +200,9 @@ array_stack_last_level (array_stack const *self)
 #endif
   assert (self != NULL);
   assert (self->levels > 0);
-  /* assert (stack_size (stack_get (self->arrays, self->levels - 1)) > 0); */
+
+  if (stack_size (stack_get (self->arrays, self->levels - 1)) == 0)
+    return NULL;
 
   return stack_raw (stack_get (self->arrays, self->levels - 1));
 }

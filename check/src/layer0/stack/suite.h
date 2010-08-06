@@ -1,5 +1,3 @@
-#include <cppstack.h>
-
 static stack *stk;
 
 static void
@@ -65,7 +63,8 @@ START_TEST (data_storage)
       for (; it != et; it--)
         {
           fail_unless (stack_top (stk) == *it,
-                       "top should be \"%p\", but was \"%p\"", *it, stack_top (stk));
+                       "top should be \"%p\", but was \"%p\" (size=%d)",
+                       *it, stack_top (stk), stack_size (stk));
           fail_unless (strcmp (stack_pop (stk), *it) == 0);
         }
     }

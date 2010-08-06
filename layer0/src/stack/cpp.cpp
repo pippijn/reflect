@@ -1,8 +1,9 @@
-#include <cppstack.h>
+#include <stack/impl_cpp.h>
+#include <stack.h>
 
 #include <vector>
 
-struct cppstack
+struct stack
 {
   std::vector<void*> data;
 };
@@ -16,14 +17,14 @@ struct cppstack
  * public
  */
 
-cppstack *
-cppstack_new (void)
+stack *
+stack_new (void)
 {
-  return new cppstack;
+  return new stack;
 }
 
 void
-cppstack_delete (cppstack *self)
+stack_delete (stack *self)
 {
   assert (self != NULL);
   delete self;
@@ -31,14 +32,14 @@ cppstack_delete (cppstack *self)
 
 
 void
-cppstack_push (cppstack *self, void *data)
+stack_push (stack *self, void *data)
 {
   assert (self != NULL);
   self->data.push_back (data);
 }
 
 void *
-cppstack_pop (cppstack *self)
+stack_pop (stack *self)
 {
   assert (self != NULL);
   assert (!self->data.empty ());
@@ -48,7 +49,7 @@ cppstack_pop (cppstack *self)
 }
 
 void *
-cppstack_top (cppstack const *self)
+stack_top (stack const *self)
 {
   assert (self != NULL);
   assert (!self->data.empty ());
@@ -56,7 +57,7 @@ cppstack_top (cppstack const *self)
 }
 
 size_t
-cppstack_size (cppstack const *self)
+stack_size (stack const *self)
 {
   assert (self != NULL);
   return self->data.size ();
