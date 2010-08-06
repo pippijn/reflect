@@ -121,7 +121,9 @@ void *const *array_stack_pop_level (array_stack *self);
 /**
  * Return array containing the elements of the current level.
  * This array is valid until a @c pop_level / @c push_level sequence reached
- * this level again or until the next call to @c last_level.
+ * this level again or until the next call to @c last_level, if any mutating
+ * operation was done. That means, two directly successive calls will always
+ * return the same pointer.
  * The array_stack will keep ownership of this array, which means that client
  * code does not need to free it. In fact, freeing it is undefined.
  *
