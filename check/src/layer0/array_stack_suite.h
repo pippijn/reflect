@@ -216,6 +216,23 @@ END_TEST
 
 START_TEST (last_level_twice)
 {
+  array_stack_push_level (stk);
+
+  fail_unless (array_stack_last_level (stk) == array_stack_last_level (stk));
+}
+END_TEST
+
+START_TEST (last_level_twice_with_data)
+{
+  array_stack_push_level (stk);
+  array_stack_push (stk, "hello");
+
+  fail_unless (array_stack_last_level (stk) == array_stack_last_level (stk));
+}
+END_TEST
+
+START_TEST (last_level_twice_often)
+{
   size_t i;
 
   iterate (i)
@@ -225,7 +242,7 @@ START_TEST (last_level_twice)
 }
 END_TEST
 
-START_TEST (last_level_twice_with_data)
+START_TEST (last_level_twice_with_data_often)
 {
   size_t i;
 
