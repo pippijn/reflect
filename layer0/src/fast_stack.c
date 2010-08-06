@@ -203,9 +203,9 @@ elem_new (size_t n)
 {
   struct elem *e;
 
-  e = malloc (sizeof (struct elem));
+  e = mem_alloc (sizeof (struct elem));
 
-  e->data = malloc (n * sizeof (void *));
+  e->data = mem_alloc (n * sizeof (void *));
   e->next = NULL;
   e->size = 0;
   e->max  = n;
