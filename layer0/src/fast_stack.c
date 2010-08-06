@@ -5,6 +5,7 @@
 static struct elem *elem_new (size_t n);
 static void elem_free (struct elem *e);
 static void stack_add_elem (stack *self, size_t n);
+static void stack_repack (stack *self);
 
 struct elem
 {
@@ -192,6 +193,8 @@ stack_raw (stack *const self)
 {
   assert (self != NULL);
 
+  stack_repack (self);
+
   return self->last->data;
 }
 
@@ -231,6 +234,33 @@ stack_add_elem (stack *self, size_t n)
   new->prev = self->last;
   self->last = new;
   self->max += n;
+
+  return;
+}
+
+static void
+stack_repack (stack *self)
+{
+  int i, j;
+  struct elem *new, *e, *rm;
+
+  assert (self != NULL);
+
+  new = elem_new (self->size);
+
+  i = self->size - 1;
+  e = self->last;
+  while (i >= 0)
+    {
+      for (j = e->size - 1; j >= 0; j--)
+        new->data[i] = e->data[j];
+
+      rm = e;
+      e = e->prev;
+      elem_free (rm);
+    }
+
+  self->last = new;
 
   return;
 }

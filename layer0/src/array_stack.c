@@ -1,7 +1,7 @@
 #include <array_stack.h>
-#include <stack.h>
+#include <fast_stack.h>
 
-#include "stack.h"
+#include "fast_stack.h"
 
 struct array_stack
 {
