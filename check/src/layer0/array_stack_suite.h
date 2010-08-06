@@ -37,6 +37,18 @@ START_TEST (pop_level)
 }
 END_TEST
 
+START_TEST (last_pop)
+{
+  void *const *last;
+  void *const *popped;
+
+  array_stack_push_level (stk);
+  last = array_stack_last_level (stk);
+  popped = array_stack_pop_level (stk);
+  fail_unless (last == popped);
+}
+END_TEST
+
 START_TEST (push_pop)
 {
   size_t up, down;
@@ -208,6 +220,20 @@ START_TEST (last_level_twice)
 
   iterate (i)
     array_stack_push_level (stk);
+
+  fail_unless (array_stack_last_level (stk) == array_stack_last_level (stk));
+}
+END_TEST
+
+START_TEST (last_level_twice_with_data)
+{
+  size_t i;
+
+  iterate (i)
+    {
+      array_stack_push_level (stk);
+      array_stack_push (stk, "hello");
+    }
 
   fail_unless (array_stack_last_level (stk) == array_stack_last_level (stk));
 }
