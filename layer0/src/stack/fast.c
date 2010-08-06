@@ -155,6 +155,7 @@ stack_get (stack const *self, size_t index)
   assert (index < self->size);
 
   rindex = self->size - index;
+  assert (rindex > 0);
 
   e = self->last;
   for (i = 0; i < rindex; i += pr->size)
@@ -185,6 +186,7 @@ stack_set (stack *self, size_t index, void *data)
   else
     {
       rindex = self->size - index;
+      assert (rindex > 0);
 
       e = self->last;
       for (i = 0; i < rindex; i += pr->size)
