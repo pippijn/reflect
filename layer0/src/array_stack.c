@@ -12,7 +12,12 @@ struct array_stack
 array_stack *
 array_stack_new (void)
 {
-  array_stack *self = mem_alloc (sizeof (array_stack));
+  array_stack *self;
+#if ARRAY_STACK_TRACE
+  printf ("%s ()\n", __func__);
+#endif
+   
+  self = mem_alloc (sizeof (array_stack));
 
   self->arrays = stack_new ();
   self->levels = 0;
@@ -23,6 +28,9 @@ array_stack_new (void)
 void
 array_stack_delete (array_stack *self)
 {
+#if ARRAY_STACK_TRACE
+  printf ("%s (%p)\n", __func__, self);
+#endif
   assert (self != NULL);
 
   while (stack_size (self->arrays))
@@ -35,6 +43,9 @@ array_stack_delete (array_stack *self)
 void
 array_stack_push (array_stack *self, void *data)
 {
+#if ARRAY_STACK_TRACE
+  printf ("%s (%p, %p)\n", __func__, self, data);
+#endif
   assert (self != NULL);
   assert (self->levels > 0);
 
@@ -48,6 +59,9 @@ array_stack_push (array_stack *self, void *data)
 void *
 array_stack_pop (array_stack *self)
 {
+#if ARRAY_STACK_TRACE
+  printf ("%s (%p)\n", __func__, self);
+#endif
   assert (self != NULL);
   assert (self->levels > 0);
 
@@ -60,6 +74,9 @@ array_stack_pop (array_stack *self)
 void *
 array_stack_first (array_stack const *self)
 {
+#if ARRAY_STACK_TRACE
+  printf ("%s (%p)\n", __func__, self);
+#endif
   assert (self != NULL);
   assert (self->levels > 0);
   assert (stack_size (stack_get (self->arrays, self->levels - 1)) > 0);
@@ -70,6 +87,9 @@ array_stack_first (array_stack const *self)
 void *
 array_stack_last (array_stack const *self)
 {
+#if ARRAY_STACK_TRACE
+  printf ("%s (%p)\n", __func__, self);
+#endif
   assert (self != NULL);
   assert (self->levels > 0);
   assert (stack_size (stack_get (self->arrays, self->levels - 1)) > 0);
@@ -82,6 +102,9 @@ array_stack_set (array_stack *self, size_t index, void *data)
 {
   void *ret;
   int levels;
+#if ARRAY_STACK_TRACE
+  printf ("%s (%p, %zu, %p)\n", __func__, self, index, data);
+#endif
 
   assert (self != NULL);
   assert (self->levels > 0);
@@ -107,6 +130,9 @@ array_stack_set (array_stack *self, size_t index, void *data)
 void *
 array_stack_get (array_stack *self, size_t index)
 {
+#if ARRAY_STACK_TRACE
+  printf ("%s (%p, %zu)\n", __func__, self, index);
+#endif
   assert (self != NULL);
   assert (self->levels > 0);
   assert (stack_size (stack_get (self->arrays, self->levels - 1)) > index);
@@ -117,6 +143,9 @@ array_stack_get (array_stack *self, size_t index)
 size_t
 array_stack_size (array_stack const *self)
 {
+#if ARRAY_STACK_TRACE
+  printf ("%s (%p)\n", __func__, self);
+#endif
   assert (self != NULL);
   assert (self->levels > 0);
 
@@ -126,6 +155,9 @@ array_stack_size (array_stack const *self)
 void
 array_stack_push_level (array_stack *self)
 {
+#if ARRAY_STACK_TRACE
+  printf ("%s (%p)\n", __func__, self);
+#endif
   assert (self != NULL);
 
   if (self->levels < stack_size (self->arrays))
@@ -144,6 +176,9 @@ array_stack_push_level (array_stack *self)
 void *const *
 array_stack_pop_level (array_stack *self)
 {
+#if ARRAY_STACK_TRACE
+  printf ("%s (%p)\n", __func__, self);
+#endif
   assert (self != NULL);
   assert (self->levels > 0);
 #if 0
@@ -156,6 +191,9 @@ array_stack_pop_level (array_stack *self)
 void *const *
 array_stack_last_level (array_stack const *self)
 {
+#if ARRAY_STACK_TRACE
+  printf ("%s (%p)\n", __func__, self);
+#endif
   assert (self != NULL);
   assert (self->levels > 0);
   /* assert (stack_size (stack_get (self->arrays, self->levels - 1)) > 0); */
@@ -166,5 +204,8 @@ array_stack_last_level (array_stack const *self)
 size_t
 array_stack_levels (array_stack const *self)
 {
+#if ARRAY_STACK_TRACE
+  printf ("%s (%p)\n", __func__, self);
+#endif
   return self->levels;
 }
