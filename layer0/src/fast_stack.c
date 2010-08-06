@@ -7,22 +7,25 @@
 static struct elem *elem_new (size_t n);
 static void stack_add_elem (stack *self, struct elem *last, size_t n);
 
-struct elem {
-  void        **data; /* data */
-  struct elem  *next; /* next elem */
-  size_t        size; /* used size */
-  size_t        max;  /* max size */
+struct elem
+{
+  void        **data;   /* data */
+  struct elem  *next;   /* next elem */
+  size_t        size;   /* used size */
+  size_t        max;    /* max size */
 };
 
-struct stack {
-  struct elem *first; /* the stack */
-  size_t       size;  /* current used size */
-  size_t       max;   /* max slots available */
+struct stack
+{
+  struct elem *first;   /* the stack */
+  size_t       size;    /* current used size */
+  size_t       max;     /* max slots available */
 };
 
 /* public */
 
-stack *stack_new (void)
+stack *
+stack_new (void)
 {
   stack *self = mem_alloc (sizeof (stack));
 
@@ -33,7 +36,8 @@ stack *stack_new (void)
   return self;
 }
 
-void stack_delete (stack *self)
+void
+stack_delete (stack *self)
 {
   struct elem *rm, *e;
 
@@ -44,18 +48,18 @@ void stack_delete (stack *self)
 #endif
 
   e = self->first;
-  while (e) {
-    rm = e;
-    e = e->next;
-    mem_free (rm, sizeof (void *) * rm->max);
-  }
+  while (e)
+    {
+      rm = e;
+      e = e->next;
+      mem_free (rm, rm->max * sizeof (void *));
+    }
 
   mem_free (self, sizeof (stack));
-
-  return;
 }
 
-void stack_push (stack *self, void *data)
+void
+stack_push (stack *self, void *data)
 {
   struct elem *e;
 
@@ -65,10 +69,11 @@ void stack_push (stack *self, void *data)
   while (e->size == e->max && e->next)
     e = e->next;
 
-  if (e->size == e->max) {
-    stack_add_elem (self, e, e->max * 2);
-    e = e->next;
-  }
+  if (e->size == e->max)
+    {
+      stack_add_elem (self, e, e->max * 2);
+      e = e->next;
+    }
 
   assert (self->size < self->max);
 
@@ -77,13 +82,12 @@ void stack_push (stack *self, void *data)
   self->size++;
 
 #if STACK_VERBOSE
-  printf("push %d\n", self->size);
+  printf ("push %d\n", self->size);
 #endif
-
-  return;
 }
 
-void *stack_pop (stack *self)
+void *
+stack_pop (stack *self)
 {
   struct elem *e;
 
@@ -96,7 +100,7 @@ void *stack_pop (stack *self)
 #endif
 
 #if STACK_VERBOSE
-  printf("pop %d\n", self->size);
+  printf ("pop %d\n", self->size);
 #endif
 
   e = self->first;
@@ -110,7 +114,8 @@ void *stack_pop (stack *self)
   return e->data[e->size];
 }
 
-void *stack_top (stack const *self)
+void *
+stack_top (stack const *self)
 {
   struct elem *e;
 
@@ -124,7 +129,8 @@ void *stack_top (stack const *self)
   return e->data[e->size - 1];
 }
 
-size_t stack_size (stack const *self)
+size_t
+stack_size (stack const *self)
 {
   assert (self != NULL);
 
@@ -133,7 +139,8 @@ size_t stack_size (stack const *self)
 
 /* internal only */
 
-void *stack_get (stack const *self, size_t index)
+void *
+stack_get (stack const *self, size_t index)
 {
   size_t i;
   struct elem *e;
@@ -150,7 +157,8 @@ void *stack_get (stack const *self, size_t index)
   return e->data[index - i];
 }
 
-void *stack_set (stack *self, size_t index, void *data)
+void *
+stack_set (stack *self, size_t index, void *data)
 {
   size_t i;
   void *ret;
@@ -158,7 +166,7 @@ void *stack_set (stack *self, size_t index, void *data)
 
   assert (self != NULL);
 #if STACK_VERBOSE
-  printf("setting %d/%d\n", index, self->size);
+  printf ("setting %d/%d\n", index, self->size);
 #endif
 
   if (index >= self->size)
@@ -180,7 +188,8 @@ void *stack_set (stack *self, size_t index, void *data)
   return ret;
 }
 
-void *const *stack_raw (stack *const self)
+void *const *
+stack_raw (stack *const self)
 {
   assert (self != NULL);
 
@@ -189,13 +198,14 @@ void *const *stack_raw (stack *const self)
 
 /* static */
 
-static struct elem *elem_new (size_t n)
+static struct elem *
+elem_new (size_t n)
 {
   struct elem *e;
 
   e = malloc (sizeof (struct elem));
 
-  e->data = malloc (sizeof (void *) * n);
+  e->data = malloc (n * sizeof (void *));
   e->next = NULL;
   e->size = 0;
   e->max  = n;
@@ -203,7 +213,8 @@ static struct elem *elem_new (size_t n)
   return e;
 }
 
-static void stack_add_elem (stack *self, struct elem *last, size_t n)
+static void
+stack_add_elem (stack *self, struct elem *last, size_t n)
 {
   struct elem *new;
 
@@ -211,6 +222,4 @@ static void stack_add_elem (stack *self, struct elem *last, size_t n)
 
   last->next = new;
   self->max += n;
-
-  return;
 }
