@@ -1,24 +1,96 @@
-#include <memman.h>
+#include <unistd.h>
+#include <sys/resource.h>
+
+#include <mcheck.h>
+#include <valgrind/valgrind.h>
 
 #define NEW_FILL 0x33
 #define OLD_FILL 0xDD
 
-/*
- * We may not always want to do this. Specifically, if running under valgrind,
- * this will hide bugs valgrind would otherwise find.
- */
-#define FILL_MEMORY 1
+static void
+mem_check_abort (enum mcheck_status status)
+{
+  switch (status)
+    {
+    case MCHECK_DISABLED:
+      fprintf (stderr,
+               "mcheck was not called before the first allocation. "
+               "No consistency checking can be done.");
+      break;
+    case MCHECK_HEAD:
+      fprintf (stderr,
+               "The data immediately before the block was modified. "
+               "This commonly happens when an array index or pointer is decremented too far.");
+      break;
+    case MCHECK_TAIL:
+      fprintf (stderr,
+               "The data immediately after the block was modified. "
+               "This commonly happens when an array index or pointer is incremented too far.");
+      break;
+    case MCHECK_FREE:
+      fprintf (stderr,
+               "The block was already freed.");
+      break;
+    case MCHECK_OK:
+      fprintf (stderr,
+               "No inconsistency detected, but %s was called. Aborting anyway.", __func__);
+      break;
+    default:
+      fprintf (stderr,
+               "Unhandled mcheck status: %d.", status);
+    }
+  abort ();
+}
+
+static bool mem_inited = false;
+
+void
+mem_init (void)
+{
+  assert (!mem_inited);
+
+  if (!RUNNING_ON_VALGRIND)
+    {
+      /* 10 minutes */
+      alarm (600);
+      {
+        /* 2 minutes CPU time */
+        struct rlimit const rlim = {
+          120,
+          120,
+        };
+        setrlimit (RLIMIT_CPU, &rlim);
+      }
+      {
+        /* 512 MiB address space (memory) limit */
+        struct rlimit const rlim = {
+          512 * 1024 * 1024,
+          512 * 1024 * 1024,
+        };
+        setrlimit (RLIMIT_AS, &rlim);
+      }
+
+    if (mcheck (mem_check_abort) == -1)
+      {
+        fprintf (stderr, "mcheck called too late");
+        abort ();
+      }
+    }
+
+  mem_inited = true;
+}
 
 void *
 mem_alloc (size_t bytes)
 {
   void *ptr;
 
+  assert (mem_inited);
+
   ptr = malloc (bytes);
   assert (ptr != NULL);
-#if FILL_MEMORY
-  memset (ptr, NEW_FILL, bytes);
-#endif
+  if (!RUNNING_ON_VALGRIND)
+    memset (ptr, NEW_FILL, bytes);
   return ptr;
 }
 
@@ -26,6 +98,8 @@ void *
 mem_realloc (void *ptr, size_t bytes)
 {
   void *newptr;
+
+  assert (mem_inited);
 
   if (ptr == NULL)
     newptr = mem_alloc (bytes);
@@ -38,9 +112,8 @@ mem_realloc (void *ptr, size_t bytes)
 void
 mem_free (void *memory, size_t bytes)
 {
-#if FILL_MEMORY
-  if (memory != NULL)
-    memset (memory, OLD_FILL, bytes);
-#endif
+  if (!RUNNING_ON_VALGRIND)
+    if (memory != NULL)
+      memset (memory, OLD_FILL, bytes);
   free (memory);
 }

@@ -5,6 +5,8 @@ main (void)
 {
   int failed;
   SRunner *sr;
+
+  mem_init ();
   
   sr = srunner_create (NULL);
 

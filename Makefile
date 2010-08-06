@@ -23,7 +23,7 @@ else
 CFLAGS		+= -Wnested-externs
 endif
 
-LDFLAGS		+= -Wl,-z,defs -Wl,-rpath,$(PWD)/bin -Lbin
+LDFLAGS		+= -Wl,-z,defs -Wl,-rpath,$(PWD)/bin -Lbin -lmcheck
 CPPFLAGS	+= -include stdinc.h -MD
 CFLAGS		+= -Wall -Wextra -O3 -ggdb3 -fPIC
 CXXFLAGS	+= -Wall -Wextra -O3 -ggdb3 -fPIC -std=c++0x
