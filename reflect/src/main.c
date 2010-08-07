@@ -75,7 +75,7 @@ print_members_recursive (pt_node const *node, FILE *fh, int indent)
 {
   char const *const *members;
 
-  fprintf (fh, "%*s- node `%s':\n", indent, "", pt_node_type_name (node));
+  fprintf (fh, "%*s- node `%s'@%p:\n", indent, "", pt_node_type_name (node), node);
   if (strcmp (pt_node_type_name (node), "token") == 0)
     {
       fprintf (fh, "%*s- text: `%s´\n", indent + 2, "", pt_token_text (node));
@@ -87,7 +87,7 @@ print_members_recursive (pt_node const *node, FILE *fh, int indent)
         pt_node const *next = pt_node_member (node, *members);
         fprintf (fh, "%*s- member `%s':\n", indent + 2, "", *members);
         if (next != NULL)
-          print_members_recursive (next, fh, indent + 2);
+          print_members_recursive (next, fh, indent + 4);
         else
           fprintf (fh, "%*s  (nil)\n", indent + 2, "");
       }
