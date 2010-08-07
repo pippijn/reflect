@@ -30,7 +30,7 @@ sz (int length)
 %option reentrant
 %option header-file="layer2/p/src/yy/lexer.h"
 %option yylineno
-%option noyywrap nounput noinput
+%option noyywrap nounput noinput nounistd
 
 D			[0-9]
 L			[a-zA-Z_]
