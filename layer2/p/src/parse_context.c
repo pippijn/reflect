@@ -57,7 +57,16 @@ parse_context_unit (parse_context const *self)
 void
 parse_context_unit_set (parse_context *self, pt_node *unit)
 {
+  assert (self != NULL);
+  assert (unit != NULL);
+
+#if 0
+  printf ( "replacing %s@%p with %s@%p\n"
+         , self->unit ? pt_node_type_name (self->unit) : "nil", self->unit
+         , pt_node_type_name (unit), unit
+         );
+#endif
   pt_node_unref_ornull (self->unit);
   self->unit = unit;
-  pt_node_ref_ornull (self->unit);
+  pt_node_ref (self->unit);
 }

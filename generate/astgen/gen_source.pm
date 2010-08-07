@@ -19,8 +19,6 @@ sub generate {
    gen_self_type $fh, $dataname, $name, $members;
    gen_member_list $fh, $dataname, $name, $members;
    gen_vtbl $fh, $dataname, $name, $members;
-   #gen_ctor $fh, $dataname, $name, $members;
-   #gen_new $fh, $dataname, $name, $members;
    gen_accessors $fh, $dataname, $name, $members;
    gen_functions $fh, $dataname, $name, $members;
 }

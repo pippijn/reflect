@@ -28,7 +28,11 @@ ${dataname}_${name}_construct
 
 [% FOREACH member = members.all %]
 
+#if 0
+  ${dataname}_node_ref_ornull (self->$member = $member);
+#else
   self->$member = $member;
+#endif
 [% END %]
 
 }

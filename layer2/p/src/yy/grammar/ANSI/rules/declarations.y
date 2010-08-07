@@ -76,7 +76,7 @@ sue_declaration_specifier
 typedef_declaration_specifier
 	: n1:typedef_type_specifier n2:storage_class
 	  { typedef_declaration_specifier28 }
-	| n1:declaration_qualifier_list n2:TYPEDEF_NAME
+	| n1:declaration_qualifier_list n2:typedef_name
 	  { typedef_declaration_specifier29 }
 	| n1:typedef_declaration_specifier n2:declaration_qualifier
 	  { typedef_declaration_specifier30 }
@@ -127,9 +127,9 @@ sue_type_specifier
 	;
 
 typedef_type_specifier
-	:                        n2:TYPEDEF_NAME
+	:                        n2:typedef_name
 	  { typedef_type_specifier47 }
-	| n1:type_qualifier_list n2:TYPEDEF_NAME
+	| n1:type_qualifier_list n2:typedef_name
 	  { typedef_type_specifier47 }
 	| n1:typedef_type_specifier n2:type_qualifier
 	  { typedef_type_specifier49 }
@@ -156,8 +156,8 @@ elaborated_type_name
 
 declarator
 	: :paren_typedef_declarator
-	| :parameter_typedef_declarator
-	| :identifier_declarator
+	| :parameter_typedef_declarator %merge <node_merge>
+	| :identifier_declarator %merge <node_merge>
 	| :old_function_declarator
 	;
 
@@ -184,16 +184,16 @@ paren_postfix_typedef_declarator
 	;
 
 simple_paren_typedef_declarator
-	: n1:TYPEDEF_NAME
+	: n1:typedef_name
 	  { simple_paren_typedef_declarator68 }
 	| n1:'(' n2:simple_paren_typedef_declarator n3:')'
 	  { simple_paren_typedef_declarator69 }
 	;
 
 parameter_typedef_declarator
-	: n1:TYPEDEF_NAME
+	: n1:typedef_name
 	  { parameter_typedef_declarator70 }
-	| n1:TYPEDEF_NAME n2:postfixing_abstract_declarator
+	| n1:typedef_name n2:postfixing_abstract_declarator
 	  { parameter_typedef_declarator71 }
 	| n1:clean_typedef_declarator
 	  { parameter_typedef_declarator72 }
@@ -312,6 +312,16 @@ identifier_or_typedef_name
 	| :TYPEDEF_NAME
 	;
 
+#if 0
+typedef_name
+	: :IDENTIFIER
+	;
+#else
+typedef_name
+	: :TYPEDEF_NAME
+	;
+#endif
+
 type_name
 	: tspec:type_specifier
 	  { type_name }
@@ -325,12 +335,10 @@ nonnull_expression_list
 	;
 
 any_word
-	: n1:IDENTIFIER
+	: n1:identifier_or_typedef_name
 	  { any_word115 }
-	| n1:TYPEDEF_NAME
-	  { any_word116 }
 	| n1:CONST
-	  { any_word117 }
+	  { any_word116 }
 	;
 
 initialiser_opt
@@ -400,9 +408,9 @@ parameter_declaration
 	  { parameter_declaration143 }
 	| n1:attributes_opt n2:type_specifier n3:abstract_declarator
 	  { parameter_declaration144 }
-	| n1:attributes_opt n2:type_specifier n3:identifier_declarator n4:attributes_opt
+	| n1:attributes_opt n2:type_specifier n3:identifier_declarator n4:attributes_opt %merge <node_merge>
 	  { parameter_declaration145 }
-	| n1:attributes_opt n2:type_specifier n3:parameter_typedef_declarator
+	| n1:attributes_opt n2:type_specifier n3:parameter_typedef_declarator %merge <node_merge>
 	  { parameter_declaration146 }
 	;
 

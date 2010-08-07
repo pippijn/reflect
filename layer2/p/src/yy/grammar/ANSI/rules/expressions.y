@@ -52,9 +52,9 @@ unary_expression
 	  { bitwise_negate }
 	| op:'!' expr:cast_expression
 	  { logical_not }
-	| op:SIZEOF expr:unary_expression
+	| op:SIZEOF expr:unary_expression %merge <node_merge>
 	  { sizeof_var }
-	| op:SIZEOF lbrack:'(' expr:type_name rbrack:')'
+	| op:SIZEOF lbrack:'(' expr:type_name rbrack:')' %merge <node_merge>
 	  { sizeof_type }
 	;
 

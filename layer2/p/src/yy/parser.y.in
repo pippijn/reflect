@@ -10,7 +10,12 @@
 %locations
 %debug
 %error-verbose
+#if 0
+%expect 7
+%expect-rr 15
+#else
 %expect 2
+#endif
 %glr-parser
 %token-table
 

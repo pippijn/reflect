@@ -22,11 +22,11 @@ labeled_statement
 compound_statement
 	: lbrace:'{'                                             rbrace:'}'
 	  { compound_statement }
-	| lbrace:'{' decls:declaration_list                      rbrace:'}'
+	| lbrace:'{' decls:declaration_list                      rbrace:'}' %merge <node_merge>
 	  { compound_statement }
-	| lbrace:'{'                        stmts:statement_list rbrace:'}'
+	| lbrace:'{'                        stmts:statement_list rbrace:'}' %merge <node_merge>
 	  { compound_statement }
-	| lbrace:'{' decls:declaration_list stmts:statement_list rbrace:'}'
+	| lbrace:'{' decls:declaration_list stmts:statement_list rbrace:'}' %merge <node_merge>
 	  { compound_statement }
 	;
 

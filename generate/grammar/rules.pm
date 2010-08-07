@@ -57,9 +57,16 @@ sub assemble_rules {
       push @args, undef
          for $cur .. (keys %{ $nodes->{$rule->{node}} }) - 1;
 
-      my $count = 0;
-      $code .= join ", ", map { $_ ? '$' . ++$count : "NULL" } @args;
-      $code .= "); parse_context_unit_set (context, \$\$); }";
+      {
+         my $count = 0;
+         $code .= join ", ", map { $_ ? '$' . ++$count : "NULL" } @args;
+         $code .= "); parse_context_unit_set (context, \$\$); ";
+      }
+      if (0) {
+         my $count = 0;
+         $code .= join " ", map { "${dataname}_node_unref (\$" . ++$count . ");" } grep { $_ } @args;
+      }
+      $code .= " }"
    }
 
    $rhs . $code

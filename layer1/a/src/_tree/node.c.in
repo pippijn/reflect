@@ -129,7 +129,7 @@ L (node_ref_ornull) (node_type *self)
   if (self != NULL)
     {
 #if 0
-      printf ("++ref (%s) => %d\n", self->vtbl->ti.name, self->refcnt + 1);
+      printf ("++ref (%s@%p) => %d\n", self->vtbl->ti.name, self, self->refcnt + 1);
 #endif
 
       ++self->refcnt;
@@ -152,10 +152,10 @@ L (node_unref_ornull) (node_type *self)
   if (self != NULL)
     {
 #if 0
-      printf ("--ref (%s) => %d\n", self->vtbl->ti.name, self->refcnt - 1);
+      printf ("--ref (%s@%p) => %d\n", self->vtbl->ti.name, self, self->refcnt - 1);
 #endif
 
-#if 0
+#if 1
       if (self->refcnt == 0)
         printf ("refcount of %p is 0\n", self);
 #endif

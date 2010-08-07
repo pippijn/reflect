@@ -71,6 +71,52 @@ print_tokens (pt_node const *node, char const *file)
 }
 
 static void
+dot_members_recursive (pt_node const *node, FILE *fh)
+{
+  char const *const *members;
+
+  for (members = pt_node_members (node); *members != NULL; members++)
+    {
+      pt_node const *next = pt_node_member (node, *members);
+      if (next != NULL)
+        {
+          fprintf ( fh
+                  , "\t\"%s\\n@%p\" -> \"%s\\n@%p"
+                  , pt_node_type_name (node), node
+                  , pt_node_type_name (next), next
+                  );
+          if (strcmp (pt_node_type_name (next), "token") == 0)
+            fprintf ( fh
+                    , ":\\n`%s´ (%d)\";\n"
+                    , pt_token_text (next)
+                    , pt_token_token (next)
+                    );
+          else
+            fprintf ( fh
+                    , "\";\n"
+                    );
+          dot_members_recursive (next, fh);
+        }
+    }
+}
+
+static void
+dot_members (pt_node const *node, char const *file)
+{
+  FILE *fh = fopen (file, "w");
+  assert (fh != NULL);
+
+  fprintf (fh, "digraph code {\n");
+#if 0
+  fprintf (fh, "\trankdir = \"LR\";\n");
+#endif
+  dot_members_recursive (node, fh);
+  fprintf (fh, "}\n");
+
+  fclose (fh);
+}
+
+static void
 print_members_recursive (pt_node const *node, FILE *fh, int indent)
 {
   char const *const *members;
@@ -127,6 +173,10 @@ main (void)
   print_tokens (node, "parse.tok");
   phase ("printing parse tree");
   print_members (node, "parse.out");
+  phase ("printing parse tree as dot file");
+  dot_members (node, "parse.dot");
+  phase ("visualising parse graph");
+  system ("dot -Tpng parse.dot -o parse.png");
 
   phase ("destroying tree");
   parse_context_delete (pctx);

@@ -9,8 +9,8 @@ translation_unit
 	;
 
 external_definition
-	: :declaration
-	| :function_definition
+	: :declaration %merge <node_merge>
+	| :function_definition %merge <node_merge>
 	| :';'
 	;
 
@@ -28,8 +28,8 @@ function_definition
 	;
 
 function_declarator
-	: :identifier_declarator
-	| :full_old_function_declarator
+	: :identifier_declarator %merge <node_merge>
+	| :full_old_function_declarator %merge <node_merge>
 	;
 
 full_old_function_declarator

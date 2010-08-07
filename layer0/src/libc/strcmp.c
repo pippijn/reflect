@@ -13,7 +13,7 @@ int
     }
   /* Compare the characters as unsigned char and
    * return the difference.  */
-  uc1 = (*(unsigned char const *)s1);
-  uc2 = (*(unsigned char const *)s2);
-  return (uc1 < uc2) ? -1 : (uc1 > uc2);
+  uc1 = *(unsigned char const *)s1;
+  uc2 = *(unsigned char const *)s2;
+  return uc1 < uc2 ? -1 : uc1 > uc2;
 }
