@@ -10,3 +10,5 @@
 
 void yyerror (YYLTYPE const *llocp, parse_context const *context, char const *s);
 extern int yydebug;
+
+YYSTYPE node_merge (YYSTYPE n1, YYSTYPE n2);
