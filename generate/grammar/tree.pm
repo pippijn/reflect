@@ -57,6 +57,7 @@ sub gen_tree {
       my ($struct, $members) = ($_, $structs{$_});
       print $fh "   $struct => " . Data::Dumper->new ([$members])->Dump . ",\n";
    }
+   print $fh "   node_merge => ['n1','n2']\n";
    print $fh "}\n"
 }
 

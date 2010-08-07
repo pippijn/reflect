@@ -49,6 +49,7 @@ L (node_delete) (node_type *self)
 {
   assert (self != NULL);
   assert (self->vtbl != NULL);
+  assert (self->refcnt == 0);
 
   self->vtbl->destruct (self);
 
@@ -104,6 +105,7 @@ L (node_destruct) (node_type *self)
 {
   assert (self != NULL);
   assert (self->vtbl != NULL);
+  assert (self->refcnt == 0);
 }
 
 
@@ -117,6 +119,7 @@ node_type *
 L (node_ref) (node_type *self)
 {
   assert (self != NULL);
+  assert (self->refcnt > 0);
   return L (node_ref_ornull) (self);
 }
 
@@ -139,6 +142,7 @@ void
 L (node_unref) (node_type *self)
 {
   assert (self != NULL);
+  assert (self->refcnt > 0);
   L (node_unref_ornull) (self);
 }
 
@@ -151,6 +155,11 @@ L (node_unref_ornull) (node_type *self)
       printf ("--ref (%s) => %d\n", self->vtbl->ti.name, self->refcnt - 1);
 #endif
 
+#if 0
+      if (self->refcnt == 0)
+        printf ("refcount of %p is 0\n", self);
+#endif
+      assert (self->refcnt > 0);
       if (--self->refcnt == 0)
         L (node_delete) (self);
     }
