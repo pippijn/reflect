@@ -1,5 +1,7 @@
 *.gch
 *.[od]
+/parse.*
+/reparse.*
 /bin
 /*/include/gen
 /*/include/*/gen

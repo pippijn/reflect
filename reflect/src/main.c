@@ -2,10 +2,11 @@
 #include <xml_input.h>
 #include <yyinterf.h>
 
+#include <stdarg.h>
 #include <sys/time.h>
 
 static void
-phase (char const *name)
+phase (char const *name, ...)
 {
   static int number;
   static struct timeval start;
@@ -21,14 +22,22 @@ phase (char const *name)
       printf ("%td.%06td sec\n", diff.tv_sec, diff.tv_usec);
     }
   if (name)
-    printf ("phase %2d: %s... ", ++number, name);
+    {
+      va_list ap;
+
+      printf ("phase %2d: ", ++number);
+      va_start (ap, name);
+      vprintf (name, ap);
+      va_end (ap);
+      printf ("... ");
+    }
   fflush (stdout);
 
   gettimeofday (&start, NULL);
 }
 
 static void
-print_node (pt_node *node, char const *file)
+print_node (pt_node const *node, char const *file)
 {
   pt_visitor *printer;
   FILE *fh = fopen (file, "w");
@@ -42,7 +51,7 @@ print_node (pt_node *node, char const *file)
 }
 
 static void
-store_node (pt_node *node, char const *file)
+store_node (pt_node const *node, char const *file)
 {
   pt_visitor *printer;
   FILE *fh = fopen (file, "w");
@@ -70,6 +79,26 @@ print_tokens (pt_node const *node, char const *file)
   fclose (fh);
 }
 
+static char const *
+dot_escape (char const *text)
+{
+  static char buf[1024];
+  char *ptr = buf;
+  char c;
+
+  while ((c = *text++) != '\0')
+    switch (c)
+      {
+      case '"': case '\\':
+        *ptr++ = '\\';
+      default:
+        *ptr++ = c;
+      }
+  *ptr = '\0';
+
+  return buf;
+}
+
 static void
 dot_members_recursive (pt_node const *node, FILE *fh)
 {
@@ -81,20 +110,21 @@ dot_members_recursive (pt_node const *node, FILE *fh)
       if (next != NULL)
         {
           fprintf ( fh
-                  , "\t\"%s\\n@%p\" -> \"%s\\n@%p"
-                  , pt_node_type_name (node), node
-                  , pt_node_type_name (next), next
+                  , "\t\"%s\\n@%p\\nrefcnt: %d\" -> \"%s\\n@%p\\nrefcnt: %d"
+                  , pt_node_type_name (node), node, pt_node_refcnt (node)
+                  , pt_node_type_name (next), next, pt_node_refcnt (next)
                   );
           if (strcmp (pt_node_type_name (next), "token") == 0)
             fprintf ( fh
-                    , ":\\n`%s´ (%d)\";\n"
-                    , pt_token_text (next)
+                    , "\\n`%s´ (%d)\" "
+                    , dot_escape (pt_token_text (next))
                     , pt_token_token (next)
                     );
           else
             fprintf ( fh
-                    , "\";\n"
+                    , "\" "
                     );
+          fprintf (fh, "[ label = \"%s\" ];\n", *members);
           dot_members_recursive (next, fh);
         }
     }
@@ -150,46 +180,71 @@ print_members (pt_node const *node, char const *file)
   fclose (fh);
 }
 
+static void
+action (pt_node const *node, char const *base, char const *name)
+{
+  char buf[1024];
+
+  assert (node != NULL);
+
+  phase ("generating xml from %s tree", name);
+  snprintf (buf, sizeof buf, "%s.xml", base);
+  print_node (node, buf);
+
+  phase ("generating s-expression tree from %s tree", name);
+  snprintf (buf, sizeof buf, "%s.lsp", base);
+  store_node (node, buf);
+
+  phase ("deparsing %s tree", name);
+  snprintf (buf, sizeof buf, "%s.tok", base);
+  print_tokens (node, buf);
+
+  phase ("printing %s tree", name);
+  snprintf (buf, sizeof buf, "%s.out", base);
+  print_members (node, buf);
+
+  phase ("printing %s tree as dot file", name);
+  snprintf (buf, sizeof buf, "%s.dot", base);
+  dot_members (node, buf);
+
+  phase ("visualising parse graph for %s tree", name);
+  snprintf (buf, sizeof buf, "dot -Tpng %s.dot -o %s.png", base, base);
+  system (buf);
+}
+
 int
 main (void)
 {
-  parse_context *pctx;
-  pt_node *node;
-
   mem_init ();
 
-  pctx = parse_context_new ();
-  yydebug = 0;
-  phase ("parsing");
-  if (yyparse (pctx) == 1)
-    puts ("An unrecoverable syntax has occurred. Parsing was aborted.");
-  node = parse_context_unit (pctx);
+  {
+    parse_context *pctx = parse_context_new ();
+    pt_node *node;
 
-  phase ("generating xml");
-  print_node (node, "parse.xml");
-  phase ("generating s-expression tree");
-  store_node (node, "parse.lsp");
-  phase ("deparsing tree");
-  print_tokens (node, "parse.tok");
-  phase ("printing parse tree");
-  print_members (node, "parse.out");
-  phase ("printing parse tree as dot file");
-  dot_members (node, "parse.dot");
-  phase ("visualising parse graph");
-  system ("dot -Tpng parse.dot -o parse.png");
+    yydebug = 0;
+    phase ("parsing");
+    if (yyparse (pctx) == 1)
+      puts ("An unrecoverable syntax has occurred. Parsing was aborted.");
+    node = parse_context_unit (pctx);
 
-  phase ("destroying tree");
-  parse_context_delete (pctx);
+    action (node, "parse", "parse");
 
-  phase ("reading back tree from xml");
-  node = test_xml_parse ("parse.xml");
-  assert (node != NULL);
-  phase ("printing read-back parse tree");
-  print_members (node, "reparse.out");
-  phase ("generating xml from subtree");
-  print_node (pt_node_path (node, "/def/n3"), "reparse.xml");
-  phase ("destroying read-back tree");
-  pt_node_unref (node);
+    phase ("destroying parse context");
+    parse_context_delete (pctx);
+  }
+
+  {
+    pt_node *node;
+
+    phase ("reading back tree from xml");
+    node = test_xml_parse ("parse.xml");
+
+    action (node, "reparse", "read-back");
+
+    phase ("destroying read-back tree");
+    pt_node_unref (node);
+  }
+
   phase (NULL);
 
   return 0;

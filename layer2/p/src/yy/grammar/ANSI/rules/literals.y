@@ -16,11 +16,9 @@ constant
 	  { wchar_constant }
 	;
 
-string_literal_list
-	:                          string:STRING_LITERAL
-	  { string_literal_list }
-	| prev:string_literal_list string:STRING_LITERAL
-	  { string_literal_list }
+string_literal
+	: token:STRING_LITERAL
+	  { string_literal }
 	;
 
 type_qualifier
@@ -28,13 +26,6 @@ type_qualifier
 	  { const_type_qualifier }
 	| volatile_tok:VOLATILE
 	  { volatile_type_qualifier }
-	;
-
-type_qualifier_opt
-	: n1:empty
-	  { type_qualifier_opt270 }
-	| n1:type_qualifier
-	  { type_qualifier_opt271 }
 	;
 
 pointer_type_qualifier

@@ -55,12 +55,19 @@ pt_token_visitor_visit_token (visitor_type *object, node_type const *node)
     output_text (self, text);
 }
 
+static void
+pt_token_visitor_visit_node_merge (visitor_type *object, node_type const *node)
+{
+  pt_node_accept (pt_node_merge_n1 (node), object);
+}
+
 static vtbl_type pt_token_visitor_vtbl = {
   {
     "token_visitor",
     sizeof (self_type)
   },
-  pt_token_visitor_visit_token
+  .visit_token = pt_token_visitor_visit_token,
+  .visit_node_merge = pt_token_visitor_visit_node_merge,
 };
 
 

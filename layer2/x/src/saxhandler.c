@@ -202,22 +202,25 @@ xml_input_endElement ( void *ctx
       {
         size_t i;
         pt_node *node;
-        void *const *args = array_stack_last_level (state->node_stack);
-        assert (args != NULL);
+        void *const *argv = array_stack_last_level (state->node_stack);
+        size_t argc = array_stack_size (state->node_stack);
+        assert (argv != NULL);
 
         if (DEBUG)
           {
             printf ("pt_%s_new (", (char const *)name);
-            for (i = 0; i < array_stack_size (state->node_stack) - 1; i++)
-              printf ("%p, ", args[i]);
-            printf ("%p) = ", args[i]);
+            for (i = 0; i < argc - 1; i++)
+              printf ("%p, ", argv[i]);
+            printf ("%p) = ", argv[i]);
             fflush (stdout);
           }
-        node = pt_new ((char const *)name, (pt_node *const *)args);
+        node = pt_new ((char const *)name, (pt_node *const *)argv);
         assert (node != NULL);
         if (DEBUG)
           printf ("%p\n", node);
 
+        for (i = 0; i < argc; i++)
+          pt_node_unref_ornull (argv[i]);
         array_stack_pop_level (state->node_stack);
 
         array_stack_push (state->node_stack, node);

@@ -31,6 +31,9 @@ void                    L (node_unref)          (L (node) *self);
 /*!< Decrease refcount. @c self may be NULL. */
 void                    L (node_unref_ornull)   (L (node) *self);
 
+/*!< Get reference count (for debugging purposes). */
+int                     L (node_refcnt)         (L (node) const *self);
+
 /* accessors */
 struct location const  *L (node_location)       (L (node) const *self);
 

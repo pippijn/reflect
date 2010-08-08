@@ -14,8 +14,8 @@ typeof_expression
 	;
 
 typeof_type_specifier
-	:                            typeof_tok:TYPEOF lbrack:'(' expr:typeof_expression rbrack:')'
+	:                        typeof_tok:TYPEOF lbrack:'(' expr:typeof_expression rbrack:')'
 	  { typeof_type_specifier }
-	| tquals:type_qualifier_list typeof_tok:TYPEOF lbrack:'(' expr:typeof_expression rbrack:')'
+	| tquals:type_qualifier+ typeof_tok:TYPEOF lbrack:'(' expr:typeof_expression rbrack:')'
 	  { typeof_type_specifier }
 	;

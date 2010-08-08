@@ -22,9 +22,7 @@ struct_or_union
 	;
 
 struct_declaration_list
-	:                              attrs:attributes_opt decl:struct_declaration
-	  { struct_declaration_list }
-	| prev:struct_declaration_list attrs:attributes_opt decl:struct_declaration
+	: decl:struct_declaration[attributes?]+
 	  { struct_declaration_list }
 	;
 
@@ -36,7 +34,7 @@ struct_declaration
 	;
 
 struct_default_declaring_list
-	: n1:type_qualifier_list n2:struct_identifier_declarator
+	: n1:type_qualifier+ n2:struct_identifier_declarator
 	  { struct_default_declaring_list323 }
 	| n1:struct_default_declaring_list comma:',' n3:struct_identifier_declarator
 	  { struct_default_declaring_list324 }
@@ -53,20 +51,13 @@ struct_declaring_list
 
 
 struct_declarator
-	: decl:declarator bitfield:bit_field_size_opt attrs:attributes_opt
+	: decl:declarator bitfield:bit_field_size? attrs:attributes?
 	  { struct_declarator }
 	;
 
 struct_identifier_declarator
-	: decl:identifier_declarator bitfield:bit_field_size_opt attrs:attributes_opt
+	: decl:identifier_declarator bitfield:bit_field_size? attrs:attributes?
 	  { struct_identifier_declarator }
-	;
-
-bit_field_size_opt
-	: n1:empty
-	  { bit_field_size_opt330 }
-	| bitfield:bit_field_size
-	  { bit_field_size_opt331 }
 	;
 
 bit_field_size
@@ -75,26 +66,22 @@ bit_field_size
 	;
 
 enum_specifier
-	: enum_tok:ENUM                                lbrace:'{' values:enumerator_list comma:comma_opt rbrace:'}'
+	: enum_tok:ENUM                                lbrace:'{' values:enumerator+ comma:comma_opt rbrace:'}'
 	  { enum_specifier }
-	| enum_tok:ENUM tag:identifier_or_typedef_name lbrace:'{' values:enumerator_list comma:comma_opt rbrace:'}'
+	| enum_tok:ENUM tag:identifier_or_typedef_name lbrace:'{' values:enumerator+ comma:comma_opt rbrace:'}'
 	  { enum_specifier }
 	| enum_tok:ENUM tag:identifier_or_typedef_name
 	  { enum_specifier }
 	;
 
-enumerator_list
-	:                                id:identifier_or_typedef_name value:enumerator_value_opt
-	  { enumerator_list }
-	| prev:enumerator_list comma:',' id:identifier_or_typedef_name value:enumerator_value_opt
-	  { enumerator_list }
+enumerator
+	: id:identifier_or_typedef_name value:enumerator_value?
+	  { enumerator }
 	;
 
-enumerator_value_opt
-	: n1:empty
-	  { enumerator_value_opt338 }
-	| equals:'=' expr:constant_expression
-	  { enumerator_value_opt339 }
+enumerator_value
+	: equals:'=' expr:constant_expression
+	  { enumerator_value }
 	;
 
 comma_opt

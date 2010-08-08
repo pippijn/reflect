@@ -27,6 +27,7 @@ sub maybe_open {
 sub all {
    my ($members) = @_;
 
+   #map { ref $_ eq "ARRAY" ? map { all ($_) } @$_ : $_ } @$members;
    map { ref $_ eq "ARRAY" ? @$_ : $_ } @$members;
 }
 

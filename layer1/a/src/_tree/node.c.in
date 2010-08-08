@@ -1,5 +1,7 @@
 #include "_error.h"
 
+#define DEBUG 1
+
 /* vtable */
 
 static char const *const members[] = {
@@ -53,7 +55,8 @@ L (node_delete) (node_type *self)
 
   self->vtbl->destruct (self);
 
-  mem_free (self, self->vtbl->ti.size);
+  if (!DEBUG)
+    mem_free (self, self->vtbl->ti.size);
 }
 
 
@@ -128,11 +131,11 @@ L (node_ref_ornull) (node_type *self)
 {
   if (self != NULL)
     {
-#if 0
-      printf ("++ref (%s@%p) => %d\n", self->vtbl->ti.name, self, self->refcnt + 1);
-#endif
-
       ++self->refcnt;
+
+#if 0
+      printf ("++ref (%s@%p) => %d\n", self->vtbl->ti.name, self, self->refcnt);
+#endif
     }
 
   return self;
@@ -151,18 +154,29 @@ L (node_unref_ornull) (node_type *self)
 {
   if (self != NULL)
     {
+      --self->refcnt;
+
 #if 0
-      printf ("--ref (%s@%p) => %d\n", self->vtbl->ti.name, self, self->refcnt - 1);
+      printf ("--ref (%s@%p) => %d\n", self->vtbl->ti.name, self, self->refcnt);
 #endif
 
-#if 1
-      if (self->refcnt == 0)
-        printf ("refcount of %p is 0\n", self);
-#endif
-      assert (self->refcnt > 0);
-      if (--self->refcnt == 0)
-        L (node_delete) (self);
+      if (!DEBUG)
+        {
+          if (self->refcnt == 0)
+            printf ("refcount of %p is 0\n", self);
+          assert (self->refcnt > 0);
+          if (self->refcnt == 0)
+            L (node_delete) (self);
+        }
     }
+}
+
+
+int
+L (node_refcnt) (node_type const *self)
+{
+  assert (self != NULL);
+  return self->refcnt;
 }
 
 

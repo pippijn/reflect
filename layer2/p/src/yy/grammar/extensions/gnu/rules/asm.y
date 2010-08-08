@@ -7,44 +7,26 @@ statement
 	;
 
 asm_statement
-	: asm_tok:ASM tquals:type_qualifier_opt lbrack:'(' code:string_literal_list                                                                                                                                               rbrack:')' semi:';'
+	: asm_tok:ASM tquals:type_qualifier? lbrack:'(' code:string_literal+                                                                                                                                          rbrack:')' semi:';'
 	  { asm_statement }
-	| asm_tok:ASM tquals:type_qualifier_opt lbrack:'(' code:string_literal_list in_arg_colon:':' in_args:asm_argument_list_opt                                                                                                rbrack:')' semi:';'
+	| asm_tok:ASM tquals:type_qualifier? lbrack:'(' code:string_literal+ in_arg_colon:':' in_args:asm_argument[',']*                                                                                              rbrack:')' semi:';'
 	  { asm_statement }
-	| asm_tok:ASM tquals:type_qualifier_opt lbrack:'(' code:string_literal_list in_arg_colon:':' in_args:asm_argument_list_opt out_arg_colon:':' out_args:asm_argument_list_opt                                               rbrack:')' semi:';'
+	| asm_tok:ASM tquals:type_qualifier? lbrack:'(' code:string_literal+ in_arg_colon:':' in_args:asm_argument[',']* out_arg_colon:':' out_args:asm_argument[',']*                                                rbrack:')' semi:';'
 	  { asm_statement }
-	| asm_tok:ASM tquals:type_qualifier_opt lbrack:'(' code:string_literal_list in_arg_colon:':' in_args:asm_argument_list_opt out_arg_colon:':' out_args:asm_argument_list_opt clobber_colon:':' clobbers:asm_clobbered_list rbrack:')' semi:';'
+	| asm_tok:ASM tquals:type_qualifier? lbrack:'(' code:string_literal+ in_arg_colon:':' in_args:asm_argument[',']* out_arg_colon:':' out_args:asm_argument[',']* clobber_colon:':' clobbers:asm_clobbered[',']+ rbrack:')' semi:';'
 	  { asm_statement }
 	;
 
-asm_opt
-	: n1:empty
-	  { asm_opt359 }
-	| n1:asm
-	  { asm_opt360 }
-	;
 asm
-	: n1:ASM n2:'(' n3:string_literal_list n4:')'
+	: n1:ASM n2:'(' n3:string_literal+ n4:')'
 	  { asm361 }
 	;
 
-asm_argument_list_opt
-	: n1:asm_argument_list
-	  { asm_argument_list_opt362 }
-	;
-asm_argument_list
-	:                                  arg:asm_argument
-	  { asm_argument_list }
-	| prev:asm_argument_list comma:',' arg:asm_argument
-	  { asm_argument_list }
-	;
 asm_argument
-	: target:string_literal_list lbrack:'(' expr:assignment_expression rbrack:')'
+	: target:string_literal+ lbrack:'(' expr:assignment_expression rbrack:')'
 	  { asm_argument }
 	;
-asm_clobbered_list
-	:                                   clobber:string_literal_list
-	  { asm_clobbered_list }
-	| prev:asm_clobbered_list comma:',' clobber:string_literal_list
-	  { asm_clobbered_list }
+asm_clobbered
+	: clobber:string_literal+
+	  { asm_clobbered }
 	;

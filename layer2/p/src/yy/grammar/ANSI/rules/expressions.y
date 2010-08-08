@@ -2,9 +2,9 @@
 %%
 
 primary_expression
-	: :IDENTIFIER
+	: :identifier
 	| :constant
-	| :string_literal_list
+	| :string_literal+
 	| lbrack:'(' expr:expression rbrack:')'
 	  { bracket_expression }
 	;
@@ -13,9 +13,9 @@ postfix_expression
 	: :primary_expression
 	| lhs:postfix_expression lsqbrack:'[' rhs:expression rsqbrack:']'
 	  { array_access }
-	| lhs:postfix_expression lbrack:'('                               rbrack:')'
+	| lhs:postfix_expression lbrack:'('                                  rbrack:')'
 	  { function_call }
-	| lhs:postfix_expression lbrack:'(' args:argument_expression_list rbrack:')'
+	| lhs:postfix_expression lbrack:'(' args:assignment_expression[',']+ rbrack:')'
 	  { function_call }
 	| lhs:postfix_expression op:'.' member:identifier_or_typedef_name
 	  { struct_access }
@@ -25,13 +25,6 @@ postfix_expression
 	  { post_increment }
 	| expr:postfix_expression op:DEC_OP
 	  { post_decrement }
-	;
-
-argument_expression_list
-	:                                         expr:assignment_expression
-	  { argument_expression_list }
-	| prev:argument_expression_list comma:',' expr:assignment_expression
-	  { argument_expression_list }
 	;
 
 unary_expression
@@ -177,18 +170,10 @@ assignment_expression
 	;
 
 expression
-	: :assignment_expression
-	| prev:expression comma:',' expr:assignment_expression
+	: exprs:assignment_expression[',']+
 	  { comma_expression }
 	;
 
 constant_expression
 	: :conditional_expression
-	;
-
-expression_opt
-	: n1:empty
-	  { expression_opt250 }
-	| n1:expression
-	  { expression_opt254 }
 	;

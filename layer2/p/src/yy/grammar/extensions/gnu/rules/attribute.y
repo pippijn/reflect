@@ -1,13 +1,6 @@
 %%
 %%
 
-attributes_opt
-	: n1:empty
-	  { attributes_opt368 }
-	| n1:attributes
-	  { attributes_opt369 }
-	;
-
 attributes
 	: n1:attribute
 	  { attributes370 }
@@ -16,15 +9,8 @@ attributes
 	;
 
 attribute
-	: attribute_tok:ATTRIBUTE lbrack1:'(' lbrack2:'(' attributes:attribute_list rbrack1:')' rbrack2:')'
+	: attribute_tok:ATTRIBUTE lbrack1:'(' lbrack2:'(' attributes:attrib[',']+ rbrack1:')' rbrack2:')'
 	  { attribute }
-	;
-
-attribute_list
-	: attrib:attrib
-	  { attribute_list373 }
-	| prev:attribute_list comma:',' attrib:attrib
-	  { attribute_list374 }
 	;
 
 attrib
@@ -32,9 +18,9 @@ attrib
 	  { attrib375 }
 	| name:any_word
 	  { attrib376 }
-	| name:any_word lbrack:'(' id:IDENTIFIER                                        rbrack:')' %dprec 2
+	| name:any_word lbrack:'(' id:identifier                                        rbrack:')' %dprec 2
 	  { attrib377 }
-	| name:any_word lbrack:'(' id:IDENTIFIER comma:',' expr:nonnull_expression_list rbrack:')'
+	| name:any_word lbrack:'(' id:identifier comma:',' expr:nonnull_expression_list rbrack:')'
 	  { attrib378 }
 	| name:any_word lbrack:'('                         expr:nonnull_expression_list rbrack:')' %dprec 1
 	  { attrib379 }

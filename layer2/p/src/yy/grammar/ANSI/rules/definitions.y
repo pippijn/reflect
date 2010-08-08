@@ -2,9 +2,7 @@
 %%
 
 translation_unit
-	:                       def:external_definition
-	  { translation_unit }
-	| prev:translation_unit def:external_definition
+	: defs:external_definition+
 	  { translation_unit }
 	;
 
@@ -19,7 +17,7 @@ function_definition
 	  { function_definition }
 	| dqual:declaration_qualifier_list declarator:function_declarator          body:compound_statement
 	  { function_definition_dqual }
-	| tqual:type_qualifier_list        declarator:function_declarator          body:compound_statement
+	| tqual:type_qualifier+            declarator:function_declarator          body:compound_statement
 	  { function_definition_tqual }
 	| dspec:declaration_specifier      declarator:full_old_function_declarator body:compound_statement
 	  { old_function_definition_dspec }
@@ -41,5 +39,5 @@ full_old_function_declarator
 
 
 old_function_declaration_list
-	: :declaration_list
+	: :declaration+
 	;
