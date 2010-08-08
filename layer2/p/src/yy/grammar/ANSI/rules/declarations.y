@@ -286,21 +286,6 @@ postfix_old_function_declarator
 	  { postfix_old_function_declarator106 }
 	;
 
-identifier_or_typedef_name
-	: :IDENTIFIER
-	| :TYPEDEF_NAME
-	;
-
-typedef_name
-	: token:TYPEDEF_NAME
-	  { typedef_name }
-	;
-
-identifier
-	: token:IDENTIFIER
-	  { identifier }
-	;
-
 type_name
 	: tspec:type_specifier
 	  { type_name }
@@ -311,13 +296,6 @@ type_name
 
 nonnull_expression_list
 	: :assignment_expression[',']+
-	;
-
-any_word
-	: n1:identifier_or_typedef_name
-	  { any_word115 }
-	| n1:CONST
-	  { any_word116 }
 	;
 
 decl_initialiser

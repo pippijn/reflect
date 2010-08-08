@@ -72,3 +72,33 @@ basic_type_name
 	| long_tok:LONG
 	  { long_type_spec }
 	;
+
+
+identifier_or_typedef_name
+	: :IDENTIFIER
+	| :TYPEDEF_NAME
+	;
+
+identifier
+	: token:IDENTIFIER
+	  { identifier }
+	;
+
+any_word
+	: n1:identifier_or_typedef_name
+	  { any_word115 }
+	| n1:CONST
+	  { any_word116 }
+	;
+
+#if 0
+typedef_name
+	: token:IDENTIFIER
+	  { typedef_name }
+	;
+#else
+typedef_name
+	: token:TYPEDEF_NAME
+	  { typedef_name }
+	;
+#endif

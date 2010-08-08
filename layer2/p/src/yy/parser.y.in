@@ -3,14 +3,31 @@
 ##include "yy/parse_interf.h"
 ##define scanner parse_context_scanner (context)
 ##define YYMAXDEPTH (1024 * 1024)
+##define yyerror(loc, ctx, msg) yyerror (yylval, loc, ctx, msg)
+
+#if 0
+#define SR 7
+#define RR 12
+#else
+#define SR 2
+#define RR 0
+#endif
+
 #define new(rule) $$ = pt_##rule##_new
+
+// this is in case there is no yystack in scope (GLR ambiguity reporter)
+struct
+{
+  YYSTYPE yyval;
+} yystack, *yystackp = &yystack;
 %}
 
 %define api.pure
 %locations
 %debug
 %error-verbose
-%expect 2
+%expect SR
+%expect-rr RR
 %glr-parser
 %token-table
 
