@@ -10,7 +10,9 @@ init_chars (void)
   if (initialised)
     return;
 
+#if 0
   g_trace ("initialising flyweight string representations of characters");
+#endif
 
   for (c = 0; c < UCHAR_MAX; c++)
     {
