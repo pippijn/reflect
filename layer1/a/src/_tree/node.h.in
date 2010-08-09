@@ -53,35 +53,6 @@ node_type const *L (cast_const) (node_type const *object, kind_type kind);
 #define BASE_CTOR(BASE, ...)    L (BASE##_construct) (&self->base, vtbl, __VA_ARGS__)
 #define BASE_DTOR()             self->base.vtbl->ti.base->destruct (&self->base)
 
-/* helper macros */
-
-#define ACCESSOR(base, elem)                    \
-node_type *                                     \
-L (base##_##elem) (node_type const *object)     \
-{                                               \
-  CONST_SELF ();                                \
-  return self->elem;                            \
-}
-
-#define COMPUTE_LOC(start_node, end_node)       \
-  do {                                          \
-    struct location const *start, *end;         \
-    start = L (node_location) (start_node);     \
-    end   = L (node_location) (end_node);       \
-                                                \
-    loc.first_line = start->first_line;         \
-    loc.first_column = start->first_column;     \
-    loc.last_line = end->last_line;             \
-    loc.last_column = end->last_column;         \
-  } while (0)
-
-#define INDENT(fh, n)                           \
-  do {                                          \
-    int i;                                      \
-                                                \
-    for (i = 0; i < n; i++)                     \
-      fputc(' ', fh);                           \
-  } while (0)
 
 extern vtbl_type const L (node_vtbl);
 

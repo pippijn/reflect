@@ -12,3 +12,5 @@ void yyerror (YYSTYPE lvalp, YYLTYPE const *llocp, parse_context const *context,
 extern int yydebug;
 
 YYSTYPE node_merge (YYSTYPE n1, YYSTYPE n2);
+
+char const *token_name (int token);

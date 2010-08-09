@@ -80,9 +80,8 @@ print_tokens (pt_node const *node, char const *file)
 }
 
 static char const *
-dot_escape (char const *text)
+dot_escape (char *buf, char const *text)
 {
-  static char buf[1024];
   char *ptr = buf;
   char c;
 
@@ -109,6 +108,8 @@ dot_members_recursive (pt_node const *node, FILE *fh)
       pt_node const *next = pt_node_member (node, *members);
       if (next != NULL)
         {
+          char text_buf[1024];
+          char token_buf[1024];
           struct location const *loc = pt_node_location (next);
           fprintf ( fh
                   , "\t\"%s\\n@%p\\nrefcnt: %d\" -> \"%s\\n@%p\\nrefcnt: %d"
@@ -117,9 +118,10 @@ dot_members_recursive (pt_node const *node, FILE *fh)
                   );
           if (strcmp (pt_node_type_name (next), "token") == 0)
             fprintf ( fh
-                    , "\\n`%s´ (%d)\\n%d:%d - %d:%d\"\n "
-                    , dot_escape (pt_token_text (next))
+                    , "\\n`%s´ (%d=%s)\\n%d:%d - %d:%d\" "
+                    , dot_escape (text_buf, pt_token_text (next))
                     , pt_token_token (next)
+                    , dot_escape (token_buf, token_name (pt_token_token (next)))
                     , loc->first_line, loc->first_column
                     , loc->last_line, loc->last_column
                     );
@@ -216,10 +218,8 @@ action (pt_node const *node, char const *base, char const *name)
 }
 
 int
-main (void)
+main (int argc, char *argv[])
 {
-  mem_init ();
-
   {
     parse_context *pctx = parse_context_new ();
     pt_node *node;
@@ -250,5 +250,5 @@ main (void)
 
   phase (NULL);
 
-  return 0;
+  return EXIT_SUCCESS;
 }

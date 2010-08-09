@@ -8,11 +8,7 @@ L (visitor_construct) (visitor_type *self, struct L (visitor_vtbl) const *vtbl)
   assert (vtbl != NULL);
 
 #if 0
-  vtbl_verify (vtbl);
-#endif
-
-#if 0
-  printf ("constructing %s: %p\n", vtbl->ti.name, self);
+  g_debug ("constructing %s: %p", vtbl->ti.name, self);
 #endif
 
   memcpy (self, &visitor, sizeof visitor);

@@ -97,7 +97,7 @@ L (node_construct) (node_type *self, vtbl_type const *vtbl, struct location cons
   vtbl_verify (vtbl);
 
 #if 0
-  printf ("constructing %s: %p\n", vtbl->ti.name, self);
+  g_debug ("constructing %s: %p", vtbl->ti.name, self);
 #endif
 
   memcpy (self, &node, sizeof node);
@@ -134,7 +134,7 @@ L (node_ref_ornull) (node_type *self)
       ++self->refcnt;
 
 #if 0
-      printf ("++ref (%s@%p) => %d\n", self->vtbl->ti.name, self, self->refcnt);
+      g_debug ("++ref (%s@%p) => %d", self->vtbl->ti.name, self, self->refcnt);
 #endif
     }
 
@@ -154,17 +154,20 @@ L (node_unref_ornull) (node_type *self)
 {
   if (self != NULL)
     {
+      if (self->refcnt <= 0)
+        {
+          printf ("refcount of %p is %d\n", self, self->refcnt);
+          abort ();
+        }
+
       --self->refcnt;
 
 #if 0
-      printf ("--ref (%s@%p) => %d\n", self->vtbl->ti.name, self, self->refcnt);
+      g_debug ("--ref (%s@%p) => %d", self->vtbl->ti.name, self, self->refcnt);
 #endif
 
       if (!DEBUG)
         {
-          if (self->refcnt == 0)
-            printf ("refcount of %p is 0\n", self);
-          assert (self->refcnt > 0);
           if (self->refcnt == 0)
             L (node_delete) (self);
         }
@@ -187,8 +190,18 @@ L (node_path) (node_type const *self, char const *path)
 {
   node_type *node = NULL;
   node_type const *next = self;
-  char *pieces = mem_strdup (path);
-  char *token = strtok (pieces, "/");
+  char *pieces;
+  char *token;
+
+  assert (self != NULL);
+  assert (path != NULL);
+
+#if 0
+  g_debug ("following path \"%s\" starting at %p", path, self);
+#endif
+
+  pieces = mem_strdup (path);
+  token = strtok (pieces, "/");
 
   do
     next = node = L (node_member) (next, token);

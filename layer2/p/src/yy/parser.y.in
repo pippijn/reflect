@@ -1,6 +1,7 @@
 %{
 // vim:noexpandtab
 ##include "yy/parse_interf.h"
+##include <strutil.h>
 ##define scanner parse_context_scanner (context)
 ##define YYMAXDEPTH (1024 * 1024)
 ##define yyerror(loc, ctx, msg) yyerror (yylval, loc, ctx, msg)
@@ -45,3 +46,11 @@ empty
 	  { new (token) (&@$, "<empty>", 7, EOF); }
 	;
 %%
+char const *
+token_name (int token)
+{
+  if (token > 255)
+    return yytname[token - 255];
+  else
+    return char_to_string (token);
+}

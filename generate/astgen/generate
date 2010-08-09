@@ -13,7 +13,7 @@ use astgen::gen_visitor;
 use astgen::gen_extra;
 
 our $dataname;
-our @mfuns     = qw|construct new visitor_visit virtual/destruct virtual/accept|;
+our @mfuns     = qw|construct new accessors visitor_visit virtual/destruct virtual/accept|;
 our @visitors  = qw/print store/;
 our @extra     = qw/string_acc string_ctor kind_name/;
 

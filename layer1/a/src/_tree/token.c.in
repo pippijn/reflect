@@ -1,15 +1,5 @@
 #include "_error.h"
 
-#define strlen my_strlen
-static size_t
-my_strlen (char const* str)
-{
-  size_t sz = 0;
-  while (*str++)
-    ++sz;
-  return sz;
-}
-
 /* type of *self */
 
 typedef struct L (node_token) self_type;
@@ -25,7 +15,7 @@ static destruct_fn L (token_destruct);
 static accept_fn L (token_accept);
 
 
-static vtbl_type const* const vtbl = &L (token_vtbl);
+static vtbl_type const *const vtbl = &L (token_vtbl);
 vtbl_type const L (token_vtbl) = {
   {
     &L (node_vtbl),
@@ -42,7 +32,7 @@ vtbl_type const L (token_vtbl) = {
 /* internal */
 
 void
-L (token_construct) (self_type* self, struct location const* loc, char const* text, size_t length, int token)
+L (token_construct) (self_type *self, struct location const *loc, char const *text, size_t length, int token)
 {
   assert (loc != NULL);
   assert (text != NULL);
@@ -64,8 +54,8 @@ L (token_construct) (self_type* self, struct location const* loc, char const* te
 
 /* public */
 
-node_type*
-L (token_new) (struct location const* loc, char const* text, size_t length, int token)
+node_type *
+L (token_new) (struct location const *loc, char const *text, size_t length, int token)
 {
   return NEW (token, loc, text, length, token);
 }
@@ -79,8 +69,8 @@ ACCESSOR (token, text);
 ACCESSOR (token, token);
 #endif
 
-char const*
-L (token_text) (node_type const* object)
+char const *
+L (token_text) (node_type const *object)
 {
   CONST_SELF ();
 
@@ -88,7 +78,7 @@ L (token_text) (node_type const* object)
 }
 
 int
-L (token_token) (node_type const* object)
+L (token_token) (node_type const *object)
 {
   CONST_SELF ();
 
@@ -99,7 +89,7 @@ L (token_token) (node_type const* object)
 /* virtual */
 
 static void
-L (token_destruct) (node_type* object)
+L (token_destruct) (node_type *object)
 {
   SELF ();
 
@@ -113,7 +103,7 @@ L (token_destruct) (node_type* object)
 }
 
 static void
-L (token_accept) (node_type const* object, visitor_type *visitor)
+L (token_accept) (node_type const *object, visitor_type *visitor)
 {
   CONST_SELF ();
 

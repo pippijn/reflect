@@ -10,10 +10,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if WANT_GLIB
-#include <glib.h>
-#endif
-
 #include <memman.h>
 
 #define PASTE(a, b) PAST_(a, b)

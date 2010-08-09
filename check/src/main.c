@@ -1,12 +1,12 @@
 #include <suites.h>
 
 int
-main (void)
+main (int argc, char *argv[])
 {
   int failed;
   SRunner *sr;
 
-  mem_init ();
+  init_reflect (argv[0]);
 
   sr = srunner_create (NULL);
 
@@ -17,6 +17,8 @@ main (void)
   srunner_run_all (sr, CK_NORMAL);
   failed = srunner_ntests_failed (sr);
   srunner_free (sr);
+
+  exit_reflect ();
 
   return failed == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }

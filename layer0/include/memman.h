@@ -2,12 +2,6 @@
 
 __BEGIN_DECLS
 
-/**
- * Initialise the memory subsystem. This registers the malloc check functions
- * and sets resource limits.
- */
-void mem_init (void);
-
 
 /**
  * Allocate an object of @c bytes chars. If it fails, it aborts the program.

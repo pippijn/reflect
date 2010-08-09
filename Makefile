@@ -1,7 +1,6 @@
 WANT_MCHECK	= 0
 WANT_VALGRIND	= 1
 WANT_MUDFLAP	= 1
-WANT_GLIB	= 0
 
 all: bin/reflect bin/check
 
@@ -13,13 +12,6 @@ MKDIR_P		= mkdir -p
 
 ifeq ($(WANT_VALGRIND),1)
 CPPFLAGS	+= -DWANT_VALGRIND
-endif
-
-ifeq ($(WANT_GLIB),1)
-CPPFLAGS	+= -DWANT_GLIB
-LDFLAGS		+= $(shell pkg-config --libs glib-2.0)
-CFLAGS		+= $(shell pkg-config --cflags glib-2.0)
-CXXFLAGS	+= $(shell pkg-config --cflags glib-2.0)
 endif
 
 ifeq ($(WANT_MUDFLAP),1)

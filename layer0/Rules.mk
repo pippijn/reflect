@@ -33,4 +33,4 @@ SOURCES += $(layer0_SOURCES)
 prepare: layer0/include/stdinc.h.gch
 %.h.gch: %.h
 	$(RM) $@
-	$(COMPILE.c) $(layer0_CPPFLAGS) $<
+	$(CC) $(layer0_CPPFLAGS) $<

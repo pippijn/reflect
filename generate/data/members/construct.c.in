@@ -23,7 +23,17 @@ ${dataname}_${name}_construct
     }
 [% END %]
 
-  COMPUTE_LOC (fst, lst);
+  /* Compute start and end of this node */
+  {
+    struct location const *start = L (node_location) (fst);
+    struct location const *end   = L (node_location) (lst);
+
+    loc.first_line   = start->first_line;
+    loc.first_column = start->first_column;
+    loc.last_line    = end->last_line;
+    loc.last_column  = end->last_column;
+  }
+
   BASE_CTOR (node, &loc);
 
 [% FOREACH member = members.all %]

@@ -55,10 +55,11 @@ mem_check_abort (enum mcheck_status status)
 
 static bool mem_inited = false;
 
-void
+static void
 mem_init (void)
 {
-  assert (!mem_inited);
+  if (mem_inited)
+    return;
 
   if (!RUNNING_ON_VALGRIND)
     {
@@ -96,7 +97,7 @@ mem_alloc (size_t bytes)
 {
   void *ptr;
 
-  assert (mem_inited);
+  mem_init ();
 
   ptr = malloc (bytes);
   assert (ptr != NULL);
@@ -110,7 +111,7 @@ mem_realloc (void *ptr, size_t bytes)
 {
   void *newptr;
 
-  assert (mem_inited);
+  mem_init ();
 
   if (ptr == NULL)
     newptr = mem_alloc (bytes);
