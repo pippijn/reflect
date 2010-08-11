@@ -12,7 +12,7 @@ struct ${dataname}_node_$name
 EOF
 
    print $fh "  ${dataname}_node *$_;\n"
-      for all $members;
+      for mangle all $members;
     
    my $ctor = "void ${dataname}_${name}_construct ";
    print $fh <<EOF;
@@ -26,7 +26,7 @@ $ctor( struct ${dataname}_node_${name} *self
 EOF
 
    print $fh ' ' x (length $ctor) . ", ${dataname}_node *$_\n"
-      for all $members;
+      for mangle all $members;
    print $fh ' ' x (length $ctor) . ");\n";
 }
 

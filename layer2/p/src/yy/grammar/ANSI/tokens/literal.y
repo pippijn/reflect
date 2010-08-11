@@ -8,5 +8,3 @@
 %token HEX_CONSTANT		"hex constant"
 %token CHAR_CONSTANT		"character constant"
 %token WCHAR_CONSTANT		"wide character constant"
-
-%token TYPEDEF_NAME		"typedef name"

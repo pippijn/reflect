@@ -58,8 +58,6 @@ IS			(u|U|l|L)*
 "va_list"		{ RETURN (VA_LIST); }
 "wchar_t"		{ RETURN (WCHAR_T); }
 
-"@typedef_name@"	{ RETURN (TYPEDEF_NAME); }
-
 "auto"			{ RETURN (AUTO); }
 "break"			{ RETURN (BREAK); }
 "case"			{ RETURN (CASE); }

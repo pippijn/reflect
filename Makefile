@@ -1,6 +1,6 @@
 WANT_MCHECK	= 0
 WANT_VALGRIND	= 1
-WANT_MUDFLAP	= 1
+WANT_MUDFLAP	= 0
 
 all: bin/reflect bin/check
 
@@ -59,11 +59,11 @@ include reflect/Rules.mk
 clean:
 	$(RM) -r bin
 	$(RM) $(shell find . -name "*.o")
+	$(RM) parse.* reparse.*
 
 depclean: clean
 	$(RM) $(shell find . -name "*.d")
 
-codegen: ast.codegen.stamp
 codegen: pt.codegen.stamp
 	$(MKDIR_P) bin
 	$(MAKE) prepare

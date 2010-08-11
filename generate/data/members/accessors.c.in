@@ -6,7 +6,7 @@ node_type *
 ${dataname}_${name}_$member (node_type const *object)
 {
   CONST_SELF ();
-  return self->$member;
+  return self->$member.mangle;
 }
 
 [% END %]

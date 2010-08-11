@@ -2,8 +2,8 @@
 
 ${dataname}_node *
 ${dataname}_${name}_new
-  ( $members.all.params)
+  ( $members.all.mangle.params)
 {
-  return NEW ($name, $members.all.args);
+  return NEW ($name, $members.all.mangle.args);
 }
 

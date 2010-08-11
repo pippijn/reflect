@@ -2,8 +2,7 @@
 %%
 
 default_int
-	: n1:empty
-	  { default_int }
+	: :empty
 	;
 
 type_name
@@ -23,8 +22,6 @@ parameter_declaration
 	;
 
 qualifier_list
-	: n1:declaration_qualifier_list
-	  { qualifier_list159 }
-	| n1:type_qualifier+
-	  { qualifier_list160 }
+	: :declaration_qualifier_list
+	| :type_qualifier+
 	;

@@ -3,17 +3,17 @@
 void
 ${dataname}_${name}_construct
   ( self_type *self
-  , $members.all.params)
+  , $members.all.mangle.params)
 {
   struct location loc;
   ${dataname}_node *fst = NULL;
   ${dataname}_node *lst = NULL;
 
-[% FOREACH member = members.required %]
+[% FOREACH member = members.required.mangle %]
 
   assert ($member != NULL);
 [% END %]
-[% FOREACH member = members.all %]
+[% FOREACH member = members.all.mangle %]
 
   if ($member != NULL)
     {
@@ -36,7 +36,7 @@ ${dataname}_${name}_construct
 
   BASE_CTOR (node, &loc);
 
-[% FOREACH member = members.all %]
+[% FOREACH member = members.all.mangle %]
 
 #if 1
   ${dataname}_node_ref_ornull (self->$member = $member);

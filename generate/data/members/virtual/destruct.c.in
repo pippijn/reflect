@@ -3,7 +3,7 @@ ${dataname}_${name}_destruct (${dataname}_node *object)
 {
   SELF ();
 
-  [% FOREACH member = members.all %]
+  [% FOREACH member = members.all.mangle %]
 
   ${dataname}_node_unref_ornull (self->$member);
   self->$member = NULL;

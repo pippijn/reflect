@@ -6,9 +6,9 @@
 ##define YYMAXDEPTH (1024 * 1024)
 ##define yyerror(loc, ctx, msg) yyerror (yylval, loc, ctx, msg)
 
-#if 0
+#if 1
 #define SR 7
-#define RR 12
+#define RR 10
 #else
 #define SR 2
 #define RR 0

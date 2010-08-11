@@ -17,9 +17,9 @@ postfix_expression
 	  { function_call }
 	| lhs:postfix_expression lbrack:'(' args:assignment_expression[',']+ rbrack:')'
 	  { function_call }
-	| lhs:postfix_expression op:'.' member:identifier_or_typedef_name
+	| lhs:postfix_expression op:'.' member:identifier
 	  { struct_access }
-	| lhs:postfix_expression op:PTR_OP member:identifier_or_typedef_name
+	| lhs:postfix_expression op:PTR_OP member:identifier
 	  { pointer_access }
 	| expr:postfix_expression op:INC_OP
 	  { post_increment }
