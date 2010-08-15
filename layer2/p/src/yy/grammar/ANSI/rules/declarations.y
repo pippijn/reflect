@@ -144,7 +144,7 @@ declarator
 	: :paren_typedef_declarator
 	| :parameter_typedef_declarator %merge <node_merge>
 	| :identifier_declarator %merge <node_merge>
-	| :old_function_declarator
+	| :old_function_declarator %merge <node_merge>
 	;
 
 paren_typedef_declarator
