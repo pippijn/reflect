@@ -1,0 +1,49 @@
+#!/usr/bin/env perl
+
+use common::sense;
+use lib 'layer3';
+
+use GraphViz::Data::Grapher;
+use Storable 'store_fd';
+use XML::Simple;
+use JSON::XS;
+
+use Data::Dumper;
+$Data::Dumper::Indent = 1;
+$Data::Dumper::Quotekeys = 0;
+
+use Reflect;
+
+do {
+   my $ref = Reflect::bless_all XMLin "parse.xml";
+
+   $ref = Reflect::Transform::Empty->new->visit ($ref);
+   $ref = Reflect::Transform::List->new->visit ($ref);
+   $ref = Reflect::Transform::Parent->new->visit ($ref);
+   #$ref = Reflect::Output::Print->new->visit ($ref);
+   $ref = Reflect::Transform::UnParent->new->visit ($ref);
+   $ref = Reflect::Analyse::Scopes->new->visit ($ref);
+   print Dumper $ref;
+
+   #Reflect::damn_all $ref;
+   #my $graph = new GraphViz::Data::Grapher $ref;
+   #{
+      #open my $fh, ">", "parse.png"
+         #or die "Could not open 'parse.png': $!";
+      #print $fh $graph->as_png;
+   #}
+
+   {
+      open my $fh, ">", "parse.js"
+         or die "Could not open 'parse.js': $!";
+      print $fh JSON::XS->new->ascii->pretty->convert_blessed->encode ($ref);
+   }
+   {
+      open my $fh, ">", "parse.pst"
+         or die "Could not open 'parse.pst': $!";
+      store_fd $ref, $fh;
+   }
+} for 0;
+
+use Devel::Leak;
+print "\n\nLive SVs: $_\n" for Devel::Leak::NoteSV my $ptr
