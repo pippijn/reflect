@@ -19,25 +19,8 @@ function_definition
 	  { function_definition_dqual }
 	| tqual:type_qualifier+            declarator:function_declarator          body:compound_statement
 	  { function_definition_tqual }
-	| dspec:declaration_specifier      declarator:full_old_function_declarator body:compound_statement
-	  { old_function_definition_dspec }
-	| tspec:type_specifier             declarator:full_old_function_declarator body:compound_statement
-	  { old_function_definition_tspec }
 	;
 
 function_declarator
 	: :identifier_declarator %merge <node_merge>
-	| :full_old_function_declarator %merge <node_merge>
-	;
-
-full_old_function_declarator
-	: declarator:old_function_declarator
-	  { fullold_function_declarator }
-	| declarator:old_function_declarator decls:old_function_declaration_list
-	  { fullold_function_declarator }
-	;
-
-
-old_function_declaration_list
-	: :declaration+
 	;

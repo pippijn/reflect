@@ -144,7 +144,6 @@ declarator
 	: :paren_typedef_declarator
 	| :parameter_typedef_declarator %merge <node_merge>
 	| :identifier_declarator %merge <node_merge>
-	| :old_function_declarator %merge <node_merge>
 	;
 
 paren_typedef_declarator
@@ -261,23 +260,6 @@ paren_identifier_declarator
 	| lbrack:'(' id:paren_identifier_declarator rbrack:')'
 	  { paren_identifier_declarator }
 	 ;
-
-old_function_declarator
-	: :postfix_old_function_declarator
-	| star:'*' attrs:attributes?                                declr:old_function_declarator
-	  { old_function_declarator103 }
-	| star:'*' attrs:attributes? tquals:pointer_type_qualifier+ declr:old_function_declarator
-	  { old_function_declarator103 }
-	;
-
-postfix_old_function_declarator
-	: name:paren_identifier_declarator lbrack:'(' params:identifier[',']+ rbrack:')'
-	  { postfix_old_function_declarator105 }
-	| lbrack:'(' declr:old_function_declarator rbrack:')'
-	  { postfix_old_function_declarator106 }
-	| lbrack:'(' declr:old_function_declarator rbrack:')' post_declr:postfixing_abstract_declarator
-	  { postfix_old_function_declarator106 }
-	;
 
 type_name
 	: tspec:type_specifier

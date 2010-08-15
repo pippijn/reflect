@@ -6,14 +6,6 @@
 ##define YYMAXDEPTH (1024 * 1024)
 ##define yyerror(loc, ctx, msg) yyerror (yylval, loc, ctx, msg)
 
-#if 1
-#define SR 7
-#define RR 10
-#else
-#define SR 2
-#define RR 0
-#endif
-
 #define new(rule) $$ = pt_##rule##_new
 
 // this is in case there is no yystack in scope (GLR ambiguity reporter)
@@ -27,8 +19,8 @@ struct
 %locations
 %debug
 %error-verbose
-%expect SR
-%expect-rr RR
+%expect 6
+%expect-rr 10
 %glr-parser
 %token-table
 
@@ -51,6 +43,8 @@ token_name (int token)
 {
   if (token > 255)
     return yytname[token - 255];
+  else if (token == EOF)
+    return "<empty>";
   else
     return char_to_string (token);
 }
