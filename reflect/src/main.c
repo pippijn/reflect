@@ -111,6 +111,12 @@ dot_members_recursive (pt_node const *node, FILE *fh)
           char text_buf[1024];
           char token_buf[1024];
           struct location const *loc = pt_node_location (next);
+
+          if (   strcmp (pt_node_type_name (next), "node_opt") == 0
+              && strcmp (pt_node_type_name (pt_node_opt_node (next)), "token") == 0
+              && pt_token_token (pt_node_opt_node (next)) == EOF)
+            continue;
+
           fprintf ( fh
                   , "\t\"%s\\n@%p\\nrefcnt: %d\" -> \"%s\\n@%p\\nrefcnt: %d"
                   , pt_node_type_name (node), node, pt_node_refcnt (node)
