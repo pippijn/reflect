@@ -11,7 +11,12 @@ sub new {
 sub DESTROY {
    my ($self) = @_;
 
-   override (
+   undef *node_list::prev;
+   undef *node_list::node;
+
+   *node_list::list = sub { $_[0]->{list} };
+
+   Reflect::Visitor::override (
       "node_list",
       sub {
          my ($self, $tree) = @_;
@@ -20,7 +25,7 @@ sub DESTROY {
             if exists ${(ref $self) . "::"}{any};
 
          $self->visit ($_)
-            for @{ $tree->{list} };
+            for @{ $tree->list };
 
          $tree
       }

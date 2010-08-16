@@ -1,23 +1,24 @@
 package Reflect;
 
-our $TYPES;
-
 BEGIN {
-   $TYPES = require "generate/data/pt.ast"
+   our $TYPES = require "generate/data/pt.ast"
 }
 
 use Reflect::Transform::List;
 use Reflect::Transform::Parent;
 use Reflect::Transform::UnParent;
 use Reflect::Transform::Empty;
+use Reflect::Transform::Clean;
 use Reflect::Analyse::Scopes;
 use Reflect::Output::Print;
 
 {
    package token;
 
-   sub token   { $_[0]->{token}   }
    sub content { $_[0]->{content} }
+   sub left    { $_[0]->{left}    }
+   sub right   { $_[0]->{right}   }
+   sub token   { $_[0]->{token}   }
 }
 
 sub all {

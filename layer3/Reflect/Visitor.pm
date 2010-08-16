@@ -30,8 +30,11 @@ sub import {
             if exists ${"${pkg}::"}{any};
 
          for my $member (all $members) {
-            #print "stub -> $member\n";
-            $tree->$member = $self->visit ($tree->$member);
+            #printf "stub: %s->$member\n", ref $tree;
+            use Carp 'confess';
+            eval {
+               $tree->$member = $self->visit ($tree->$member);
+            } or confess $@;
             #delete $tree->{$member}
                #unless $tree->{$member}
          }

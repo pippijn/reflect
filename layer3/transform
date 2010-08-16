@@ -14,15 +14,18 @@ $Data::Dumper::Quotekeys = 0;
 
 use Reflect;
 
+$|++;
+
 do {
    my $ref = Reflect::bless_all XMLin "parse.xml";
 
    $ref = Reflect::Transform::Empty->new->visit ($ref);
+   $ref = Reflect::Transform::Clean->new->visit ($ref);
    $ref = Reflect::Transform::List->new->visit ($ref);
    $ref = Reflect::Transform::Parent->new->visit ($ref);
    #$ref = Reflect::Output::Print->new->visit ($ref);
    $ref = Reflect::Transform::UnParent->new->visit ($ref);
-   #$ref = Reflect::Analyse::Scopes->new->visit ($ref);
+   $ref = Reflect::Analyse::Scopes->new->visit ($ref);
    print Dumper $ref;
 
    #Reflect::damn_all $ref;
