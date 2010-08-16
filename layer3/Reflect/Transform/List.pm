@@ -8,6 +8,25 @@ sub new {
    bless { }, $_[0]
 }
 
+sub DESTROY {
+   my ($self) = @_;
+
+   override (
+      "node_list",
+      sub {
+         my ($self, $tree) = @_;
+
+         return $self->any ($tree)
+            if exists ${(ref $self) . "::"}{any};
+
+         $self->visit ($_)
+            for @{ $tree->{list} };
+
+         $tree
+      }
+   )
+}
+
 sub node_list {
    my ($self, $tree) = @_;
 
@@ -21,21 +40,8 @@ sub node_list {
    delete $tree->{prev};
    delete $tree->{node};
 
-   # XXX: could be done just once for optimisation
-   $self->override (
-      "node_list",
-      sub {
-         my ($self, $tree) = @_;
-
-         return $self->any ($tree)
-            if exists ${(ref $self) . "::"}{any};
-
-         $self->visit ($_)
-            for @{ $tree->{list} };
-
-         $tree
-      }
-   );
+   $self->visit ($_)
+      for @{ $tree->{list} };
 
    $tree
 }

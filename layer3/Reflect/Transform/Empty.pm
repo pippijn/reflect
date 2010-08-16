@@ -11,9 +11,9 @@ sub new {
 sub node_opt {
    my ($self, $tree) = @_;
 
-   ref $tree->{node} eq "token" and $tree->{node}{token} == -1
+   ref $tree->node eq "token" and $tree->node->token == -1
       ? { }
-      : $tree->{node}
+      : $tree->node
 }
 
 1

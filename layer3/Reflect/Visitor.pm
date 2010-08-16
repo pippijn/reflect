@@ -31,7 +31,7 @@ sub import {
 
          for my $member (all $members) {
             #print "stub -> $member\n";
-            $tree->{$member} = $self->visit ($tree->{$member});
+            $tree->$member = $self->visit ($tree->$member);
             #delete $tree->{$member}
                #unless $tree->{$member}
          }
@@ -48,7 +48,7 @@ sub unimport {
 }
 
 sub override {
-   my ($self, $sym, $code) = @_;
+   my ($sym, $code) = @_;
 
    *{"${_}::$sym"} = $code
       for keys %derived
@@ -78,7 +78,7 @@ sub resume {
    my ($self, $tree) = @_;
 
    for my $member (keys %$tree) {
-      $tree->{$member} = $self->visit ($tree->{$member});
+      $tree->$member = $self->visit ($tree->$member);
       #delete $tree->{$member}
          #unless $tree->{$member}
    }

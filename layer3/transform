@@ -22,7 +22,7 @@ do {
    $ref = Reflect::Transform::Parent->new->visit ($ref);
    #$ref = Reflect::Output::Print->new->visit ($ref);
    $ref = Reflect::Transform::UnParent->new->visit ($ref);
-   $ref = Reflect::Analyse::Scopes->new->visit ($ref);
+   #$ref = Reflect::Analyse::Scopes->new->visit ($ref);
    print Dumper $ref;
 
    #Reflect::damn_all $ref;

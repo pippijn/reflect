@@ -13,12 +13,28 @@ use Reflect::Transform::Empty;
 use Reflect::Analyse::Scopes;
 use Reflect::Output::Print;
 
+{
+   package token;
+
+   sub token   { $_[0]->{token}   }
+   sub content { $_[0]->{content} }
+}
+
+sub all {
+   map { ref $_ ? map { all ($_) } @$_ : $_ } @_;
+}
+
 sub import {
    *token::TO_JSON = sub { my %hash = %{$_[0]}; \%hash };
-   for (keys %$TYPES) {
-      *{"${_}::TO_JSON"} = sub {
+   while (my ($type, $members) = each %$TYPES) {
+      *{"${type}::TO_JSON"} = sub {
          my %hash = %{ $_[0] };
          return { ref $_[0] => \%hash }
+      };
+      for my $member (all $members) {
+         *{"${type}::$member"} = sub : lvalue {
+            $_[0]->{$member}
+         }
       }
    }
 }
