@@ -5,6 +5,7 @@ BEGIN {
 }
 
 use Reflect::Transform::List;
+use Reflect::Transform::Merge;
 use Reflect::Transform::Parent;
 use Reflect::Transform::UnParent;
 use Reflect::Transform::Empty;

@@ -25,12 +25,18 @@ sub any {
       #printf "$member: %s<\n", ref $subtree;
       if (ref $subtree eq "ARRAY") {
          for (@$subtree) {
-            $_->{parent} = $tree;
-            weaken $_->{parent};
+            $_->{parent} = {
+               node   => $tree,
+               member => $member,
+            };
+            weaken $_->{parent}{node};
          }
       } elsif (ref $subtree ne "HASH") {
-         $subtree->{parent} = $tree;
-         weaken $subtree->{parent};
+         $subtree->{parent} = {
+            node   => $tree,
+            member => $member,
+         };
+         weaken $subtree->{parent}{node};
       }
       $self->visit ($subtree)
          if ref $subtree;

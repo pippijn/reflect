@@ -1,1 +1,2 @@
-int a;
+typedef int typename;
+int func (typename foo);

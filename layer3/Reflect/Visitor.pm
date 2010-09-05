@@ -6,7 +6,7 @@ use Data::Dumper;
 
 sub dump {
    my $dumper = new Data::Dumper [$_[1]];
-   $dumper->Seen ({ parent => $_[1]->{parent} });
+   $dumper->Seen ({ ref $_[1]->{parent}{node} => $_[1]->{parent}{node} });
 
    print $dumper->Dump
 }
@@ -80,7 +80,7 @@ sub visit {
 sub resume {
    my ($self, $tree) = @_;
 
-   for my $member (keys %$tree) {
+   for my $member (grep { $_ ne "parent" } keys %$tree) {
       $tree->$member = $self->visit ($tree->$member);
       #delete $tree->{$member}
          #unless $tree->{$member}
