@@ -98,7 +98,7 @@ void value_array_erase (value_array *self, size_t index);
  * the ordering of the array.
  * The operation is undefined if @c index is greater than or equal to @c size.
  *
- * Time: O(n) over @c size
+ * Time: O(1)
  * Space: O(1)
  */
 void value_array_erase_unordered (value_array *self, size_t index);
