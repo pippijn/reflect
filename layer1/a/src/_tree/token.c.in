@@ -1,0 +1,111 @@
+#include "_error.h"
+
+/* type of *self */
+
+typedef struct L (node_token) self_type;
+
+
+/* vtable */
+
+static char const *const members[] = {
+  NULL
+};
+
+static destruct_fn L (token_destruct);
+static accept_fn L (token_accept);
+
+
+static vtbl_type const *const vtbl = &L (token_vtbl);
+vtbl_type const L (token_vtbl) = {
+  {
+    &L (node_vtbl),
+    "token",
+    U (TOKEN),
+    members,
+    sizeof (self_type),
+  },
+  L (token_destruct),
+  L (token_accept),
+};
+
+
+/* internal */
+
+void
+L (token_construct) (self_type *self, struct location const *loc, char const *text, size_t length, int token)
+{
+  assert (loc != NULL);
+  assert (text != NULL);
+  assert (*text != '\0');
+  assert (length > 0);
+
+  /* base constructor */
+  BASE_CTOR (node, loc);
+
+  /* initialise our own data */
+  self->text = mem_strndup (text, length);
+  self->token = token;
+
+  assert (self->text != NULL);
+  assert (self->text[length] == '\0');
+  assert (strlen (self->text) == length);
+}
+
+
+/* public */
+
+node_type *
+L (token_new) (struct location const *loc, char const *text, size_t length, int token)
+{
+  return NEW (token, loc, text, length, token);
+}
+
+
+/* accessors */
+
+#if 0
+/* return values don't match */
+ACCESSOR (token, text);
+ACCESSOR (token, token);
+#endif
+
+char const *
+L (token_text) (node_type const *object)
+{
+  CONST_SELF ();
+
+  return self->text;
+}
+
+int
+L (token_token) (node_type const *object)
+{
+  CONST_SELF ();
+
+  return self->token;
+}
+
+
+/* virtual */
+
+static void
+L (token_destruct) (node_type *object)
+{
+  SELF ();
+
+  assert (self->text);
+
+  /* destroy our own data */
+  mem_free (self->text, strlen (self->text) + 1);
+
+  /* base destructor */
+  BASE_DTOR ();
+}
+
+static void
+L (token_accept) (node_type const *object, visitor_type *visitor)
+{
+  CONST_SELF ();
+
+  L (visitor_visit_token) (visitor, &self->base);
+}

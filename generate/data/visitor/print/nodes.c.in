@@ -1,0 +1,50 @@
+static xmlChar const *
+itoa (int n)
+{
+  static char buf[12];
+  snprintf (buf, sizeof buf, "%d", n);
+  return BAD_CAST buf;
+}
+
+[% FOREACH rule = rules %]
+[% name = rule.key %]
+[% members = rule.value %]
+
+static void
+${dataname}_print_visitor_visit_${name} (visitor_type *object, node_type const *node)
+{
+  SELF ();
+  xmlNodePtr const last = self->cur;
+
+  self->cur = xmlNewChild (self->cur, NULL, BAD_CAST "$name", NULL);
+  xmlNewProp (self->cur, BAD_CAST "members", itoa ($members.all.size));
+
+  [% FOREACH member = members %]
+    [% IF member.optional %]
+      [% FOREACH mem = member %]
+
+  {
+    xmlNodePtr const last = self->cur;
+    self->cur = xmlNewChild (self->cur, NULL, BAD_CAST "$mem", NULL);
+    if (${dataname}_${name}_${mem} (node) != NULL)
+      ${dataname}_node_accept (${dataname}_${name}_${mem} (node), &self->base);
+    self->cur = last;
+  }
+
+      [% END %]
+    [% ELSE %]
+
+  {
+    xmlNodePtr const last = self->cur;
+    self->cur = xmlNewChild (self->cur, NULL, BAD_CAST "$member", NULL);
+    ${dataname}_node_accept (${dataname}_${name}_${member} (node), &self->base);
+    self->cur = last;
+  }
+
+    [% END %]
+  [% END %]
+
+  self->cur = last;
+}
+
+[% END %]

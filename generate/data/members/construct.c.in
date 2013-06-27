@@ -1,0 +1,49 @@
+/* internal */
+
+void
+${dataname}_${name}_construct
+  ( self_type *self
+  , $members.all.mangle.params)
+{
+  struct location loc;
+  ${dataname}_node *fst = NULL;
+  ${dataname}_node *lst = NULL;
+
+[% FOREACH member = members.required.mangle %]
+
+  assert ($member != NULL);
+[% END %]
+[% FOREACH member = members.all.mangle %]
+
+  if ($member != NULL)
+    {
+      lst = $member;
+      if (fst == NULL)
+        fst = $member;
+    }
+[% END %]
+
+  /* Compute start and end of this node */
+  {
+    struct location const *start = L (node_location) (fst);
+    struct location const *end   = L (node_location) (lst);
+
+    loc.first_line   = start->first_line;
+    loc.first_column = start->first_column;
+    loc.last_line    = end->last_line;
+    loc.last_column  = end->last_column;
+  }
+
+  BASE_CTOR (node, &loc);
+
+[% FOREACH member = members.all.mangle %]
+
+#if 1
+  ${dataname}_node_ref_ornull (self->$member = $member);
+#else
+  self->$member = $member;
+#endif
+[% END %]
+
+}
+

@@ -1,0 +1,8 @@
+L (visitor) *L (print_visitor_new) (FILE *fh);
+void L (print_visitor_delete) (L (visitor) *self);
+
+L (visitor) *L (store_visitor_new) (FILE *fh, int indent);
+void L (store_visitor_delete) (L (visitor) *self);
+
+L (visitor) *L (token_visitor_new) (FILE *fh);
+void L (token_visitor_delete) (L (visitor) *self);

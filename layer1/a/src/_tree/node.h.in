@@ -1,0 +1,62 @@
+typedef struct L (node) node_type;
+typedef struct L (visitor) visitor_type;
+typedef struct L (vtbl) vtbl_type;
+typedef enum L (kind) kind_type;
+
+typedef void destruct_fn (node_type *node);
+typedef void accept_fn (node_type const *node, visitor_type *visitor);
+
+enum L (kind)
+{
+  U (NODE),
+
+  U (TOKEN),
+
+#include KINDS_H
+};
+
+
+struct L (vtbl)
+{
+  struct type_info
+  {
+    vtbl_type const *base;
+    char const *name;
+    kind_type kind;
+    char const *const *members;
+    size_t size;
+  } ti;
+  destruct_fn *destruct;
+  accept_fn *accept;
+};
+
+
+struct L (node)
+{
+  vtbl_type const * const vtbl;
+  struct location const location;
+  int refcnt;
+};
+
+
+char const *L (kind_name) (kind_type kind);
+
+void L (pure_virtual) (void);
+bool L (kind_is) (node_type const *object, kind_type kind);
+bool L (kind_derived) (node_type const *object, kind_type kind);
+node_type *L (cast_mutable) (node_type *object, kind_type kind);
+node_type const *L (cast_const) (node_type const *object, kind_type kind);
+
+#define SELF()                  self_type       *self = (self_type       *)L (cast_mutable) (object, vtbl->ti.kind)
+#define CONST_SELF()            self_type const *self = (self_type const *)L (cast_const)   (object, vtbl->ti.kind)
+
+#define BASE_CTOR(BASE, ...)    L (BASE##_construct) (&self->base, vtbl, __VA_ARGS__)
+#define BASE_DTOR()             self->base.vtbl->ti.base->destruct (&self->base)
+
+
+extern vtbl_type const L (node_vtbl);
+
+
+void L (node_construct) (node_type *self, vtbl_type const *vtbl, struct location const *loc);
+
+destruct_fn L (node_destruct);

@@ -1,0 +1,56 @@
+#!/usr/bin/env perl
+
+use common::sense;
+use lib 'generate';
+
+use constant USAGE => "Usage: astgen <rule-file>";
+
+use astgen::util;
+use astgen::gen_header_internal;
+use astgen::gen_header;
+use astgen::gen_source;
+use astgen::gen_visitor;
+use astgen::gen_extra;
+
+our $dataname;
+our @mfuns     = qw|construct new accessors visitor_visit virtual/destruct virtual/accept|;
+our @visitors  = qw/print store/;
+our @extra     = qw/string_acc string_ctor kind_name/;
+
+my $rules = do {
+   my $file = $ARGV[0]
+      or die USAGE;
+   require $file
+};
+
+my $DATANAME = uc $dataname;
+
+open my $nodes_h, ">", "layer1/a/include/${dataname}/gen/nodes.h"
+   or die $!;
+open my $visitor_vtbl_h, ">", "layer1/a/include/${dataname}/gen/visitor_vtbl.h"
+   or die $!;
+open my $internal_kinds_h, ">", "layer1/a/src/${dataname}/gen/kinds.h"
+   or die $!;
+open my $internal_nodes_h, ">", "layer1/a/src/${dataname}/gen/nodes.h"
+   or die $!;
+open my $internal_visitor_h, ">", "layer1/a/src/${dataname}/gen/visitor.h"
+   or die $!;
+
+print "  ASTGEN  $ARGV[0]\n";
+
+astgen::visitor::generate $dataname, $rules;
+astgen::extra::generate $dataname, $rules;
+
+for my $name (sort keys %$rules) {
+   my $members = $rules->{$name};
+
+   print $nodes_h "#include <${dataname}/gen/$name.h>\n";
+   print $visitor_vtbl_h "  ${dataname}_visit_fn *visit_$name;\n";
+   print $internal_kinds_h "  ${DATANAME}_" . (uc $name) . ",\n";
+   print $internal_nodes_h "#include \"$name.h\"\n";
+   print $internal_visitor_h "${dataname}_visit_fn ${dataname}_visitor_visit_$name;\n";
+
+   gen_header_internal $dataname, $name, $members;
+   gen_header          $dataname, $name, $members;
+   astgen::source::generate  $dataname, $name, $members;
+}

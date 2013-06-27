@@ -1,0 +1,48 @@
+[% FOREACH rule = rules %]
+[% name = rule.key %]
+[% members = rule.value %]
+
+static void
+${dataname}_store_visitor_visit_$name (visitor_type *object, ${dataname}_node const *node)
+{
+  SELF ();
+
+  INDENT (self->fh, self->indent);
+  self->indent++;
+  fprintf (self->fh, "(${name}\n");
+
+  [% FOREACH member = members %]
+    [% IF member.optional %]
+      [% FOREACH mem = member %]
+
+  if (${dataname}_${name}_${mem} (node) != NULL)
+    {
+      INDENT (self->fh, self->indent);
+      self->indent++;
+      fprintf (self->fh, "('$mem\n");
+      ${dataname}_node_accept (${dataname}_${name}_${mem} (node), &self->base);
+      self->indent--;
+      INDENT (self->fh, self->indent);
+      fprintf (self->fh, ")\n");
+    }
+
+      [% END %]
+    [% ELSE %]
+
+  INDENT (self->fh, self->indent);
+  self->indent++;
+  fprintf (self->fh, "('$member\n");
+  ${dataname}_node_accept (${dataname}_${name}_${member} (node), &self->base);
+  self->indent--;
+  INDENT (self->fh, self->indent);
+  fprintf (self->fh, ")\n");
+
+    [% END %]
+  [% END %]
+
+  self->indent--;
+  INDENT (self->fh, self->indent);
+  fprintf (self->fh, ")\n");
+}
+
+[% END %]

@@ -1,0 +1,15 @@
+struct L (node_token)
+{
+  node_type base;
+
+  char *text;
+  int token;
+};
+
+
+extern vtbl_type const L (token_vtbl);
+
+
+void L (token_construct) (struct L (node_token) *self,
+                          struct location const *loc, char const *text,
+                          size_t length, int token);

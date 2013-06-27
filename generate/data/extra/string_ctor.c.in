@@ -1,0 +1,28 @@
+#include "../internal.h"
+#include <$dataname/gen/nodes.h>
+#include "nodes.h"
+
+static void
+no_such_ctor (char const *type)
+{
+  fprintf (stderr, "No such constructor: %s\n", type);
+  abort ();
+}
+
+
+node_type *
+${dataname}_new (char const *type, node_type *const *args)
+{
+  assert (type != NULL);
+  assert (args != NULL);
+
+[% FOREACH rule = rules %]
+
+  if (strcmp (type, "$rule.key") == 0)
+    return ${dataname}_${rule.key}_new (${rule.value.all.args ("args")});
+
+[% END %]
+
+  no_such_ctor (type);
+  return NULL;
+}

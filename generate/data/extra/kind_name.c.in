@@ -1,0 +1,17 @@
+#include "../internal.h"
+
+char const *
+${dataname}_kind_name (kind_type kind)
+{
+  switch (kind)
+    {
+
+[% FOREACH rule = rules %]
+    case ${dataname.upper}_${rule.key.upper}: return "$rule.key";
+
+[% END %]
+
+    default:
+      assert (!"invalid node type");
+    }
+}

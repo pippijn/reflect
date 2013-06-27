@@ -1,0 +1,109 @@
+#include <$dataname/visitors.h>
+#include <$dataname/visitor/impl.h>
+
+#include <libxml/tree.h>
+
+typedef struct ${dataname}_print_visitor self_type;
+
+struct ${dataname}_print_visitor
+{
+  ${dataname}_visitor base;
+
+  xmlDocPtr doc;
+  xmlNodePtr cur;
+  FILE *fh;
+};
+
+
+[% INCLUDE print/nodes.c.in %]
+
+
+static xmlChar const *
+xml_loc (int line, int column)
+{
+  static char buf[64];
+
+  snprintf (buf, sizeof buf, "%d:%d", line, column);
+  return BAD_CAST buf;
+}
+
+/* TODO: unbounded, dynamically allocated output
+ * or, even better, let libxml do it (why doesn't it?)
+ */
+static xmlChar const *
+xml_escape (char const *text)
+{
+  static xmlChar buf[1024];
+  xmlChar *ptr = buf;
+  char c;
+
+  while ((c = *text++) != '\0')
+    switch (c)
+      {
+      case '&':
+        assert (ptr - buf < sizeof buf - 5);
+        *ptr++ = '&';
+        *ptr++ = 'a';
+        *ptr++ = 'm';
+        *ptr++ = 'p';
+        *ptr++ = ';';
+        break;
+      default:
+        assert (ptr - buf < sizeof buf);
+        *ptr++ = c;
+        break;
+      }
+
+  *ptr = '\0';
+  buf[sizeof buf - 1] = '\0';
+
+  return buf;
+}
+
+static void
+${dataname}_print_visitor_visit_token (visitor_type *object, node_type const *node)
+{
+  SELF ();
+  struct location const *loc = ${dataname}_node_location (node);
+
+  xmlNodePtr xmltok = xmlNewChild (self->cur, NULL, BAD_CAST "token", xml_escape (${dataname}_token_text (node)));
+  xmlNewProp (xmltok, BAD_CAST "left",  xml_loc (loc->first_line, loc->first_column));
+  xmlNewProp (xmltok, BAD_CAST "right", xml_loc (loc->last_line , loc->last_column ));
+  xmlNewProp (xmltok, BAD_CAST "token", itoa (${dataname}_token_token (node)));
+}
+
+
+[% INCLUDE print/vtbl.c.in %]
+
+static void
+${dataname}_print_visitor_construct (self_type *self, FILE *fh)
+{
+  assert (self != NULL);
+  assert (fh != NULL);
+
+  ${dataname}_visitor_construct (&self->base, &${dataname}_print_visitor_vtbl);
+
+  self->doc = xmlNewDoc (BAD_CAST "1.0");
+  self->cur = xmlNewNode (NULL, BAD_CAST "$dataname");
+  self->fh = fh;
+
+  xmlDocSetRootElement (self->doc, self->cur);
+}
+
+visitor_type *
+${dataname}_print_visitor_new (FILE *fh)
+{
+  return NEW (print_visitor, fh);
+}
+
+void
+${dataname}_print_visitor_delete (visitor_type *object)
+{
+  SELF ();
+
+  /* TODO: give client code the option to get the document as string */
+  xmlDocDump (self->fh, self->doc);
+  xmlFreeDoc (self->doc);
+
+  mem_free (self, self->base.vtbl->ti.size);
+}

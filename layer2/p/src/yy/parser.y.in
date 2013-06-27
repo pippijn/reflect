@@ -1,0 +1,50 @@
+%{
+// vim:noexpandtab
+##include "yy/parse_interf.h"
+##include <strutil.h>
+##define scanner parse_context_scanner (context)
+##define YYMAXDEPTH (1024 * 1024)
+##define yyerror(loc, ctx, msg) yyerror (yylval, loc, ctx, msg)
+
+#define new(rule) $$ = pt_##rule##_new
+
+// this is in case there is no yystack in scope (GLR ambiguity reporter)
+struct
+{
+  YYSTYPE yyval;
+} yystack, *yystackp = &yystack;
+%}
+
+%define api.pure
+%locations
+%debug
+%error-verbose
+%expect 6
+%expect-rr 10
+%glr-parser
+%token-table
+
+%parse-param { parse_context *context }
+%lex-param { void *scanner }
+
+%destructor { pt_node_unref ($$); } <>
+
+#include "gen/tokens.y"
+%%
+#include "gen/rules-pp.y"
+
+empty
+	: /* empty */
+	  { new (token) (&@$, "<empty>", 7, EOF); }
+	;
+%%
+char const *
+token_name (int token)
+{
+  if (token > 255)
+    return yytname[token - 255];
+  else if (token == EOF)
+    return "<empty>";
+  else
+    return char_to_string (token);
+}

@@ -1,0 +1,24 @@
+#include "_error.h"
+
+void
+L (visitor_construct) (visitor_type *self, struct L (visitor_vtbl) const *vtbl)
+{
+  visitor_type visitor = { vtbl };
+  assert (self != NULL);
+  assert (vtbl != NULL);
+
+#if 0
+  g_debug ("constructing %s: %p", vtbl->ti.name, self);
+#endif
+
+  memcpy (self, &visitor, sizeof visitor);
+}
+
+void
+L (visitor_visit_token) (visitor_type *self, node_type const *node)
+{
+  assert (self != NULL);
+  assert (self->vtbl != NULL);
+
+  self->vtbl->visit_token (self, node);
+}

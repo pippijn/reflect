@@ -1,0 +1,234 @@
+#include "_error.h"
+
+#define DEBUG 1
+
+/* vtable */
+
+static char const *const members[] = {
+  NULL
+};
+
+vtbl_type const L (node_vtbl) = {
+  {
+    NULL,
+    "node",
+    U (NODE),
+    members,
+    sizeof (node_type),
+  },
+  L (node_destruct),
+  (accept_fn *)L (pure_virtual),
+};
+
+static void
+type_info_verify (struct type_info const *ti)
+{
+  assert (ti->name != NULL);
+  assert (ti->kind != U (NODE));
+  assert (ti->size != 0);
+}
+
+static void
+vtbl_verify (vtbl_type const *vtbl)
+{
+  assert (vtbl != NULL);
+  type_info_verify (&vtbl->ti);
+#define VFN_VERIFY(fn) assert (vtbl->fn != NULL && vtbl->fn != (fn##_fn *)L (pure_virtual))
+  VFN_VERIFY (destruct);
+  VFN_VERIFY (accept);
+#undef VFN_VERIFY
+}
+
+
+/*
+ * public
+ */
+
+/* destructor */
+
+static void
+L (node_delete) (node_type *self)
+{
+  assert (self != NULL);
+  assert (self->vtbl != NULL);
+  assert (self->refcnt == 0);
+
+  self->vtbl->destruct (self);
+
+  if (!DEBUG)
+    mem_free (self, self->vtbl->ti.size);
+}
+
+
+/* accessors */
+
+struct location const *
+L (node_location) (node_type const *self)
+{
+  assert (self != NULL);
+  return &self->location;
+}
+
+
+/* methods */
+
+void
+L (node_accept) (node_type const *self, visitor_type *visitor)
+{
+  assert (self != NULL);
+  assert (self->vtbl != NULL);
+
+  self->vtbl->accept (self, visitor);
+}
+
+
+/*
+ * protected
+ */
+
+void
+L (node_construct) (node_type *self, vtbl_type const *vtbl, struct location const *loc)
+{
+  node_type node = { vtbl, *loc, 1 };
+  assert (self != NULL);
+  assert (vtbl != NULL);
+  assert (loc != NULL);
+
+  vtbl_verify (vtbl);
+
+#if 0
+  g_debug ("constructing %s: %p", vtbl->ti.name, self);
+#endif
+
+  memcpy (self, &node, sizeof node);
+}
+
+void
+L (node_destruct) (node_type *self)
+{
+  assert (self != NULL);
+  assert (self->vtbl != NULL);
+  assert (self->refcnt == 0);
+}
+
+
+/*
+ * public
+ */
+
+/* refcounting */
+
+node_type *
+L (node_ref) (node_type *self)
+{
+  assert (self != NULL);
+  assert (self->refcnt > 0);
+  return L (node_ref_ornull) (self);
+}
+
+node_type *
+L (node_ref_ornull) (node_type *self)
+{
+  if (self != NULL)
+    {
+      ++self->refcnt;
+
+#if 0
+      g_debug ("++ref (%s@%p) => %d", self->vtbl->ti.name, self, self->refcnt);
+#endif
+    }
+
+  return self;
+}
+
+void
+L (node_unref) (node_type *self)
+{
+  assert (self != NULL);
+  assert (self->refcnt > 0);
+  L (node_unref_ornull) (self);
+}
+
+void
+L (node_unref_ornull) (node_type *self)
+{
+  if (self != NULL)
+    {
+      if (self->refcnt <= 0)
+        {
+          printf ("refcount of %p is %d\n", self, self->refcnt);
+          abort ();
+        }
+
+      --self->refcnt;
+
+#if 0
+      g_debug ("--ref (%s@%p) => %d", self->vtbl->ti.name, self, self->refcnt);
+#endif
+
+      if (!DEBUG)
+        {
+          if (self->refcnt == 0)
+            L (node_delete) (self);
+        }
+    }
+}
+
+
+int
+L (node_refcnt) (node_type const *self)
+{
+  assert (self != NULL);
+  return self->refcnt;
+}
+
+
+/* string member access */
+
+node_type *
+L (node_path) (node_type const *self, char const *path)
+{
+  node_type *node = NULL;
+  node_type const *next = self;
+  char *pieces;
+  char *token;
+
+  assert (self != NULL);
+  assert (path != NULL);
+
+#if 0
+  g_debug ("following path \"%s\" starting at %p", path, self);
+#endif
+
+  pieces = mem_strdup (path);
+  token = strtok (pieces, "/");
+
+  do
+    next = node = L (node_member) (next, token);
+  while ((token = strtok (NULL, "/")) != NULL);
+
+  mem_free (pieces, strlen (path) + 1);
+
+  return node;
+}
+
+
+/* member list */
+char const *const *
+L (node_members) (node_type const *self)
+{
+  assert (self != NULL);
+  assert (self->vtbl != NULL);
+  assert (self->vtbl->ti.members != NULL);
+  return self->vtbl->ti.members;
+}
+
+/* get node type name */
+char const *
+L (node_type_name) (L (node) const *self)
+{
+  assert (self != NULL);
+  assert (self->vtbl != NULL);
+  assert (self->vtbl->ti.name != NULL);
+  return self->vtbl->ti.name;
+}

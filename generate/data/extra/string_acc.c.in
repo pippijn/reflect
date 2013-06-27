@@ -1,0 +1,41 @@
+#include "../internal.h"
+#include <$dataname/gen/nodes.h>
+#include "nodes.h"
+
+static void
+no_such_member (char const *type, char const *field)
+{
+  fprintf (stderr, "Type `%s' does not have a member named `%s'\n", type, field);
+  abort ();
+}
+
+
+node_type *
+${dataname}_node_member (node_type const *node, char const *field)
+{
+  assert (field != NULL);
+  assert (node != NULL);
+
+  switch (node->vtbl->ti.kind)
+    {
+[% FOREACH rule = rules %]
+
+    case ${dataname.upper}_${rule.key.upper}:
+[% FOREACH member = rule.value.all %]
+
+      if (strcmp (field, "$member") == 0)
+        return ${dataname}_${rule.key}_$member (node);
+
+[% END %]
+
+      no_such_member ("$rule.key", field);
+      break;
+
+[% END %]
+
+    default:
+      assert (!"invalid node type in type info");
+    }
+
+  return NULL;
+}

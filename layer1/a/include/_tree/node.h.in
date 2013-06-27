@@ -1,0 +1,72 @@
+#define L(tok) PASTE (L_TREE, PASTE (_, tok))
+#define U(tok) PASTE (U_TREE, PASTE (_, tok))
+
+/*
+ * node base
+ */
+
+typedef struct L (node) L (node);
+typedef struct L (visitor) L (visitor);
+
+typedef void L (visit_fn) (L (visitor) *self, L (node) const *node);
+typedef L (node) *L (accessor_fn) (L (node) const *self);
+
+/**
+ * Call constructor named by string. Aborts if there is no constructor named by
+ * @c type or if @c args does not contain the right (enough, non-NULL)
+ * arguments for the constructor.
+ */
+L (node)               *L (new)                 (char const *type, L (node) *const *args);
+
+/*
+ * refcounting
+ */
+
+/*!< Increase refcount. Aborts if @c self is NULL. */
+L (node)               *L (node_ref)            (L (node) *self);
+/*!< Increase refcount. @c self may be NULL. */
+L (node)               *L (node_ref_ornull)     (L (node) *self);
+/*!< Decrease refcount. Aborts if @c self is NULL. */
+void                    L (node_unref)          (L (node) *self);
+/*!< Decrease refcount. @c self may be NULL. */
+void                    L (node_unref_ornull)   (L (node) *self);
+
+/*!< Get reference count (for debugging purposes). */
+int                     L (node_refcnt)         (L (node) const *self);
+
+/* accessors */
+struct location const  *L (node_location)       (L (node) const *self);
+
+/**
+ * Call accessor named by string. It aborts if the node does not have a field
+ * named by @c field.
+ * This operations is currently O(m) with
+ * m = number of members in the node requested
+ */
+L (node)               *L (node_member)         (L (node) const *self, char const *field);
+/**
+ * Walk down a path and return a subtree.
+ * @code
+ * // this code:
+ * node_path (node, "foo/bar/cow");
+ * // equals this code:
+ * node->foo->bar->cow
+ * @endcode
+ * It aborts if the path crosses a NULL pointer or if node_member aborts.
+ *
+ * This repeatedly calls @c member, thus requiring O(node_member * n) with
+ * n = number of elements in path.
+ */
+L (node)               *L (node_path)           (L (node) const *self, char const *path);
+
+/* get array with field names */
+char const *const      *L (node_members)        (L (node) const *self);
+
+/* get node type name */
+char const             *L (node_type_name)      (L (node) const *self);
+
+/**
+ * Accept a visitor object and calls the right method on it according to
+ * @c self's runtime type.
+ */
+void                    L (node_accept)         (L (node) const *self, L (visitor) *visitor);

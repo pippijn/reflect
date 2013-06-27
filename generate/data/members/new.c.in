@@ -1,0 +1,9 @@
+/* public */
+
+${dataname}_node *
+${dataname}_${name}_new
+  ( $members.all.mangle.params)
+{
+  return NEW ($name, $members.all.mangle.args);
+}
+
